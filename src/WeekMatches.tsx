@@ -158,6 +158,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
   isAdmin = false
 }) => {
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
+  const [selfViewUserId, setSelfViewUserId] = useState<string>("");
 
   const sortedMatches = useMemo(() => {
     return [...matches].sort((a, b) => getDateMs(a.matchDate) - getDateMs(b.matchDate));
@@ -248,6 +249,56 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                 </div>
               );
             })}
+          </div>
+
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <label htmlFor="self-prediction-view-select" className="block text-xs font-black uppercase tracking-wider text-orange-400 mb-2">
+              🔍 Kendi Tahminlerini Kontrol Et:
+            </label>
+            <select
+              id="self-prediction-view-select"
+              value={selfViewUserId}
+              onChange={(e) => setSelfViewUserId(e.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-[#0f172a] px-4 py-3 text-sm font-bold text-white outline-none focus:border-orange-500"
+            >
+              <option value="">Adını seç...</option>
+              {users.map((user) => {
+                const hasSubmitted = uniquePredictorIds.has(user.id);
+                return (
+                  <option key={user.id} value={user.id}>
+                    {user.name} ({hasSubmitted ? "Tahmin Girdi" : "Girmedi"})
+                  </option>
+                );
+              })}
+            </select>
+
+            {selfViewUserId && (
+              <div className="mt-4 rounded-2xl border border-orange-500/20 bg-orange-500/5 p-4 animate-fadeIn">
+                <h3 className="text-sm font-black text-white mb-3">
+                  {users.find((u) => u.id === selfViewUserId)?.name} için Kayıtlı Tahminler:
+                </h3>
+                {predictions.filter((p) => p.userId === selfViewUserId).length === 0 ? (
+                  <p className="text-xs font-semibold text-slate-500">Bu yazar için henüz tahmin kaydedilmemiş.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {sortedMatches.map((match) => {
+                      const p = predictions.find(
+                        (pred) => pred.userId === selfViewUserId && pred.matchId === match.id
+                      );
+                      return (
+                        <div key={match.id} className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] p-2.5 text-xs border border-white/[0.04]">
+                          <span className="font-bold text-slate-300 truncate max-w-[150px]">{match.homeTeam}</span>
+                          <span className="font-mono bg-white/[0.05] px-2 py-1 rounded text-orange-400 font-black">
+                            {p ? `${p.predictedHome} - ${p.predictedAway}` : "-"}
+                          </span>
+                          <span className="font-bold text-slate-300 truncate max-w-[150px] text-right">{match.awayTeam}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -382,9 +433,48 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-5">
+                    {/* Mobile layout (stacked & responsive) */}
+                    <div className="flex flex-col gap-3 sm:hidden">
+                      <div className="flex items-center justify-between">
+                        {/* Home Team */}
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <TeamLogo teamName={match.homeTeam} className="h-9 w-9 shrink-0" />
+                          <span className="truncate text-base font-black text-white">
+                            {match.homeTeam}
+                          </span>
+                        </div>
+
+                        {/* Score/VS block in middle */}
+                        <div className="mx-2 shrink-0">
+                          <div className={`min-w-[70px] rounded-xl border px-2 py-1.5 text-center shadow-sm ${
+                            resultKnown
+                              ? "border-orange-500/25 bg-orange-500/10 text-orange-300"
+                              : "border-white/10 bg-white/[0.03] text-white"
+                          }`}>
+                            {resultKnown ? (
+                              <span className="text-sm font-black">
+                                {match.actualHome}:{match.actualAway}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider">VS</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Away Team */}
+                        <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+                          <span className="truncate text-base font-black text-white text-right">
+                            {match.awayTeam}
+                          </span>
+                          <TeamLogo teamName={match.awayTeam} className="h-9 w-9 shrink-0" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Desktop layout (3 columns side-by-side) */}
+                    <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-5">
                       <div className="min-w-0">
-                        <div className="flex items-center justify-end gap-2 sm:gap-3">
+                        <div className="flex items-center justify-end gap-3">
                           <div className="min-w-0 text-right">
                             <div className="truncate text-lg font-black tracking-[-0.04em] text-white sm:text-2xl">
                               {match.homeTeam}
@@ -438,7 +528,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                       </div>
 
                       <div className="min-w-0">
-                        <div className="flex items-center justify-start gap-2 sm:gap-3">
+                        <div className="flex items-center justify-start gap-3">
                           <TeamLogo
                             teamName={match.awayTeam}
                             className="h-12 w-12 shrink-0 sm:h-16 sm:w-16"

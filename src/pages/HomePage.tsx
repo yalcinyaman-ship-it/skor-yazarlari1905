@@ -1030,7 +1030,8 @@ const HomePage: React.FC = () => {
                       <History className="h-6 w-6 text-orange-400" />
                     </div>
 
-                    <div className="mb-5 flex gap-2 overflow-x-auto pb-2">
+                    {/* Desktop/Tablet Week Buttons */}
+                    <div className="hidden sm:flex mb-5 gap-2 overflow-x-auto pb-2">
                       {weeks.map((week) => (
                         <button
                           key={week.id}
@@ -1058,6 +1059,25 @@ const HomePage: React.FC = () => {
                           </div>
                         </button>
                       ))}
+                    </div>
+
+                    {/* Mobile Week Select Dropdown */}
+                    <div className="block sm:hidden mb-5">
+                      <label htmlFor="week-select-mobile" className="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                        Hafta Seçin:
+                      </label>
+                      <select
+                        id="week-select-mobile"
+                        value={selectedWeekId}
+                        onChange={(e) => setSelectedWeekId(e.target.value)}
+                        className="w-full rounded-2xl border border-white/10 bg-[#0f172a] px-4 py-3 text-sm font-bold text-white outline-none focus:border-orange-500"
+                      >
+                        {weeks.map((week) => (
+                          <option key={week.id} value={week.id}>
+                            {week.label} ({week.isActive ? "Aktif" : week.pointsPublished ? "Puanlandı" : week.isPublished ? "Yayında" : "Geçmiş"})
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     {selectedWeek ? (

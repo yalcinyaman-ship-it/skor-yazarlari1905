@@ -500,7 +500,71 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                        {/* Mobile view (stacked columns for better legibility on mobile screens) */}
+                        <div className="flex flex-col gap-3 sm:hidden">
+                          <div className="flex items-center justify-between gap-4">
+                            {/* Home Team */}
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                              <TeamLogo teamName={match.homeTeam} className="h-8 w-8 shrink-0" />
+                              <span className="text-sm font-black text-white truncate">
+                                {match.homeTeam}
+                              </span>
+                            </div>
+                            
+                            {/* VS separator */}
+                            <span className="text-xs font-bold text-slate-500">vs</span>
+
+                            {/* Away Team */}
+                            <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+                              <span className="text-sm font-black text-white truncate text-right">
+                                {match.awayTeam}
+                              </span>
+                              <TeamLogo teamName={match.awayTeam} className="h-8 w-8 shrink-0" />
+                            </div>
+                          </div>
+
+                          {/* Scores inputs centered */}
+                          <div className="flex items-center justify-center gap-3">
+                            <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 w-full max-w-[200px] justify-center">
+                              <div className="flex items-center gap-1">
+                                <span className="text-[10px] font-black text-slate-400 uppercase mr-1">EV</span>
+                                <input
+                                  type="number"
+                                  inputMode="numeric"
+                                  min="0"
+                                  max="30"
+                                  value={prediction?.home ?? ""}
+                                  onChange={(event) =>
+                                    handleScoreChange(match.id, "home", event.target.value)
+                                  }
+                                  className="h-10 w-12 rounded-xl border border-white/10 bg-white/[0.04] text-center text-lg font-black text-white outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15"
+                                  placeholder="0"
+                                />
+                              </div>
+
+                              <span className="text-sm font-black text-slate-500">:</span>
+
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  inputMode="numeric"
+                                  min="0"
+                                  max="30"
+                                  value={prediction?.away ?? ""}
+                                  onChange={(event) =>
+                                    handleScoreChange(match.id, "away", event.target.value)
+                                  }
+                                  className="h-10 w-12 rounded-xl border border-white/10 bg-white/[0.04] text-center text-lg font-black text-white outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15"
+                                  placeholder="0"
+                                />
+                                <span className="text-[10px] font-black text-slate-400 uppercase ml-1">DEP</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Desktop view (3 columns side-by-side) */}
+                        <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                           <div className="flex min-w-0 items-center justify-end gap-2">
                             <span className="truncate text-right text-xs font-black text-white sm:text-base">
                               {match.homeTeam}
@@ -554,7 +618,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                           </div>
                         </div>
 
-                        <div className="mt-3 text-center text-[10px] font-black uppercase tracking-wider text-slate-500 sm:hidden">
+                        <div className="mt-3 text-center text-[10px] font-black uppercase tracking-wider text-slate-500">
                           {formatMatchDate(match.matchDate)}
                         </div>
                       </div>
