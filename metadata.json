@@ -1,0 +1,6 @@
+{
+  "name": "Skor Yazarları",
+  "description": "Futbol skor tahmin yarışması. Sezonlar, haftalar ve maçlar üzerinden puan kazanın.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

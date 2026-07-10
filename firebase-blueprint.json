@@ -1,0 +1,105 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Application user",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "flagEmoji": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "flagEmoji", "createdAt"]
+    },
+    "Season": {
+      "title": "Season",
+      "description": "A football season",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "finished"] },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "finishedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "status", "startedAt"]
+    },
+    "Week": {
+      "title": "Week",
+      "description": "A specific week in a season",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "weekNumber": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "isPublished": { "type": "boolean" },
+        "pointsPublished": { "type": "boolean" }
+      },
+      "required": ["label", "weekNumber", "isActive", "isPublished", "pointsPublished"]
+    },
+    "Match": {
+      "title": "Match",
+      "description": "A single football match",
+      "type": "object",
+      "properties": {
+        "homeTeam": { "type": "string" },
+        "awayTeam": { "type": "string" },
+        "matchDate": { "type": "string", "format": "date-time" },
+        "actualHome": { "type": "number" },
+        "actualAway": { "type": "number" }
+      },
+      "required": ["homeTeam", "awayTeam", "matchDate"]
+    },
+    "Prediction": {
+      "title": "Prediction",
+      "description": "A user's prediction for a match",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "weekId": { "type": "string" },
+        "matchId": { "type": "string" },
+        "predictedHome": { "type": "number" },
+        "predictedAway": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "weekId", "matchId", "predictedHome", "predictedAway", "createdAt"]
+    },
+    "UserPoint": {
+      "title": "UserPoint",
+      "description": "Points earned by a user in a week",
+      "type": "object",
+      "properties": {
+        "points": { "type": "number" },
+        "bonusPoints": { "type": "number" },
+        "totalWeekPoints": { "type": "number" },
+        "breakdown": { "type": "array" }
+      },
+      "required": ["points", "bonusPoints", "totalWeekPoints", "breakdown"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Main users collection"
+    },
+    "/seasons/{seasonId}": {
+      "schema": "Season",
+      "description": "Seasons collection"
+    },
+    "/seasons/{seasonId}/weeks/{weekId}": {
+      "schema": "Week",
+      "description": "Weeks within a season"
+    },
+    "/seasons/{seasonId}/weeks/{weekId}/matches/{matchId}": {
+      "schema": "Match",
+      "description": "Matches within a week"
+    },
+    "/seasons/{seasonId}/predictions/{predictionId}": {
+      "schema": "Prediction",
+      "description": "Predictions for a season"
+    },
+    "/seasons/{seasonId}/weekPoints/{weekId}/userPoints/{userId}": {
+      "schema": "UserPoint",
+      "description": "Points earned by users each week"
+    }
+  }
+}
