@@ -37,8 +37,9 @@ import {
 import { db } from "../firebase";
 import { User, Season, Week, Match, Prediction, sanitizeFlagEmoji } from "../types";
 import { calculateWeekPoints } from "../utils/calculatePoints";
+import UserFlag from "./UserFlag";
 
-const FLAG_OPTIONS = ["⚽", "🏆", "🦁", "🦅", "🐺", "⚡", "🔥", "👑", "🌟", "⚔️", "🎯", "💎", "🇹🇷"];
+const FLAG_OPTIONS = ["⚽", "🏆", "GS", "FB", "BJK", "TS", "BŞK", "ADS", "GÖZ", "KSK", "ESES", "BURSA", "SAMSUN", "🇹🇷"];
 
 type AdminTab = "users" | "seasons" | "weeks" | "matches" | "results" | "predictions" | "standings";
 
@@ -539,7 +540,7 @@ const UsersTab = ({
                     : "border-slate-200 bg-white hover:bg-slate-50"
                 }`}
               >
-                {flag}
+                <UserFlag flagEmoji={flag} className="h-6 w-6 text-base" />
               </button>
             ))}
           </div>
@@ -632,7 +633,7 @@ const UsersTab = ({
         {users.map((user: any) => (
           <div key={user.id} className="card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="text-3xl">{sanitizeFlagEmoji(user.flagEmoji)}</span>
+              <UserFlag flagEmoji={user.flagEmoji} className="h-10 w-10 text-3xl" />
               <div className="min-w-0">
                 <div className="truncate font-black text-slate-950">{user.name}</div>
                 <div className="flex items-center gap-3 mt-1">
@@ -1670,7 +1671,10 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                       return (
                         <tr key={uid} className="border-b border-slate-100">
                           <td className="py-2">
-                            <span>{sanitizeFlagEmoji(user?.flagEmoji)}</span> <span>{user?.name}</span>
+                            <div className="flex items-center gap-2">
+                              <UserFlag flagEmoji={user?.flagEmoji} className="h-5 w-5 text-lg" />
+                              <span>{user?.name}</span>
+                            </div>
                           </td>
                           <td className="py-2 text-center">{data.points}</td>
                           <td className="py-2 text-center">{data.bonus}</td>
@@ -1818,7 +1822,7 @@ const StandingsTab = ({ seasons, users }: { seasons: Season[]; users: User[] }) 
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-xs font-black text-slate-600">
                     {index + 1}
                   </div>
-                  <span className="text-2xl">{sanitizeFlagEmoji(user.flagEmoji)}</span>
+                  <UserFlag flagEmoji={user.flagEmoji} className="h-7 w-7 text-2xl" />
                   <div>
                     <div className="font-black text-slate-950">{user.name}</div>
                     <div className="text-xs font-semibold text-slate-400">Sezon puanı</div>

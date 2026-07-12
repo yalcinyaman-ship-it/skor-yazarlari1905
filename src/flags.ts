@@ -111,6 +111,25 @@ export function flagUrlForTeam(teamName: string | undefined | null, width: 24 | 
   return flagUrlForIso(teamNameToIso(teamName), width);
 }
 
+const SOCCER_TEAM_LOGOS: Record<string, string> = {
+  GS: "https://images.fotmob.com/image_resources/logo/team/10263.png",
+  FB: "https://images.fotmob.com/image_resources/logo/team/8695.png",
+  BJK: "https://images.fotmob.com/image_resources/logo/team/10188.png",
+  TS: "https://images.fotmob.com/image_resources/logo/team/10185.png",
+  BŞK: "https://images.fotmob.com/image_resources/logo/team/6153.png",
+  ADS: "https://images.fotmob.com/image_resources/logo/team/9806.png",
+  GÖZ: "https://images.fotmob.com/image_resources/logo/team/10186.png",
+  KSK: "https://images.fotmob.com/image_resources/logo/team/246538.png",
+  ESES: "https://images.fotmob.com/image_resources/logo/team/10183.png",
+  BURSA: "https://images.fotmob.com/image_resources/logo/team/10181.png",
+  SAMSUN: "https://images.fotmob.com/image_resources/logo/team/9801.png"
+};
+
 export function flagUrlForEmoji(emoji: string | undefined | null, width: 24 | 48 | 80 = 48): string | null {
+  if (!emoji) return null;
+  const upper = emoji.trim().toUpperCase();
+  if (SOCCER_TEAM_LOGOS[upper]) {
+    return SOCCER_TEAM_LOGOS[upper];
+  }
   return flagUrlForIso(emojiFlagToIso(emoji), width);
 }

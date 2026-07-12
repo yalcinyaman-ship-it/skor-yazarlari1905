@@ -1,5 +1,6 @@
 import React from 'react';
 import { User, sanitizeFlagEmoji } from '../types';
+import UserFlag from './UserFlag';
 
 interface StandingsProps {
   users: (User & { totalPoints: number; weekPoints?: number; avgPoints?: number })[];
@@ -36,8 +37,8 @@ const Standings: React.FC<StandingsProps> = ({ users }) => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl relative">
-                        {sanitizeFlagEmoji(user.flagEmoji)}
+                      <span className="relative flex items-center justify-center">
+                        <UserFlag flagEmoji={user.flagEmoji} className="h-7 w-7 text-2xl" />
                         {user.colors && user.colors.length > 0 && (
                           <div 
                             className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full opacity-80"
