@@ -537,7 +537,7 @@ const HomePage: React.FC = () => {
         hasActiveWeek={!!activeWeek && !activeWeek.isPublished && !allUsersHavePredicted}
       />
 
-      <main className="mx-auto max-w-7xl space-y-8 text-white">
+      <main className="mx-auto max-w-7xl space-y-8 text-slate-900">
         {error && (
           <div
             className="flex items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-300 shadow-sm"
@@ -555,17 +555,17 @@ const HomePage: React.FC = () => {
 
         {/* Sitenin Klasına Uygun Tab Navigasyonu */}
         {activeSeason && (
-          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-3xl bg-white/[0.05] border border-white/10 backdrop-blur-sm">
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-3xl bg-slate-100 border border-slate-200 backdrop-blur-sm">
             {/* GENEL ÖZET */}
             <button
               onClick={() => setActiveTab("ozet")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "ozet"
                   ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-500 hover:text-white hover:bg-white/[0.06]"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
               }`}
             >
-              <Sparkles className="h-4 w-4 shrink-0 text-orange-400" />
+              <Sparkles className="h-4 w-4 shrink-0 text-orange-600" />
               <span>Genel Özet</span>
             </button>
 
@@ -580,13 +580,13 @@ const HomePage: React.FC = () => {
               title={predictionLocked ? "Tüm tahminler girildi veya kilitlendi." : "Haftalık tahminleri girmek için tıklayın."}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 predictionLocked
-                  ? "bg-white/[0.06] text-slate-500 cursor-not-allowed border border-white/15"
+                  ? "bg-slate-200/50 text-slate-400 cursor-not-allowed border border-slate-300"
                   : activeTab === "ozet"
                     ? "bg-orange-600 text-white shadow-lg shadow-emerald-600/15 hover:bg-orange-500 hover:scale-[1.02] animate-pulse"
-                    : "bg-white/[0.04] text-orange-400 border border-orange-500/25 hover:bg-orange-500/10 hover:border-orange-500/40"
+                    : "bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 hover:border-orange-300"
               }`}
             >
-              <Target className={`h-4 w-4 shrink-0 ${predictionLocked ? "text-slate-500" : "text-orange-400"}`} />
+              <Target className={`h-4 w-4 shrink-0 ${predictionLocked ? "text-slate-400" : "text-orange-600"}`} />
               <span>Maç Tahmini Yap</span>
             </button>
 
@@ -596,10 +596,10 @@ const HomePage: React.FC = () => {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "tahminler"
                   ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-500 hover:text-white hover:bg-white/[0.06]"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
               }`}
             >
-              <Calendar className="h-4 w-4 shrink-0 text-orange-400" />
+              <Calendar className="h-4 w-4 shrink-0 text-orange-600" />
               <span>Tahminler</span>
             </button>
 
@@ -609,10 +609,10 @@ const HomePage: React.FC = () => {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "puan-durumu"
                   ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-500 hover:text-white hover:bg-white/[0.06]"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
               }`}
             >
-              <Medal className="h-4 w-4 shrink-0 text-amber-500" />
+              <Medal className="h-4 w-4 shrink-0 text-amber-600" />
               <span>Puan Durumu</span>
             </button>
 
@@ -622,10 +622,10 @@ const HomePage: React.FC = () => {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "istatistikler"
                   ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-500 hover:text-white hover:bg-white/[0.06]"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
               }`}
             >
-              <BarChart3 className="h-4 w-4 shrink-0 text-orange-400" />
+              <BarChart3 className="h-4 w-4 shrink-0 text-orange-600" />
               <span>İstatistikler</span>
             </button>
           </div>
@@ -673,7 +673,7 @@ const HomePage: React.FC = () => {
                       </div>
 
                       <div className="max-w-4xl">
-                        <h1 className="font-display text-4xl font-black uppercase leading-[0.95] tracking-[-0.03em] text-white sm:text-6xl lg:text-7xl">
+                        <h1 className="font-display text-4xl font-black uppercase leading-[0.95] tracking-[-0.03em] text-slate-850 sm:text-6xl lg:text-7xl">
                           Skor Yazarları
                           <span className="block text-orange-400">
                             tahmin ligi
@@ -926,7 +926,7 @@ const HomePage: React.FC = () => {
                           <Archive className="h-4 w-4" />
                           Lig Hafızası
                         </div>
-                        <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-white sm:text-3xl">
+                        <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-slate-850 sm:text-3xl">
                           Geçmiş Sezonlar
                         </h2>
                       </div>
@@ -1022,7 +1022,7 @@ const HomePage: React.FC = () => {
                     <div className="mb-5 flex items-center justify-between gap-3">
                       <div>
                         <div className="section-title">Hafta Seçimi</div>
-                        <h2 className="mt-2 text-xl font-black text-white">
+                        <h2 className="mt-2 text-xl font-black text-slate-850">
                           Haftalar ve Maç Detayı
                         </h2>
                       </div>
@@ -1070,7 +1070,7 @@ const HomePage: React.FC = () => {
                         id="week-select-mobile"
                         value={selectedWeekId}
                         onChange={(e) => setSelectedWeekId(e.target.value)}
-                        className="w-full rounded-2xl border border-white/10 bg-[#0f172a] px-4 py-3 text-sm font-bold text-white outline-none focus:border-orange-500"
+                        className="w-full rounded-2xl border border-slate-250 bg-white px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:border-orange-500"
                       >
                         {weeks.map((week) => (
                           <option key={week.id} value={week.id}>
@@ -1112,7 +1112,7 @@ const HomePage: React.FC = () => {
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
                       <div className="section-title">Canlı Sıralama</div>
-                      <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-white sm:text-3xl">
+                      <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-slate-850 sm:text-3xl">
                         Sezon Puan Durumu
                       </h2>
                       <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-500">
@@ -1120,7 +1120,7 @@ const HomePage: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-black uppercase tracking-wider text-slate-500">
+                    <div className="rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-xs font-black uppercase tracking-wider text-slate-500">
                       {weeks.length} Hafta · {users.length} Yazar
                     </div>
                   </div>
@@ -1142,7 +1142,7 @@ const HomePage: React.FC = () => {
                 <section className="space-y-4">
                   <div>
                     <div className="section-title">Performans Analizi</div>
-                    <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-white sm:text-3xl">
+                    <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-slate-850 sm:text-3xl">
                       İstatistik Merkezi
                     </h2>
                     <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-500">

@@ -2,29 +2,26 @@
 
 @theme {
   /* Anybody = condensed, sporty display face for headlines & numbers.
-     Hanken Grotesk = the actual body workhorse. Both were already being
-     loaded in index.html but never wired into the theme — the whole
-     site was silently rendering in the OS default font. */
+     Hanken Grotesk = the actual body workhorse. */
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Anybody", "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
 
-  /* Stadyum Gecesi — night-match / floodlight identity. Orange is the
-     primary action color (whistle/floodlight glow), emerald is kept only
-     as a secondary "pitch" accent, gold stays reserved for achievement. */
+  /* Premium Light Match / Day Match Identity. Orange remains the primary brand action color,
+     emerald/teal acts as secondary, and dark slate is used for ultimate readability. */
   --color-brand-primary: #ea580c;
   --color-brand-primary-dark: #c2410c;
-  --color-brand-secondary: #059669;
-  --color-brand-background: #0b1220;
-  --color-brand-surface: #141b2d;
-  --color-brand-surface-raised: #1a2338;
-  --color-brand-text: #f1f5f9;
-  --color-brand-text-muted: #94a3b8;
-  --color-border-main: #263349;
+  --color-brand-secondary: #0d9488;
+  --color-brand-background: #f8fafc;
+  --color-brand-surface: #ffffff;
+  --color-brand-surface-raised: #f1f5f9;
+  --color-brand-text: #0f172a;
+  --color-brand-text-muted: #475569;
+  --color-border-main: #e2e8f0;
 
-  --color-gold-500: #f59e0b;
-  --color-gold-600: #d97706;
+  --color-gold-500: #d97706;
+  --color-gold-600: #b45309;
 
-  --color-ink: #f1f5f9;
+  --color-ink: #0f172a;
 }
 
 @layer base {
@@ -36,9 +33,9 @@
     margin: 0;
     min-height: 100vh;
     background:
-      radial-gradient(ellipse 60rem 40rem at 15% -10%, rgba(234, 88, 12, 0.14), transparent),
-      radial-gradient(ellipse 50rem 36rem at 100% 0%, rgba(5, 150, 105, 0.1), transparent),
-      linear-gradient(180deg, #0b1220 0%, #0a0f1c 46%, #0b1220 100%);
+      radial-gradient(ellipse 60rem 40rem at 15% -10%, rgba(234, 88, 12, 0.08), transparent),
+      radial-gradient(ellipse 50rem 36rem at 100% 0%, rgba(13, 148, 136, 0.06), transparent),
+      linear-gradient(180deg, #f8fafc 0%, #f1f5f9 46%, #f8fafc 100%);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -55,8 +52,8 @@
   }
 
   ::selection {
-    background: rgba(234, 88, 12, 0.3);
-    color: #fff7ed;
+    background: rgba(234, 88, 12, 0.2);
+    color: #431407;
   }
 
   button,
@@ -83,51 +80,51 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-orange-600 px-5 py-3 text-sm font-black uppercase tracking-wider text-white shadow-[0_14px_34px_rgba(234,88,12,0.35)] transition duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:shadow-[0_18px_44px_rgba(234,88,12,0.4)] active:translate-y-0 disabled:translate-y-0 disabled:bg-slate-700 disabled:text-slate-400 disabled:shadow-none;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-orange-600 px-5 py-3 text-sm font-black uppercase tracking-wider text-white shadow-[0_14px_34px_rgba(234,88,12,0.25)] transition duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:shadow-[0_18px_44px_rgba(234,88,12,0.3)] active:translate-y-0 disabled:translate-y-0 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none;
   }
 
   .btn-secondary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-black uppercase tracking-wider text-slate-100 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.08] hover:shadow-md active:translate-y-0;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-black uppercase tracking-wider text-slate-800 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md active:translate-y-0;
   }
 
   .card {
-    @apply rounded-[1.65rem] border border-white/[0.08] bg-[#141b2d]/95 shadow-[0_20px_70px_rgba(0,0,0,0.35)] backdrop-blur;
+    @apply rounded-[1.65rem] border border-slate-200/80 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.05)] backdrop-blur;
   }
 
   .card-base {
-    @apply rounded-[1.65rem] border border-white/[0.08] bg-[#141b2d]/95 shadow-[0_20px_70px_rgba(0,0,0,0.35)] backdrop-blur;
+    @apply rounded-[1.65rem] border border-slate-200/80 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.05)] backdrop-blur;
   }
 
   .card-hover {
-    @apply transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/30 hover:shadow-[0_26px_90px_rgba(0,0,0,0.45)];
+    @apply transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.09)];
   }
 
   .section-title {
-    @apply text-[11px] font-black uppercase tracking-[0.28em] text-orange-400;
+    @apply text-[11px] font-black uppercase tracking-[0.28em] text-orange-600;
   }
 
   .input-field {
-    @apply min-h-12 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-bold text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15;
+    @apply min-h-12 rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-bold text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10;
   }
 
   .score-input {
-    @apply h-14 w-14 rounded-2xl border border-white/10 bg-white/[0.03] text-center text-xl font-black text-slate-100 outline-none transition focus:border-orange-500 focus:bg-white/[0.06] focus:ring-4 focus:ring-orange-500/15;
+    @apply h-14 w-14 rounded-2xl border border-slate-200 bg-slate-50/50 text-center text-xl font-black text-slate-800 outline-none transition focus:border-orange-500 focus:bg-slate-100 focus:ring-4 focus:ring-orange-500/10;
   }
 
   .prediction-card {
-    @apply rounded-[1.5rem] border border-white/[0.08] bg-white/[0.03] p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/30 hover:shadow-md;
+    @apply rounded-[1.5rem] border border-slate-200/80 bg-slate-50/30 p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/35 hover:shadow-md;
   }
 
   .badge-exact {
-    @apply rounded-full bg-amber-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-amber-300;
+    @apply rounded-full bg-amber-100 border border-amber-200 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-amber-800;
   }
 
   .badge-result {
-    @apply rounded-full bg-emerald-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-300;
+    @apply rounded-full bg-emerald-100 border border-emerald-200 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-800;
   }
 
   .badge-wrong {
-    @apply rounded-full bg-red-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-red-300;
+    @apply rounded-full bg-red-100 border border-red-200 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-red-800;
   }
 }
 
@@ -138,16 +135,15 @@
 
   .premium-ring {
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 24px 90px rgba(0, 0, 0, 0.4);
+      0 0 0 1px rgba(0, 0, 0, 0.04),
+      0 20px 50px rgba(15, 23, 42, 0.08);
   }
 
   .text-balance {
     text-wrap: balance;
   }
 
-  /* Subtle film-grain, used instead of the generic blurred-blob gradient
-     trick — gives dark panels actual texture instead of two soft circles. */
+  /* Subtle film-grain for a physical paper/board look */
   .bg-grain {
     position: relative;
   }
@@ -157,18 +153,17 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.15;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
   }
 
-  /* A faint scoreboard-stripe motif for hero panels — a nod to the
-     product (match tallies) rather than a decorative abstract blob. */
+  /* A faint scoreboard-stripe motif for hero panels */
   .bg-scoreboard {
     background-image: repeating-linear-gradient(
       115deg,
-      rgba(255, 255, 255, 0.035) 0px,
-      rgba(255, 255, 255, 0.035) 1px,
+      rgba(15, 23, 42, 0.02) 0px,
+      rgba(15, 23, 42, 0.02) 1px,
       transparent 1px,
       transparent 34px
     );

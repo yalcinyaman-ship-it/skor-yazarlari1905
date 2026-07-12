@@ -255,7 +255,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-slate-950/75 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
         onClick={resetAndClose}
       />
 
@@ -263,22 +263,22 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         initial={{ opacity: 0, scale: 0.96, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
-        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] shadow-2xl"
+        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl"
       >
-        <div className="border-b border-white/[0.06] bg-white/[0.04] p-5 sm:p-6">
+        <div className="border-b border-slate-150 bg-slate-50 p-5 sm:p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-orange-400">
+                <span className="rounded-full bg-orange-50 border border-orange-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-orange-700">
                   {activeWeek.label}
                 </span>
 
-                <span className="rounded-full bg-white/[0.06] px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                <span className="rounded-full bg-slate-100 border border-slate-200 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
                   {step === 1 ? "1/2 Oyuncu" : "2/2 Skor"}
                 </span>
               </div>
 
-              <h2 className="mt-3 flex items-center gap-3 text-2xl font-black tracking-[-0.055em] text-white sm:text-3xl">
+              <h2 className="mt-3 flex items-center gap-3 text-2xl font-black tracking-[-0.055em] text-slate-800 sm:text-3xl">
                 {step === 2 && <UserFlag flagEmoji={selectedUser?.flagEmoji} className="h-8 w-8 text-3xl" />}
                 {step === 1 ? "Kim tahmin yapıyor?" : `${selectedUser?.name}, skorları gir`}
               </h2>
@@ -293,7 +293,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
             <button
               type="button"
               onClick={resetAndClose}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-slate-500 shadow-sm transition hover:bg-white/[0.07] hover:text-white"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-500 shadow-sm transition hover:bg-slate-100 hover:text-slate-800"
               aria-label="Tahmin penceresini kapat"
             >
               <X className="h-5 w-5" />
@@ -309,7 +309,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 <span>{progressPct}%</span>
               </div>
 
-              <div className="h-3 overflow-hidden rounded-full bg-white/[0.06]">
+              <div className="h-3 overflow-hidden rounded-full bg-slate-100">
                 <div
                   className="h-full rounded-full bg-orange-600 transition-all duration-300"
                   style={{ width: `${progressPct}%` }}
@@ -319,21 +319,21 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto bg-white/[0.03] p-4 sm:p-6">
+        <div className="flex-1 overflow-y-auto bg-slate-50/30 p-4 sm:p-6">
           <AnimatePresence mode="wait">
             {isSuccess ? (
               <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex min-h-[340px] flex-col items-center justify-center gap-5 rounded-[1.5rem] border border-orange-500/20 bg-white/[0.04] p-8 text-center"
+                className="flex min-h-[340px] flex-col items-center justify-center gap-5 rounded-[1.5rem] border border-orange-200 bg-orange-50/50 p-8 text-center"
               >
-                <div className="flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-orange-600 text-white shadow-lg shadow-emerald-700/20">
+                <div className="flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-orange-600 text-white shadow-sm">
                   <CheckCircle className="h-11 w-11" />
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-black tracking-[-0.04em] text-white">
+                  <h3 className="text-2xl font-black tracking-[-0.04em] text-slate-850">
                     Tahminler kaydedildi
                   </h3>
 
@@ -351,45 +351,45 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 className="space-y-4"
               >
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-sm">
+                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
-                      <Users className="h-4 w-4 text-orange-400" />
+                      <Users className="h-4 w-4 text-orange-600" />
                       Toplam
                     </div>
-                    <div className="mt-1 text-2xl font-black text-white">
+                    <div className="mt-1 text-2xl font-black text-slate-800">
                       {users.length}
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-sm">
+                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
-                      <CheckCircle2 className="h-4 w-4 text-orange-400" />
+                      <CheckCircle2 className="h-4 w-4 text-orange-600" />
                       Yapan
                     </div>
-                    <div className="mt-1 text-2xl font-black text-white">
+                    <div className="mt-1 text-2xl font-black text-slate-800">
                       {existingPredictors.length}
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-sm">
+                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
-                      <Clock3 className="h-4 w-4 text-amber-600" />
+                      <Clock3 className="h-4 w-4 text-amber-700" />
                       Bekleyen
                     </div>
-                    <div className="mt-1 text-2xl font-black text-white">
+                    <div className="mt-1 text-2xl font-black text-slate-800">
                       {unpredictedUsers.length}
                     </div>
                   </div>
                 </div>
 
                 {unpredictedUsers.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.04] px-4 py-12 text-center shadow-sm">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-orange-500/20 bg-orange-500/10 text-orange-400">
+                  <div className="flex flex-col items-center justify-center gap-4 rounded-[1.5rem] border border-slate-200 bg-white px-4 py-12 text-center shadow-sm">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-orange-200 bg-orange-50 text-orange-600">
                       <CheckCircle className="h-8 w-8" />
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-black tracking-tight text-white">
+                      <h3 className="text-lg font-black tracking-tight text-slate-800">
                         Herkes tahminini yaptı
                       </h3>
 
@@ -405,7 +405,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                         key={user.id}
                         type="button"
                         onClick={() => handleUserSelect(user)}
-                        className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-4 text-center shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/30 hover:shadow-md active:translate-y-0"
+                        className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 text-center shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/30 hover:shadow-md active:translate-y-0"
                       >
                         {user.colors && user.colors.length > 0 && (
                           <div
@@ -419,15 +419,15 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                           />
                         )}
 
-                        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/[0.03] ring-1 ring-white/10 transition group-hover:scale-105">
+                        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-50 ring-1 ring-slate-200 transition group-hover:scale-105">
                           <UserFlag flagEmoji={user.flagEmoji} className="h-11 w-11 text-4xl" />
                         </div>
 
-                        <div className="truncate text-sm font-black text-white">
+                        <div className="truncate text-sm font-black text-slate-800">
                           {user.name}
                         </div>
 
-                        <div className="mt-2 inline-flex items-center justify-center gap-1 rounded-full bg-white/[0.06] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500 transition group-hover:bg-orange-500/10 group-hover:text-orange-400">
+                        <div className="mt-2 inline-flex items-center justify-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500 transition group-hover:bg-orange-50 group-hover:text-orange-700">
                           <UserRound className="h-3.5 w-3.5" />
                           Seç
                         </div>
@@ -445,16 +445,16 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 className="space-y-4"
               >
                 {error && (
-                  <div className="flex items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm font-bold text-red-300">
+                  <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-850">
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                     <span className="whitespace-pre-line leading-6">{error}</span>
                   </div>
                 )}
 
                 {sortedMatches.length === 0 ? (
-                  <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-sm">
-                    <Trophy className="mx-auto mb-3 h-8 w-8 text-slate-500" />
-                    <h3 className="text-lg font-black text-white">
+                  <div className="rounded-[1.5rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
+                    <Trophy className="mx-auto mb-3 h-8 w-8 text-slate-400" />
+                    <h3 className="text-lg font-black text-slate-800">
                       Maç bulunamadı
                     </h3>
                     <p className="mt-2 text-sm font-semibold text-slate-500">
@@ -471,15 +471,15 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                     return (
                       <div
                         key={match.id}
-                        className={`rounded-[1.5rem] border bg-white/[0.04] p-4 shadow-sm transition ${
+                        className={`rounded-[1.5rem] border bg-white p-4 shadow-sm transition ${
                           isComplete
-                            ? "border-orange-500/25 ring-1 ring-orange-500/20"
-                            : "border-white/10"
+                            ? "border-orange-300 ring-1 ring-orange-400/30"
+                            : "border-slate-200"
                         }`}
                       >
                         <div className="mb-3 flex items-center justify-between gap-3">
                           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
-                            <Target className="h-4 w-4 text-orange-400" />
+                            <Target className="h-4 w-4 text-orange-600" />
                             Maç {index + 1}
                           </div>
 
@@ -489,10 +489,10 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                             </span>
 
                             <span
-                              className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${
+                              className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border ${
                                 isComplete
-                                  ? "bg-orange-500/15 text-orange-300"
-                                  : "bg-white/[0.06] text-slate-500"
+                                  ? "bg-orange-50 border-orange-100 text-orange-700"
+                                  : "bg-slate-100 border-slate-200 text-slate-500"
                               }`}
                             >
                               {isComplete ? "Tamam" : "Eksik"}
@@ -506,17 +506,17 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                             {/* Home Team */}
                             <div className="flex items-center gap-2 min-w-0 flex-1">
                               <TeamLogo teamName={match.homeTeam} className="h-8 w-8 shrink-0" />
-                              <span className="text-sm font-black text-white truncate">
+                              <span className="text-sm font-black text-slate-800 truncate">
                                 {match.homeTeam}
                               </span>
                             </div>
                             
                             {/* VS separator */}
-                            <span className="text-xs font-bold text-slate-500">vs</span>
+                            <span className="text-xs font-bold text-slate-400">vs</span>
 
                             {/* Away Team */}
                             <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
-                              <span className="text-sm font-black text-white truncate text-right">
+                              <span className="text-sm font-black text-slate-800 truncate text-right">
                                 {match.awayTeam}
                               </span>
                               <TeamLogo teamName={match.awayTeam} className="h-8 w-8 shrink-0" />
@@ -525,9 +525,9 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
 
                           {/* Scores inputs centered */}
                           <div className="flex items-center justify-center gap-3">
-                            <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 w-full max-w-[200px] justify-center">
+                            <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50/50 p-1.5 w-full max-w-[200px] justify-center">
                               <div className="flex items-center gap-1">
-                                <span className="text-[10px] font-black text-slate-400 uppercase mr-1">EV</span>
+                                <span className="text-[10px] font-black text-slate-500 uppercase mr-1">EV</span>
                                 <input
                                   type="number"
                                   inputMode="numeric"
@@ -537,12 +537,12 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                                   onChange={(event) =>
                                     handleScoreChange(match.id, "home", event.target.value)
                                   }
-                                  className="h-10 w-12 rounded-xl border border-white/10 bg-white/[0.04] text-center text-lg font-black text-white outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15"
+                                  className="h-10 w-12 rounded-xl border border-slate-200 bg-white text-center text-lg font-black text-slate-800 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
                                   placeholder="0"
                                 />
                               </div>
 
-                              <span className="text-sm font-black text-slate-500">:</span>
+                              <span className="text-sm font-black text-slate-400">:</span>
 
                               <div className="flex items-center gap-1">
                                 <input
@@ -554,10 +554,10 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                                   onChange={(event) =>
                                     handleScoreChange(match.id, "away", event.target.value)
                                   }
-                                  className="h-10 w-12 rounded-xl border border-white/10 bg-white/[0.04] text-center text-lg font-black text-white outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15"
+                                  className="h-10 w-12 rounded-xl border border-slate-200 bg-white text-center text-lg font-black text-slate-800 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
                                   placeholder="0"
                                 />
-                                <span className="text-[10px] font-black text-slate-400 uppercase ml-1">DEP</span>
+                                <span className="text-[10px] font-black text-slate-500 uppercase ml-1">DEP</span>
                               </div>
                             </div>
                           </div>
@@ -566,7 +566,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                         {/* Desktop view (3 columns side-by-side) */}
                         <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                           <div className="flex min-w-0 items-center justify-end gap-2">
-                            <span className="truncate text-right text-xs font-black text-white sm:text-base">
+                            <span className="truncate text-right text-xs font-black text-slate-800 sm:text-base">
                               {match.homeTeam}
                             </span>
 
@@ -576,7 +576,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                             />
                           </div>
 
-                          <div className="flex items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5">
+                          <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 p-1.5">
                             <input
                               type="number"
                               inputMode="numeric"
@@ -586,11 +586,11 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               onChange={(event) =>
                                 handleScoreChange(match.id, "home", event.target.value)
                               }
-                              className="h-12 w-12 rounded-xl border border-white/10 bg-white/[0.04] text-center text-xl font-black text-white outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15 sm:h-14 sm:w-14"
+                              className="h-12 w-12 rounded-xl border border-slate-200 bg-white text-center text-xl font-black text-slate-800 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 sm:h-14 sm:w-14"
                               placeholder="0"
                             />
 
-                            <span className="text-sm font-black text-slate-500">:</span>
+                            <span className="text-sm font-black text-slate-400">:</span>
 
                             <input
                               type="number"
@@ -601,7 +601,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               onChange={(event) =>
                                 handleScoreChange(match.id, "away", event.target.value)
                               }
-                              className="h-12 w-12 rounded-xl border border-white/10 bg-white/[0.04] text-center text-xl font-black text-white outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15 sm:h-14 sm:w-14"
+                              className="h-12 w-12 rounded-xl border border-slate-200 bg-white text-center text-xl font-black text-slate-800 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 sm:h-14 sm:w-14"
                               placeholder="0"
                             />
                           </div>
@@ -612,13 +612,13 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               className="h-9 w-9 shrink-0 sm:h-11 sm:w-11"
                             />
 
-                            <span className="truncate text-left text-xs font-black text-white sm:text-base">
+                            <span className="truncate text-left text-xs font-black text-slate-800 sm:text-base">
                               {match.awayTeam}
                             </span>
                           </div>
                         </div>
 
-                        <div className="mt-3 text-center text-[10px] font-black uppercase tracking-wider text-slate-500">
+                        <div className="mt-3 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">
                           {formatMatchDate(match.matchDate)}
                         </div>
                       </div>
@@ -631,7 +631,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         </div>
 
         {step === 2 && !isSuccess && (
-          <div className="grid grid-cols-[1fr_2fr] gap-3 border-t border-white/[0.06] bg-white/[0.04] p-4">
+          <div className="grid grid-cols-[1fr_2fr] gap-3 border-t border-slate-150 bg-slate-50 p-4">
             <button
               type="button"
               onClick={() => {
@@ -640,7 +640,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 setPredictions({});
                 setError(null);
               }}
-              className="btn-secondary justify-center"
+              className="btn-secondary justify-center animate-fadeIn"
               disabled={isSubmitting}
             >
               <ArrowLeft className="h-4 w-4" />
@@ -651,13 +651,13 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
               type="button"
               onClick={handleSave}
               disabled={isSubmitting || sortedMatches.length === 0}
-              className="btn-primary justify-center"
+              className="btn-primary justify-center text-white"
             >
               {isSubmitting ? (
                 "Kaydediliyor..."
               ) : (
                 <>
-                  <Save className="h-5 w-5" />
+                  <Save className="h-5 w-5 text-white" />
                   Kaydet
                 </>
               )}

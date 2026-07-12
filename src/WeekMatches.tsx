@@ -75,7 +75,7 @@ const getPredictionStatus = (
     return {
       label: "Sonuç bekliyor",
       points: null,
-      className: "border-white/10 bg-white/[0.03] text-slate-500",
+      className: "border-slate-200 bg-slate-50 text-slate-500",
       icon: <Clock3 className="h-3.5 w-3.5" />
     };
   }
@@ -105,7 +105,7 @@ const getPredictionStatus = (
     return {
       label: bonus ? "Tek bilen tam isabet" : "Tam isabet",
       points: 2 + bonus,
-      className: "border-amber-400/25 bg-amber-400/10 text-amber-300",
+      className: "border-amber-200 bg-amber-50 text-amber-800",
       icon: <Trophy className="h-3.5 w-3.5" />
     };
   }
@@ -116,7 +116,7 @@ const getPredictionStatus = (
     return {
       label: bonus ? "Tek bilen sonuç" : "Doğru sonuç",
       points: 1 + bonus,
-      className: "border-orange-500/25 bg-orange-500/10 text-orange-300",
+      className: "border-orange-200 bg-orange-50 text-orange-800",
       icon: <CheckCircle2 className="h-3.5 w-3.5" />
     };
   }
@@ -124,7 +124,7 @@ const getPredictionStatus = (
   return {
     label: "Yanlış",
     points: 0,
-    className: "border-red-400/25 bg-red-400/10 text-red-300",
+    className: "border-red-200 bg-red-50 text-red-850",
     icon: <XCircle className="h-3.5 w-3.5" />
   };
 };
@@ -135,13 +135,13 @@ const SmallStat: React.FC<{
   value: React.ReactNode;
 }> = ({ icon, label, value }) => {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
       <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-slate-500">
         {icon}
         {label}
       </div>
 
-      <div className="mt-1 truncate text-sm font-black text-white">
+      <div className="mt-1 truncate text-sm font-black text-slate-800">
         {value}
       </div>
     </div>
@@ -174,15 +174,15 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
   if (!isPublished && !isAdmin) {
     return (
       <section className="card-base overflow-hidden">
-        <div className="bg-slate-950 p-5 text-white sm:p-7">
+        <div className="bg-slate-50 border-b border-slate-200 p-5 text-slate-800 sm:p-7">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
             <div>
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-amber-200">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-amber-700">
                 <Lock className="h-4 w-4" />
                 Hafta kilitli
               </div>
 
-              <h2 className="font-display mt-2 text-2xl font-black uppercase tracking-[-0.01em] sm:text-3xl">
+              <h2 className="font-display mt-2 text-2xl font-black uppercase tracking-[-0.01em] sm:text-3xl text-slate-800">
                 {label}
               </h2>
 
@@ -191,7 +191,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
               </p>
             </div>
 
-            <div className="rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-xs font-black uppercase tracking-wider text-amber-200">
+            <div className="rounded-2xl border border-amber-200 bg-amber-100 px-4 py-3 text-xs font-black uppercase tracking-wider text-amber-800">
               Yayın bekliyor
             </div>
           </div>
@@ -199,25 +199,25 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
         <div className="grid gap-4 p-5 sm:grid-cols-3 sm:p-7">
           <SmallStat
-            icon={<Users className="h-4 w-4 text-orange-400" />}
+            icon={<Users className="h-4 w-4 text-orange-600" />}
             label="Katılan"
             value={`${uniquePredictorIds.size}/${users.length}`}
           />
 
           <SmallStat
-            icon={<CalendarDays className="h-4 w-4 text-orange-400" />}
+            icon={<CalendarDays className="h-4 w-4 text-orange-600" />}
             label="Maç"
             value={matches.length}
           />
 
           <SmallStat
-            icon={<ShieldCheck className="h-4 w-4 text-orange-400" />}
+            icon={<ShieldCheck className="h-4 w-4 text-orange-600" />}
             label="Durum"
             value="Gizli"
           />
         </div>
 
-        <div className="border-t border-white/[0.06] p-5 sm:p-7">
+        <div className="border-t border-slate-200 p-5 sm:p-7">
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {users.map((user) => {
               const hasSubmitted = uniquePredictorIds.has(user.id);
@@ -225,23 +225,23 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
               return (
                 <div
                   key={user.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3"
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3"
                 >
                   <div className="flex min-w-0 items-center gap-2">
                     <span className={`shrink-0 ${hasSubmitted ? "" : "grayscale opacity-40"}`}>
                       <UserFlag flagEmoji={user.flagEmoji} className="h-5 w-5 text-lg" />
                     </span>
 
-                    <span className="truncate text-sm font-black text-white">
+                    <span className="truncate text-sm font-black text-slate-800">
                       {user.name}
                     </span>
                   </div>
 
                   <span
-                    className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${
+                    className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border ${
                       hasSubmitted
-                        ? "bg-orange-500/15 text-orange-300"
-                        : "bg-white/[0.08] text-slate-500"
+                        ? "bg-orange-50 border-orange-100 text-orange-700"
+                        : "bg-slate-100 border-slate-200 text-slate-500"
                     }`}
                   >
                     {hasSubmitted ? "Yaptı" : "Bekliyor"}
@@ -251,15 +251,15 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
             })}
           </div>
 
-          <div className="mt-8 border-t border-white/10 pt-6">
-            <label htmlFor="self-prediction-view-select" className="block text-xs font-black uppercase tracking-wider text-orange-400 mb-2">
+          <div className="mt-8 border-t border-slate-200 pt-6">
+            <label htmlFor="self-prediction-view-select" className="block text-xs font-black uppercase tracking-wider text-orange-600 mb-2">
               🔍 Kendi Tahminlerini Kontrol Et:
             </label>
             <select
               id="self-prediction-view-select"
               value={selfViewUserId}
               onChange={(e) => setSelfViewUserId(e.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-[#0f172a] px-4 py-3 text-sm font-bold text-white outline-none focus:border-orange-500"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
             >
               <option value="">Adını seç...</option>
               {users.map((user) => {
@@ -273,8 +273,8 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
             </select>
 
             {selfViewUserId && (
-              <div className="mt-4 rounded-2xl border border-orange-500/20 bg-orange-500/5 p-4 animate-fadeIn">
-                <h3 className="text-sm font-black text-white mb-3">
+              <div className="mt-4 rounded-2xl border border-orange-200 bg-orange-50/30 p-4 animate-fadeIn">
+                <h3 className="text-sm font-black text-slate-800 mb-3">
                   {users.find((u) => u.id === selfViewUserId)?.name} için Kayıtlı Tahminler:
                 </h3>
                 {predictions.filter((p) => p.userId === selfViewUserId).length === 0 ? (
@@ -286,12 +286,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         (pred) => pred.userId === selfViewUserId && pred.matchId === match.id
                       );
                       return (
-                        <div key={match.id} className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] p-2.5 text-xs border border-white/[0.04]">
-                          <span className="font-bold text-slate-300 truncate max-w-[150px]">{match.homeTeam}</span>
-                          <span className="font-mono bg-white/[0.05] px-2 py-1 rounded text-orange-400 font-black">
+                        <div key={match.id} className="flex items-center justify-between gap-3 rounded-xl bg-white p-2.5 text-xs border border-slate-200">
+                          <span className="font-bold text-slate-700 truncate max-w-[150px]">{match.homeTeam}</span>
+                          <span className="font-mono bg-orange-50 border border-orange-100 px-2 py-1 rounded text-orange-700 font-black">
                             {p ? `${p.predictedHome} - ${p.predictedAway}` : "-"}
                           </span>
-                          <span className="font-bold text-slate-300 truncate max-w-[150px] text-right">{match.awayTeam}</span>
+                          <span className="font-bold text-slate-700 truncate max-w-[150px] text-right">{match.awayTeam}</span>
                         </div>
                       );
                     })}
@@ -308,11 +308,11 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
   if (!sortedMatches.length) {
     return (
       <section className="card-base p-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-3xl bg-white/[0.03] text-slate-500 ring-1 ring-white/10">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-50 text-slate-400 ring-1 ring-slate-200">
           <CalendarDays className="h-7 w-7" />
         </div>
 
-        <h3 className="text-lg font-black text-white">
+        <h3 className="text-lg font-black text-slate-800">
           Bu haftaya maç eklenmemiş
         </h3>
 
@@ -326,14 +326,14 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
   return (
     <section className="space-y-4">
       <div className="card-base overflow-hidden">
-        <div className="border-b border-white/[0.06] p-5 sm:p-7">
+        <div className="border-b border-slate-200 p-5 sm:p-7 bg-white">
           <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-end">
             <div>
               <div className="section-title">
                 Haftanın maç merkezi
               </div>
 
-              <h2 className="font-display mt-2 text-3xl font-black uppercase tracking-[-0.02em] text-white sm:text-5xl">
+              <h2 className="font-display mt-2 text-3xl font-black uppercase tracking-[-0.02em] text-slate-800 sm:text-5xl">
                 {label}
               </h2>
 
@@ -344,19 +344,19 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
             <div className="grid grid-cols-3 gap-2 xl:w-[420px]">
               <SmallStat
-                icon={<CalendarDays className="h-4 w-4 text-orange-400" />}
+                icon={<CalendarDays className="h-4 w-4 text-orange-600" />}
                 label="Maç"
                 value={sortedMatches.length}
               />
 
               <SmallStat
-                icon={<ShieldCheck className="h-4 w-4 text-orange-400" />}
+                icon={<ShieldCheck className="h-4 w-4 text-orange-600" />}
                 label="Biten"
                 value={playedCount}
               />
 
               <SmallStat
-                icon={<Clock3 className="h-4 w-4 text-amber-600" />}
+                icon={<Clock3 className="h-4 w-4 text-amber-700" />}
                 label="Bekleyen"
                 value={pendingCount}
               />
@@ -364,7 +364,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
           </div>
         </div>
 
-        <div className="grid gap-4 p-4 sm:p-6">
+        <div className="grid gap-4 p-4 sm:p-6 bg-slate-50/30">
           {sortedMatches.map((match) => {
             const matchPredictions = predictions.filter(
               (prediction) => prediction.matchId === match.id
@@ -402,12 +402,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
             return (
               <article
                 key={match.id}
-                className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] shadow-[0_16px_54px_rgba(15,23,42,0.055)]"
+                className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm"
               >
                 <button
                   type="button"
                   onClick={() => setExpandedMatchId(expanded ? null : match.id)}
-                  className="block w-full p-4 text-left transition duration-200 hover:bg-white/[0.07] sm:p-5"
+                  className="block w-full p-4 text-left transition duration-200 hover:bg-slate-50 sm:p-5"
                 >
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
@@ -418,16 +418,16 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
                       <div className="flex flex-wrap items-center gap-2">
                         <span
-                          className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${
+                          className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider border ${
                             resultKnown
-                              ? "bg-orange-500/10 text-orange-400"
-                              : "bg-amber-400/10 text-amber-300"
+                              ? "bg-orange-50 border-orange-100 text-orange-700"
+                              : "bg-amber-50 border-amber-100 text-amber-700"
                           }`}
                         >
                           {resultKnown ? "Sonuçlandı" : "Bekliyor"}
                         </span>
 
-                        <span className="rounded-full bg-white/[0.06] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                        <span className="rounded-full bg-slate-100 border border-slate-200 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
                           {total} tahmin
                         </span>
                       </div>
@@ -439,7 +439,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         {/* Home Team */}
                         <div className="flex items-center gap-2 min-w-0 flex-1">
                           <TeamLogo teamName={match.homeTeam} className="h-9 w-9 shrink-0" />
-                          <span className="truncate text-base font-black text-white">
+                          <span className="truncate text-base font-black text-slate-800">
                             {match.homeTeam}
                           </span>
                         </div>
@@ -448,8 +448,8 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         <div className="mx-2 shrink-0">
                           <div className={`min-w-[70px] rounded-xl border px-2 py-1.5 text-center shadow-sm ${
                             resultKnown
-                              ? "border-orange-500/25 bg-orange-500/10 text-orange-300"
-                              : "border-white/10 bg-white/[0.03] text-white"
+                              ? "border-orange-200 bg-orange-50 text-orange-700"
+                              : "border-slate-200 bg-slate-50 text-slate-700"
                           }`}>
                             {resultKnown ? (
                               <span className="text-sm font-black">
@@ -463,7 +463,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
                         {/* Away Team */}
                         <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
-                          <span className="truncate text-base font-black text-white text-right">
+                          <span className="truncate text-base font-black text-slate-800 text-right">
                             {match.awayTeam}
                           </span>
                           <TeamLogo teamName={match.awayTeam} className="h-9 w-9 shrink-0" />
@@ -476,7 +476,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                       <div className="min-w-0">
                         <div className="flex items-center justify-end gap-3">
                           <div className="min-w-0 text-right">
-                            <div className="truncate text-lg font-black tracking-[-0.04em] text-white sm:text-2xl">
+                            <div className="truncate text-lg font-black tracking-[-0.04em] text-slate-800 sm:text-2xl">
                               {match.homeTeam}
                             </div>
                             <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
@@ -495,18 +495,18 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         <div
                           className={`min-w-[86px] rounded-[1.35rem] border px-3 py-3 text-center shadow-sm sm:min-w-[112px] ${
                             resultKnown
-                              ? "border-orange-500/25 bg-orange-500/10 text-orange-300"
-                              : "border-white/10 bg-white/[0.03] text-white"
+                              ? "border-orange-200 bg-orange-50 text-orange-750"
+                              : "border-slate-200 bg-slate-50 text-slate-800"
                           }`}
                         >
                           {resultKnown ? (
                             <div className="stat-number text-3xl sm:text-4xl">
                               {match.actualHome}
-                              <span className="mx-1.5 text-slate-500">:</span>
+                              <span className="mx-1.5 text-slate-400">:</span>
                               {match.actualAway}
                             </div>
                           ) : (
-                            <div className="text-sm font-black uppercase tracking-[0.28em] text-slate-500 sm:text-base">
+                            <div className="text-sm font-black uppercase tracking-[0.28em] text-slate-400 sm:text-base">
                               VS
                             </div>
                           )}
@@ -515,12 +515,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         <div className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500">
                           {resultKnown ? (
                             <>
-                              <ShieldCheck className="h-3.5 w-3.5 text-orange-400" />
+                              <ShieldCheck className="h-3.5 w-3.5 text-orange-600" />
                               Resmi skor
                             </>
                           ) : (
                             <>
-                              <Clock3 className="h-3.5 w-3.5 text-amber-600" />
+                              <Clock3 className="h-3.5 w-3.5 text-amber-700" />
                               Maç bekliyor
                             </>
                           )}
@@ -535,7 +535,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                           />
 
                           <div className="min-w-0 text-left">
-                            <div className="truncate text-lg font-black tracking-[-0.04em] text-white sm:text-2xl">
+                            <div className="truncate text-lg font-black tracking-[-0.04em] text-slate-800 sm:text-2xl">
                               {match.awayTeam}
                             </div>
                             <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
@@ -547,27 +547,27 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                     </div>
 
                     <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto] sm:items-center">
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2">
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
                         <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-slate-500">
-                          <BarChart3 className="h-3.5 w-3.5 text-orange-400" />
+                          <BarChart3 className="h-3.5 w-3.5 text-orange-600" />
                           Favori Tahmin
                         </div>
-                        <div className="mt-1 truncate text-sm font-black text-white">
+                        <div className="mt-1 truncate text-sm font-black text-slate-800">
                           {popularPick}
                         </div>
                       </div>
 
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2">
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
                         <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-slate-500">
-                          <Target className="h-3.5 w-3.5 text-orange-400" />
+                          <Target className="h-3.5 w-3.5 text-orange-600" />
                           Puan Durumu
                         </div>
-                        <div className="mt-1 truncate text-sm font-black text-white">
+                        <div className="mt-1 truncate text-sm font-black text-slate-800">
                           {pointsPublished ? "Puanlandı" : "Bekliyor"}
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-black text-white shadow-sm sm:min-w-[150px]">
+                      <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-800 shadow-sm sm:min-w-[150px]">
                         <span>{expanded ? "Kapat" : "Detay Aç"}</span>
                         <ChevronDown
                           className={`h-5 w-5 text-slate-500 transition ${
@@ -580,15 +580,15 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                 </button>
 
                 {expanded && (
-                  <div className="border-t border-white/[0.06] bg-white/[0.03]">
-                    <div className="border-b border-white/10 bg-white/[0.04] px-5 py-4 sm:px-6">
+                  <div className="border-t border-slate-150 bg-slate-50/50">
+                    <div className="border-b border-slate-250 bg-slate-50 px-5 py-4 sm:px-6">
                       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                         <div>
-                          <div className="text-[10px] font-black uppercase tracking-[0.22em] text-orange-400">
+                          <div className="text-[10px] font-black uppercase tracking-[0.22em] text-orange-600">
                             Açılan maç
                           </div>
 
-                          <h3 className="font-display mt-1 text-xl font-black uppercase tracking-[-0.01em] text-white">
+                          <h3 className="font-display mt-1 text-xl font-black uppercase tracking-[-0.01em] text-slate-800">
                             {match.homeTeam} - {match.awayTeam}
                           </h3>
 
@@ -600,15 +600,15 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         <div
                           className={`rounded-2xl border px-4 py-2 text-center ${
                             resultKnown
-                              ? "border-orange-500/25 bg-orange-500/10 text-orange-300"
-                              : "border-white/10 bg-white/[0.03] text-slate-500"
+                              ? "border-orange-200 bg-orange-50 text-orange-700 font-bold"
+                              : "border-slate-200 bg-slate-100 text-slate-500"
                           }`}
                         >
                           <div className="text-[10px] font-black uppercase tracking-wider">
                             Skor
                           </div>
 
-                          <div className="stat-number text-2xl">
+                          <div className="stat-number text-2xl text-slate-800">
                             {resultKnown
                               ? `${match.actualHome} - ${match.actualAway}`
                               : "Bekliyor"}
@@ -629,12 +629,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                           </p>
                         </div>
 
-                        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                        <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
                           {total > 0 ? `${total} tahmin` : "Tahmin yok"}
                         </span>
                       </div>
 
-                      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
+                      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
                         <div className="flex h-11 w-full">
                           <div
                             style={{ width: `${homePct}%` }}
@@ -645,14 +645,14 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
                           <div
                             style={{ width: `${drawPct}%` }}
-                            className="flex items-center justify-center bg-slate-400 text-[10px] font-black text-white"
+                            className="flex items-center justify-center bg-slate-300 text-[10px] font-black text-slate-800"
                           >
                             {drawPct >= 12 ? `${drawPct}%` : ""}
                           </div>
 
                           <div
                             style={{ width: `${awayPct}%` }}
-                            className="flex items-center justify-center bg-blue-700 text-[10px] font-black text-white"
+                            className="flex items-center justify-center bg-blue-600 text-[10px] font-black text-white"
                           >
                             {awayPct >= 12 ? `${awayPct}%` : ""}
                           </div>
@@ -660,7 +660,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                       </div>
 
                       <div className="mt-3 grid grid-cols-3 gap-2 text-[10px] font-black uppercase tracking-wider">
-                        <span className="truncate text-orange-400">
+                        <span className="truncate text-orange-600">
                           {match.homeTeam} ({homeWins})
                         </span>
 
@@ -669,13 +669,13 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                           Beraberlik ({draws})
                         </span>
 
-                        <span className="truncate text-right text-blue-700">
+                        <span className="truncate text-right text-blue-600">
                           {match.awayTeam} ({awayWins})
                         </span>
                       </div>
                     </div>
 
-                    <div className="border-t border-white/10 bg-white/[0.04] p-5 sm:p-6">
+                    <div className="border-t border-slate-200 bg-slate-50 p-5 sm:p-6">
                       {matchPredictions.length > 0 ? (
                         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                           {users.map((user) => {
@@ -713,11 +713,11 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                                     <UserFlag flagEmoji={user.flagEmoji} className="h-5 w-5 text-lg" />
 
                                     <div className="min-w-0">
-                                      <div className="truncate text-sm font-black">
+                                      <div className="truncate text-sm font-black text-slate-800">
                                         {user.name}
                                       </div>
 
-                                      <div className="mt-0.5 flex items-center gap-1 text-[9px] font-black uppercase tracking-wider opacity-80">
+                                      <div className="mt-0.5 flex items-center gap-1 text-[9px] font-black uppercase tracking-wider opacity-85 text-slate-600">
                                         {status.icon}
                                         {status.label}
                                       </div>
@@ -725,12 +725,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                                   </div>
 
                                   <div className="shrink-0 text-right">
-                                    <div className="text-lg font-black">
+                                    <div className="text-lg font-black text-slate-800">
                                       {prediction.predictedHome}-{prediction.predictedAway}
                                     </div>
 
                                     {status.points !== null && (
-                                      <div className="text-[10px] font-black uppercase tracking-wider opacity-80">
+                                      <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">
                                         {status.points > 0 ? `+${status.points}` : "0"} puan
                                       </div>
                                     )}
@@ -741,8 +741,8 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                           })}
                         </div>
                       ) : (
-                        <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center">
-                          <Sparkles className="mx-auto mb-2 h-6 w-6 text-slate-500" />
+                        <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-100/50 p-6 text-center">
+                          <Sparkles className="mx-auto mb-2 h-6 w-6 text-slate-400" />
 
                           <p className="text-sm font-bold text-slate-500">
                             Bu maç için henüz tahmin yok.

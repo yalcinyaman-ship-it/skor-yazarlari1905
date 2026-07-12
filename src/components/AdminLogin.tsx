@@ -32,25 +32,25 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-sm rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-7 shadow-2xl">
+      <div className="relative w-full max-w-sm rounded-[1.75rem] border border-slate-200 bg-white p-7 shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-2 text-slate-500 transition hover:bg-white/[0.06] hover:text-white"
+          className="absolute right-4 top-4 rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
           type="button"
         >
           <X className="h-5 w-5" />
         </button>
 
         <div className="mb-7">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-850 border border-slate-200">
             <Lock className="h-7 w-7" />
           </div>
 
-          <h2 className="text-2xl font-black tracking-tight text-white">
+          <h2 className="text-2xl font-black tracking-tight text-slate-850">
             Admin girişi
           </h2>
 
@@ -71,7 +71,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
               autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full"
+              className="input-field w-full text-slate-800 bg-white border border-slate-200 focus:border-orange-500"
               placeholder="Admin şifresi"
             />
           </div>
@@ -83,8 +83,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
             </div>
           )}
 
-          <button type="submit" className="btn-primary w-full justify-center">
-            <LogIn className="h-5 w-5" />
+          <button type="submit" className="btn-primary w-full justify-center text-white">
+            <LogIn className="h-5 w-5 text-white" />
             Giriş yap
           </button>
         </form>
