@@ -112,17 +112,17 @@ export function flagUrlForTeam(teamName: string | undefined | null, width: 24 | 
 }
 
 const SOCCER_TEAM_LOGOS: Record<string, string> = {
-  GS: "https://images.fotmob.com/image_resources/logo/team/10263.png",
-  FB: "https://images.fotmob.com/image_resources/logo/team/8695.png",
-  BJK: "https://images.fotmob.com/image_resources/logo/team/10188.png",
-  TS: "https://images.fotmob.com/image_resources/logo/team/10185.png",
-  BŞK: "https://images.fotmob.com/image_resources/logo/team/6153.png",
-  ADS: "https://images.fotmob.com/image_resources/logo/team/9806.png",
-  GÖZ: "https://images.fotmob.com/image_resources/logo/team/10186.png",
-  KSK: "https://images.fotmob.com/image_resources/logo/team/246538.png",
-  ESES: "https://images.fotmob.com/image_resources/logo/team/10183.png",
-  BURSA: "https://images.fotmob.com/image_resources/logo/team/10181.png",
-  SAMSUN: "https://images.fotmob.com/image_resources/logo/team/9801.png"
+  GS: "https://upload.wikimedia.org/wikipedia/commons/2/20/Galatasaray_Sports_Club_Logo.svg",
+  FB: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Fenerbah%C3%A7e_Spor_Kul%C3%BCb%C3%BC_%28logo%2C_1923%29.svg",
+  BJK: "https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_of_Be%C5%9Fikta%C5%9F_JK.svg",
+  TS: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Trabzonspor_logosu.svg",
+  BŞK: "https://upload.wikimedia.org/wikipedia/commons/5/5c/%C4%B0stanbul_Ba%C5%9Fak%C5%9Fehir_FK.svg",
+  ADS: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Adana_Demirspor_logo.svg",
+  GÖZ: "https://upload.wikimedia.org/wikipedia/commons/2/2d/G%C3%B6ztepe_logo.svg",
+  KSK: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Kar%C5%9F%C4%B1yaka_SK_logo.svg",
+  ESES: "https://upload.wikimedia.org/wikipedia/commons/4/41/Eski%C5%9Fehirspor_logo.svg",
+  BURSA: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Bursaspor_logo.svg",
+  SAMSUN: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Samsunspor_logo.svg"
 };
 
 export function flagUrlForEmoji(emoji: string | undefined | null, width: 24 | 48 | 80 = 48): string | null {

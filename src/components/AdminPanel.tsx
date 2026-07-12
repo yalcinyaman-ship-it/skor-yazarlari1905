@@ -129,18 +129,36 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, "users"), {
-        name: userName.trim(),
-        flagEmoji: userFlag,
-        colors: userColors.slice(0, userColorCount),
-        createdAt: serverTimestamp(),
-        totalPoints: 0,
-        totalExacts: 0,
-        totalResults: 0
-      });
+      if (editingUserPoints) {
+        const points = parseInt(tempUserPoints as string, 10) || 0;
+        await updateDoc(doc(db, "users", editingUserPoints), {
+          name: userName.trim(),
+          flagEmoji: userFlag,
+          colors: userColors.slice(0, userColorCount),
+          totalPoints: points
+        });
+        setEditingUserPoints(null);
+        setUserName("");
+        setUserFlag("⚽");
+        setUserColorCount(2);
+        setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+        setTempUserPoints(0);
+      } else {
+        await addDoc(collection(db, "users"), {
+          name: userName.trim(),
+          flagEmoji: userFlag,
+          colors: userColors.slice(0, userColorCount),
+          createdAt: serverTimestamp(),
+          totalPoints: 0,
+          totalExacts: 0,
+          totalResults: 0
+        });
 
-      setUserName("");
-      setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+        setUserName("");
+        setUserFlag("⚽");
+        setUserColorCount(2);
+        setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+      }
     } catch (err) {
       alert(err);
     } finally {
@@ -161,9 +179,17 @@ const AdminPanel: React.FC = () => {
     try {
       const points = parseInt(tempUserPoints as string, 10) || 0;
       await updateDoc(doc(db, "users", userId), { 
+        name: userName.trim(),
+        flagEmoji: userFlag,
+        colors: userColors.slice(0, userColorCount),
         totalPoints: points
       });
       setEditingUserPoints(null);
+      setUserName("");
+      setUserFlag("⚽");
+      setUserColorCount(2);
+      setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+      setTempUserPoints(0);
     } catch (err) {
       alert(err);
     }
@@ -504,9 +530,32 @@ const UsersTab = ({
     <div>
       <PanelTitle title="Kullanıcılar" description="Yazar ekle, renklerini seç, puanları yönet." icon={<Users className="h-5 w-5 text-emerald-700" />} />
 
-      <form onSubmit={handleAddUser} className="card-base mb-6 space-y-5 p-5">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto]">
-          <div>
+      <form onSubmit={handleAddUser} className={`card-base mb-6 space-y-5 p-5 border-2 transition duration-200 ${editingUserPoints ? "border-emerald-500 bg-emerald-50/10 shadow-lg" : "border-transparent"}`}>
+        {editingUserPoints && (
+          <div className="flex items-center justify-between rounded-xl bg-emerald-500/10 px-4 py-2.5 text-xs font-black text-emerald-800 animate-pulse">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-emerald-600"></span>
+              YAZARI DÜZENLEME MODU AKTİF (Yukarıdaki formdan logo, renk ve adı güncelleyebilirsiniz)
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setEditingUserPoints(null);
+                setUserName("");
+                setUserFlag("⚽");
+                setUserColorCount(2);
+                setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+                setTempUserPoints(0);
+              }}
+              className="text-slate-500 hover:text-slate-800 underline uppercase"
+            >
+              İptal Et / Vazgeç
+            </button>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_auto]">
+          <div className="flex-1">
             <label className="mb-1.5 block text-[10px] font-black uppercase tracking-wider text-slate-400">
               Ad soyad
             </label>
@@ -518,15 +567,56 @@ const UsersTab = ({
             />
           </div>
 
-          <button disabled={loading} className="btn-primary self-end justify-center h-[46px]">
-            <Plus className="h-4 w-4" />
-            Ekle
-          </button>
+          {editingUserPoints && (
+            <div>
+              <label className="mb-1.5 block text-[10px] font-black uppercase tracking-wider text-slate-400">
+                Puan
+              </label>
+              <input
+                type="number"
+                value={tempUserPoints}
+                onChange={(e) => setTempUserPoints(e.target.value)}
+                className="input-field w-24 text-right font-black"
+              />
+            </div>
+          )}
+
+          <div className="flex gap-2 self-end">
+            <button disabled={loading} className="btn-primary justify-center h-[46px] px-5">
+              {editingUserPoints ? (
+                <>
+                  <Save className="h-4 w-4" />
+                  Değişiklikleri Kaydet
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4" />
+                  Ekle
+                </>
+              )}
+            </button>
+            {editingUserPoints && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingUserPoints(null);
+                  setUserName("");
+                  setUserFlag("⚽");
+                  setUserColorCount(2);
+                  setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+                  setTempUserPoints(0);
+                }}
+                className="rounded-2xl border border-slate-200 bg-white px-4 h-[46px] text-xs font-black text-slate-500 hover:bg-slate-50"
+              >
+                Vazgeç
+              </button>
+            )}
+          </div>
         </div>
 
         <div>
           <label className="mb-2 block text-[10px] font-black uppercase tracking-wider text-slate-400">
-            Bayrak / ikon
+            Bayrak / ikon {editingUserPoints && <span className="text-emerald-700 font-bold">(Düzenleniyor)</span>}
           </label>
           <div className="flex flex-wrap gap-2">
             {FLAG_OPTIONS.map((flag) => (
@@ -536,7 +626,7 @@ const UsersTab = ({
                 onClick={() => setUserFlag(flag)}
                 className={`flex h-10 w-10 items-center justify-center rounded-2xl border text-lg transition ${
                   userFlag === flag
-                    ? "border-emerald-700 bg-emerald-50"
+                    ? "border-emerald-700 bg-emerald-50 scale-105"
                     : "border-slate-200 bg-white hover:bg-slate-50"
                 }`}
               >
@@ -549,7 +639,7 @@ const UsersTab = ({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
             <label className="mb-2 block text-[10px] font-black uppercase tracking-wider text-slate-400">
-              Renk sayısı
+              Renk sayısı {editingUserPoints && <span className="text-emerald-700 font-bold">(Düzenleniyor)</span>}
             </label>
             <div className="flex gap-2">
               <button
@@ -607,13 +697,13 @@ const UsersTab = ({
                 ["#0a6b3d", "#0058bc"]
               ].map((palette, idx) => (
                 <button
-                  key={idx}
-                  type="button"
-                  onClick={() => {
-                    setUserColorCount(palette.length as 2 | 3);
-                    setUserColors([...palette, "#ffffff"]);
-                  }}
-                  className="flex h-10 overflow-hidden rounded-xl border border-slate-200 transition hover:-translate-y-0.5"
+                   key={idx}
+                   type="button"
+                   onClick={() => {
+                     setUserColorCount(palette.length as 2 | 3);
+                     setUserColors([...palette, "#ffffff"]);
+                   }}
+                   className="flex h-10 overflow-hidden rounded-xl border border-slate-200 transition hover:-translate-y-0.5"
                 >
                   {palette.map((color, colorIndex) => (
                     <div key={colorIndex} className="h-full w-6" style={{ backgroundColor: color }} />
@@ -621,7 +711,7 @@ const UsersTab = ({
                 </button>
               ))}
             </div>
-            </div>
+          </div>
         </div>
       </form>
 
@@ -631,21 +721,42 @@ const UsersTab = ({
         </div>
 
         {users.map((user: any) => (
-          <div key={user.id} className="card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div key={user.id} className={`card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between border transition-all duration-200 ${editingUserPoints === user.id ? "border-emerald-500 bg-emerald-50/5 ring-1 ring-emerald-500" : ""}`}>
             <div className="flex min-w-0 items-center gap-3">
-              <UserFlag flagEmoji={user.flagEmoji} className="h-10 w-10 text-3xl" />
-              <div className="min-w-0">
-                <div className="truncate font-black text-slate-950">{user.name}</div>
-                <div className="flex items-center gap-3 mt-1">
-                  {user.colors && user.colors.length > 0 && (
-                    <div className="flex gap-1">
-                      {user.colors.map((color: string, index: number) => (
+              {editingUserPoints === user.id ? (
+                <div className="flex items-center gap-2">
+                  <UserFlag flagEmoji={userFlag} className="h-10 w-10 text-3xl animate-bounce" />
+                  <div>
+                    <input
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      className="input-field w-48 font-black text-sm py-1"
+                      placeholder="Ad soyad"
+                    />
+                    <div className="flex gap-1 mt-1">
+                      {userColors.slice(0, userColorCount).map((color: string, index: number) => (
                         <div key={index} className="h-3 w-3 rounded-full border border-slate-200" style={{ backgroundColor: color }} />
                       ))}
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <UserFlag flagEmoji={user.flagEmoji} className="h-10 w-10 text-3xl" />
+                  <div className="min-w-0">
+                    <div className="truncate font-black text-slate-950">{user.name}</div>
+                    <div className="flex items-center gap-3 mt-1">
+                      {user.colors && user.colors.length > 0 && (
+                        <div className="flex gap-1">
+                          {user.colors.map((color: string, index: number) => (
+                            <div key={index} className="h-3 w-3 rounded-full border border-slate-200" style={{ backgroundColor: color }} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -657,13 +768,23 @@ const UsersTab = ({
                       type="number"
                       value={tempUserPoints}
                       onChange={(e) => setTempUserPoints(e.target.value)}
-                      className="input-field w-16 text-right"
+                      className="input-field w-16 text-right font-black"
                     />
                   </div>
-                  <button onClick={() => handleSaveUserPoints(user.id)} className="rounded-xl bg-emerald-700 px-3 py-2 text-xs font-black text-white">
+                  <button onClick={() => handleSaveUserPoints(user.id)} className="rounded-xl bg-emerald-700 px-3 py-2 text-xs font-black text-white hover:bg-emerald-800 transition">
                     Kaydet
                   </button>
-                  <button onClick={() => setEditingUserPoints(null)} className="rounded-xl bg-slate-100 px-3 py-2 text-xs font-black text-slate-500">
+                  <button
+                    onClick={() => {
+                      setEditingUserPoints(null);
+                      setUserName("");
+                      setUserFlag("⚽");
+                      setUserColorCount(2);
+                      setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
+                      setTempUserPoints(0);
+                    }}
+                    className="rounded-xl bg-slate-100 px-3 py-2 text-xs font-black text-slate-500 hover:bg-slate-200 transition"
+                  >
                     İptal
                   </button>
                 </div>
@@ -679,10 +800,14 @@ const UsersTab = ({
                   </div>
                   <button
                     onClick={() => {
+                      setUserName(user.name);
+                      setUserFlag(user.flagEmoji || "⚽");
+                      setUserColorCount(user.colors?.length as 2 | 3 || 2);
+                      setUserColors(user.colors && user.colors.length > 0 ? user.colors : ["#0a6b3d", "#0058bc", "#ffffff"]);
                       setTempUserPoints(user.totalPoints || 0);
                       setEditingUserPoints(user.id);
                     }}
-                    className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-black text-slate-500 hover:bg-slate-50"
+                    className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-black text-slate-500 hover:bg-slate-100 transition"
                   >
                     Düzenle
                   </button>

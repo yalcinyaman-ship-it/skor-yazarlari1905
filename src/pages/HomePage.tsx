@@ -1326,14 +1326,28 @@ const HomePage: React.FC = () => {
           &copy; {new Date().getFullYear()} Skor Yazarları. Özel tahmin ligi merkezi.
         </p>
 
-        <button
-          onClick={openAdmin}
-          className="rounded-full p-2 text-slate-500 transition duration-200 hover:bg-white/[0.06] hover:text-slate-500"
-          title={isAdmin ? "Yönetici Panelini Aç" : "Yönetici Girişi"}
-          id="admin-footer-btn"
-        >
-          {isAdmin ? <Unlock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={openAdmin}
+            className="rounded-full p-2 text-slate-500 transition duration-200 hover:bg-white/[0.06] hover:text-slate-300"
+            title={isAdmin ? "Yönetici Panelini Aç" : "Yönetici Girişi (Şifre İster)"}
+            id="admin-footer-btn-login"
+          >
+            {isAdmin ? <Unlock className="h-4 w-4 text-emerald-400" /> : <Lock className="h-4 w-4" />}
+          </button>
+
+          <button
+            onClick={() => {
+              setIsAdmin(false);
+              setIsAdminPanelOpen(false);
+            }}
+            className="rounded-full p-2 text-slate-500 transition duration-200 hover:bg-white/[0.06] hover:text-rose-400"
+            title="Yönetici Çıkışı"
+            id="admin-footer-btn-logout"
+          >
+            <Lock className="h-4 w-4 text-slate-400 hover:text-rose-400" />
+          </button>
+        </div>
       </footer>
 
       <AnimatePresence>

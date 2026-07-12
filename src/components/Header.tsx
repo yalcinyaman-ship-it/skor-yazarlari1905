@@ -2,7 +2,7 @@ import React from "react";
 import { Lock, ShieldCheck, Target, Trophy, Unlock, RotateCw } from "lucide-react";
 
 interface HeaderProps {
-  onAdminClick: () => void;
+  onAdminClick?: () => void;
   onPredictionClick: () => void;
   activeSeasonName?: string;
   isAdmin: boolean;
@@ -60,30 +60,6 @@ const Header: React.FC<HeaderProps> = ({
               <span className="sm:hidden">Tahmin</span>
             </button>
           )}
-
-          <button
-            type="button"
-            onClick={onAdminClick}
-            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-xs font-black uppercase tracking-wider transition duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
-              isAdmin
-                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 shadow-sm hover:border-emerald-500/30 hover:bg-emerald-500/15"
-                : "border-slate-200 bg-slate-50 text-slate-600 shadow-sm hover:border-slate-300 hover:bg-slate-100 hover:text-slate-800"
-            }`}
-            title={isAdmin ? "Admin panelini aç" : "Admin girişi"}
-            id="admin-header-btn"
-          >
-            {isAdmin ? (
-              <>
-                <Unlock className="h-4 w-4" />
-                <span className="hidden md:inline">Yönetim Açık</span>
-              </>
-            ) : (
-              <>
-                <Lock className="h-4 w-4" />
-                <span className="hidden md:inline">Yönetim</span>
-              </>
-            )}
-          </button>
 
           <button
             type="button"
