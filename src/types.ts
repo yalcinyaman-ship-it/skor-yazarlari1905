@@ -8,6 +8,7 @@ export interface User {
   flagEmoji: string;
   colors?: string[];
   createdAt?: FirestoreDate;
+  pin?: string;
 
   seasonPoints?: Record<string, number>;
   seasonExacts?: Record<string, number>;

@@ -158,7 +158,6 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
   isAdmin = false
 }) => {
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
-  const [selfViewUserId, setSelfViewUserId] = useState<string>("");
 
   const sortedMatches = useMemo(() => {
     return [...matches].sort((a, b) => getDateMs(a.matchDate) - getDateMs(b.matchDate));
@@ -249,56 +248,6 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                 </div>
               );
             })}
-          </div>
-
-          <div className="mt-8 border-t border-slate-200 pt-6">
-            <label htmlFor="self-prediction-view-select" className="block text-xs font-black uppercase tracking-wider text-orange-600 mb-2">
-              🔍 Kendi Tahminlerini Kontrol Et:
-            </label>
-            <select
-              id="self-prediction-view-select"
-              value={selfViewUserId}
-              onChange={(e) => setSelfViewUserId(e.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
-            >
-              <option value="">Adını seç...</option>
-              {users.map((user) => {
-                const hasSubmitted = uniquePredictorIds.has(user.id);
-                return (
-                  <option key={user.id} value={user.id}>
-                    {user.name} ({hasSubmitted ? "Tahmin Girdi" : "Girmedi"})
-                  </option>
-                );
-              })}
-            </select>
-
-            {selfViewUserId && (
-              <div className="mt-4 rounded-2xl border border-orange-200 bg-orange-50/30 p-4 animate-fadeIn">
-                <h3 className="text-sm font-black text-slate-800 mb-3">
-                  {users.find((u) => u.id === selfViewUserId)?.name} için Kayıtlı Tahminler:
-                </h3>
-                {predictions.filter((p) => p.userId === selfViewUserId).length === 0 ? (
-                  <p className="text-xs font-semibold text-slate-500">Bu yazar için henüz tahmin kaydedilmemiş.</p>
-                ) : (
-                  <div className="space-y-2">
-                    {sortedMatches.map((match) => {
-                      const p = predictions.find(
-                        (pred) => pred.userId === selfViewUserId && pred.matchId === match.id
-                      );
-                      return (
-                        <div key={match.id} className="flex items-center justify-between gap-3 rounded-xl bg-white p-2.5 text-xs border border-slate-200">
-                          <span className="font-bold text-slate-700 truncate max-w-[150px]">{match.homeTeam}</span>
-                          <span className="font-mono bg-orange-50 border border-orange-100 px-2 py-1 rounded text-orange-700 font-black">
-                            {p ? `${p.predictedHome} - ${p.predictedAway}` : "-"}
-                          </span>
-                          <span className="font-bold text-slate-700 truncate max-w-[150px] text-right">{match.awayTeam}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </div>
       </section>

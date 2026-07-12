@@ -159,7 +159,9 @@ const AdminPanel: React.FC = () => {
   const handleSaveUserPoints = async (userId: string) => {
     try {
       const points = parseInt(tempUserPoints as string, 10) || 0;
-      await updateDoc(doc(db, "users", userId), { totalPoints: points });
+      await updateDoc(doc(db, "users", userId), { 
+        totalPoints: points
+      });
       setEditingUserPoints(null);
     } catch (err) {
       alert(err);
@@ -499,10 +501,10 @@ const UsersTab = ({
 }: any) => {
   return (
     <div>
-      <PanelTitle title="Kullanıcılar" description="Yazar ekle, renklerini seç, puanları gerekirse manuel düzelt." icon={<Users className="h-5 w-5 text-emerald-700" />} />
+      <PanelTitle title="Kullanıcılar" description="Yazar ekle, renklerini seç, puanları yönet." icon={<Users className="h-5 w-5 text-emerald-700" />} />
 
       <form onSubmit={handleAddUser} className="card-base mb-6 space-y-5 p-5">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto]">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto]">
           <div>
             <label className="mb-1.5 block text-[10px] font-black uppercase tracking-wider text-slate-400">
               Ad soyad
@@ -515,7 +517,7 @@ const UsersTab = ({
             />
           </div>
 
-          <button disabled={loading} className="btn-primary self-end justify-center">
+          <button disabled={loading} className="btn-primary self-end justify-center h-[46px]">
             <Plus className="h-4 w-4" />
             Ekle
           </button>
@@ -633,25 +635,30 @@ const UsersTab = ({
               <span className="text-3xl">{sanitizeFlagEmoji(user.flagEmoji)}</span>
               <div className="min-w-0">
                 <div className="truncate font-black text-slate-950">{user.name}</div>
-                {user.colors && user.colors.length > 0 && (
-                  <div className="mt-1 flex gap-1">
-                    {user.colors.map((color: string, index: number) => (
-                      <div key={index} className="h-3 w-3 rounded-full border border-slate-200" style={{ backgroundColor: color }} />
-                    ))}
-                  </div>
-                )}
+                <div className="flex items-center gap-3 mt-1">
+                  {user.colors && user.colors.length > 0 && (
+                    <div className="flex gap-1">
+                      {user.colors.map((color: string, index: number) => (
+                        <div key={index} className="h-3 w-3 rounded-full border border-slate-200" style={{ backgroundColor: color }} />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
               {editingUserPoints === user.id ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    value={tempUserPoints}
-                    onChange={(e) => setTempUserPoints(e.target.value)}
-                    className="input-field w-24 text-right"
-                  />
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-slate-400">Puan:</span>
+                    <input
+                      type="number"
+                      value={tempUserPoints}
+                      onChange={(e) => setTempUserPoints(e.target.value)}
+                      className="input-field w-16 text-right"
+                    />
+                  </div>
                   <button onClick={() => handleSaveUserPoints(user.id)} className="rounded-xl bg-emerald-700 px-3 py-2 text-xs font-black text-white">
                     Kaydet
                   </button>
