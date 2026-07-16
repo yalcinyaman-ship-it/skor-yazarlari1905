@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { X, Lock, LogIn, AlertCircle } from "lucide-react";
+import { X, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 interface AdminLoginProps {
   isVisible: boolean;
@@ -7,24 +9,45 @@ interface AdminLoginProps {
   onSuccess: () => void;
 }
 
-const ADMIN_PASSWORD = "1905";
-
 const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
 
-    if (password === ADMIN_PASSWORD) {
-      setPassword("");
-      setError(null);
-      onSuccess();
-      onClose();
-      return;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const adminDocRef = doc(db, "settings", "admin");
+      const adminDoc = await getDoc(adminDocRef);
+      
+      let correctPassword = "6171622";
+      if (!adminDoc.exists()) {
+        // If settings/admin doesn't exist in Firestore, initialize it with the requested 6171622
+        await setDoc(adminDocRef, { password: "6171622" });
+      } else {
+        correctPassword = adminDoc.data()?.password || "6171622";
+      }
+
+      if (password === correctPassword) {
+        setPassword("");
+        setError(null);
+        onSuccess();
+        onClose();
+        return;
+      }
+
+      setError("Şifre hatalı.");
+    } catch (err: any) {
+      console.error("Admin login error:", err);
+      setError("Bağlantı hatası: " + (err?.message || "Bilinmeyen bir hata oluştu"));
+    } finally {
+      setLoading(false);
     }
-
-    setError("Şifre hatalı.");
   };
 
   if (!isVisible) return null;
@@ -69,9 +92,10 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
               type="password"
               required
               autoFocus
+              disabled={loading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full text-slate-800 bg-white border border-slate-200 focus:border-orange-500"
+              className="input-field w-full text-slate-800 bg-white border border-slate-200 focus:border-orange-500 disabled:opacity-50"
               placeholder="Admin şifresi"
             />
           </div>
@@ -83,9 +107,17 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
             </div>
           )}
 
-          <button type="submit" className="btn-primary w-full justify-center text-white">
-            <LogIn className="h-5 w-5 text-white" />
-            Giriş yap
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary w-full justify-center text-white disabled:opacity-50"
+          >
+            {loading ? (
+              <Loader2 className="h-5 w-5 animate-spin text-white" />
+            ) : (
+              <LogIn className="h-5 w-5 text-white" />
+            )}
+            {loading ? "Doğrulanıyor..." : "Giriş yap"}
           </button>
         </form>
       </div>

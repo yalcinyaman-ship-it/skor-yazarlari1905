@@ -74,9 +74,22 @@
         "breakdown": { "type": "array" }
       },
       "required": ["points", "bonusPoints", "totalWeekPoints", "breakdown"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global settings parameters",
+      "type": "object",
+      "properties": {
+        "password": { "type": "string" }
+      },
+      "required": ["password"]
     }
   },
   "firestore": {
+    "/settings/{settingsId}": {
+      "schema": "Settings",
+      "description": "System configuration parameters"
+    },
     "/users/{userId}": {
       "schema": "User",
       "description": "Main users collection"
