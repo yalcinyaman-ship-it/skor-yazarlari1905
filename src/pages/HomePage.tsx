@@ -79,7 +79,7 @@ const StatTile: React.FC<{
       className={
         dark
           ? "rounded-3xl border border-white/10 bg-white/[0.06] p-4"
-          : "rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-sm"
+          : "rounded-3xl border border-slate-200 bg-slate-50/50 p-4 shadow-sm"
       }
     >
       <div
@@ -97,7 +97,7 @@ const StatTile: React.FC<{
         className={
           dark
             ? "truncate text-2xl font-black tracking-[-0.04em] text-white"
-            : "truncate text-2xl font-black tracking-[-0.04em] text-white"
+            : "truncate text-2xl font-black tracking-[-0.04em] text-slate-800"
         }
       >
         {value}
@@ -153,7 +153,7 @@ const EmptyState: React.FC<{
         <Trophy className="h-8 w-8" />
       </div>
 
-      <h2 className="text-3xl font-black tracking-[-0.05em] text-white">
+      <h2 className="text-3xl font-black tracking-[-0.05em] text-slate-850">
         {title}
       </h2>
 
@@ -960,7 +960,7 @@ const HomePage: React.FC = () => {
                           >
                             <div className="mb-5 flex items-start justify-between gap-3">
                               <div>
-                                <h3 className="text-lg font-black text-white transition group-hover:text-orange-400">
+                                <h3 className="text-lg font-black text-slate-850 transition group-hover:text-orange-600">
                                   {season.name}
                                 </h3>
                                 <p className="mt-1 text-xs font-black uppercase tracking-wider text-slate-500">
@@ -968,13 +968,13 @@ const HomePage: React.FC = () => {
                                 </p>
                               </div>
 
-                              <span className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                              <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
                                 Arşiv
                               </span>
                             </div>
 
                             {champion ? (
-                              <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                              <div className="mb-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-3">
                                 <div className="mb-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
                                   Şampiyon
                                 </div>
@@ -982,23 +982,23 @@ const HomePage: React.FC = () => {
                                 <div className="flex items-center justify-between gap-3">
                                   <div className="flex items-center gap-2">
                                     <UserFlag flagEmoji={champion.flagEmoji} className="h-6 w-6 text-2xl" />
-                                    <span className="font-black text-white">
+                                    <span className="font-black text-slate-800">
                                       {champion.name}
                                     </span>
                                   </div>
 
-                                  <span className="rounded-xl bg-white/[0.04] px-3 py-1.5 text-sm font-black text-orange-400">
-                                    {champion.score}
+                                  <span className="rounded-xl bg-orange-50 px-3 py-1.5 text-sm font-black text-orange-600">
+                                    {champion.score} Puan
                                   </span>
                                 </div>
                               </div>
                             ) : (
-                              <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm font-bold text-slate-500">
+                              <div className="mb-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-3 text-sm font-bold text-slate-500">
                                 Şampiyon bilgisi bekleniyor.
                               </div>
                             )}
 
-                            <div className="flex items-center justify-between border-t border-white/[0.06] pt-4 text-xs font-black uppercase tracking-wider text-orange-400">
+                            <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-xs font-black uppercase tracking-wider text-orange-600">
                               <span>Sezon Detayları</span>
                               <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" />
                             </div>
@@ -1186,7 +1186,7 @@ const HomePage: React.FC = () => {
                     <UserFlag flagEmoji={lastChampion.flagEmoji} className="h-16 w-16 text-6xl" />
 
                     <div>
-                      <h3 className="text-2xl font-black text-white">
+                      <h3 className="text-2xl font-black text-slate-850">
                         {lastChampion.name}
                       </h3>
                       <p className="mt-1 text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -1196,8 +1196,8 @@ const HomePage: React.FC = () => {
                   </div>
 
                   <div className="mt-6 grid grid-cols-3 gap-3">
-                    <div className="rounded-2xl bg-white/[0.03] p-3 text-center">
-                      <div className="text-2xl font-black text-orange-400">
+                    <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-3 text-center">
+                      <div className="text-2xl font-black text-orange-600">
                         {lastChampion.score}
                       </div>
                       <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">
@@ -1205,8 +1205,8 @@ const HomePage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white/[0.03] p-3 text-center">
-                      <div className="text-2xl font-black text-white">
+                    <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-3 text-center">
+                      <div className="text-2xl font-black text-slate-850">
                         {lastChampion.exacts}
                       </div>
                       <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">
@@ -1214,8 +1214,8 @@ const HomePage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white/[0.03] p-3 text-center">
-                      <div className="text-2xl font-black text-white">
+                    <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-3 text-center">
+                      <div className="text-2xl font-black text-slate-850">
                         {lastChampion.results}
                       </div>
                       <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">
@@ -1235,7 +1235,7 @@ const HomePage: React.FC = () => {
                       <Archive className="h-4 w-4" />
                       Lig Hafızası
                     </div>
-                    <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-white sm:text-3xl">
+                    <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-slate-850 sm:text-3xl">
                       Geçmiş Sezonlar
                     </h2>
                   </div>
@@ -1269,7 +1269,7 @@ const HomePage: React.FC = () => {
                       >
                         <div className="mb-5 flex items-start justify-between gap-3">
                           <div>
-                            <h3 className="text-lg font-black text-white transition group-hover:text-orange-400">
+                            <h3 className="text-lg font-black text-slate-850 transition group-hover:text-orange-600">
                               {season.name}
                             </h3>
                             <p className="mt-1 text-xs font-black uppercase tracking-wider text-slate-500">
@@ -1277,13 +1277,13 @@ const HomePage: React.FC = () => {
                             </p>
                           </div>
 
-                          <span className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
                             Arşiv
                           </span>
                         </div>
 
                         {champion ? (
-                          <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                          <div className="mb-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-3">
                             <div className="mb-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
                               Şampiyon
                             </div>
@@ -1291,23 +1291,23 @@ const HomePage: React.FC = () => {
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex items-center gap-2">
                                 <UserFlag flagEmoji={champion.flagEmoji} className="h-6 w-6 text-2xl" />
-                                <span className="font-black text-white">
+                                <span className="font-black text-slate-800">
                                   {champion.name}
                                 </span>
                               </div>
 
-                              <span className="rounded-xl bg-white/[0.04] px-3 py-1.5 text-sm font-black text-orange-400">
-                                {champion.score}
+                              <span className="rounded-xl bg-orange-50 px-3 py-1.5 text-sm font-black text-orange-600">
+                                {champion.score} Puan
                               </span>
                             </div>
                           </div>
                         ) : (
-                          <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm font-bold text-slate-500">
+                          <div className="mb-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-3 text-sm font-bold text-slate-500">
                             Şampiyon bilgisi bekleniyor.
                           </div>
                         )}
 
-                        <div className="flex items-center justify-between border-t border-white/[0.06] pt-4 text-xs font-black uppercase tracking-wider text-orange-400">
+                        <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-xs font-black uppercase tracking-wider text-orange-600">
                           <span>Sezon Detayları</span>
                           <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" />
                         </div>
