@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { X, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+
+const ADMIN_EMAIL = "admin@skoryazarlari.app";
 
 interface AdminLoginProps {
   isVisible: boolean;
@@ -22,29 +24,21 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
     setError(null);
 
     try {
-      const adminDocRef = doc(db, "settings", "admin");
-      const adminDoc = await getDoc(adminDocRef);
-      
-      let correctPassword = "6171622";
-      if (!adminDoc.exists()) {
-        // If settings/admin doesn't exist in Firestore, initialize it with the requested 6171622
-        await setDoc(adminDocRef, { password: "6171622" });
-      } else {
-        correctPassword = adminDoc.data()?.password || "6171622";
-      }
-
-      if (password === correctPassword) {
-        setPassword("");
-        setError(null);
-        onSuccess();
-        onClose();
-        return;
-      }
-
-      setError("Şifre hatalı.");
+      await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password);
+      setPassword("");
+      setError(null);
+      onSuccess();
+      onClose();
     } catch (err: any) {
       console.error("Admin login error:", err);
-      setError("Bağlantı hatası: " + (err?.message || "Bilinmeyen bir hata oluştu"));
+      const code = err?.code as string | undefined;
+      setError(
+        code === "auth/invalid-credential" ||
+        code === "auth/wrong-password" ||
+        code === "auth/user-not-found"
+          ? "Şifre hatalı."
+          : "Giriş şu anda tamamlanamadı. Lütfen tekrar dene."
+      );
     } finally {
       setLoading(false);
     }
@@ -55,36 +49,38 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#07100e]/82 backdrop-blur-md"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-sm rounded-[1.75rem] border border-slate-200 bg-white p-7 shadow-2xl">
+      <div className="relative w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#101816] p-7 text-white shadow-[0_32px_100px_rgba(0,0,0,0.55)]">
+        <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-orange-500/20 blur-3xl" />
+
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+          className="absolute right-4 top-4 z-10 rounded-full border border-white/10 bg-white/[0.06] p-2 text-white/45 transition hover:bg-white/10 hover:text-white"
           type="button"
         >
           <X className="h-5 w-5" />
         </button>
 
-        <div className="mb-7">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-850 border border-slate-200">
+        <div className="relative mb-7">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-orange-400/25 bg-orange-500/15 text-orange-400 shadow-[0_12px_32px_rgba(249,115,22,0.12)]">
             <Lock className="h-7 w-7" />
           </div>
 
-          <h2 className="text-2xl font-black tracking-tight text-slate-850">
+          <h2 className="text-2xl font-black tracking-tight text-white">
             Admin girişi
           </h2>
 
-          <p className="mt-1 text-sm font-semibold text-slate-500">
+          <p className="mt-1 text-sm font-semibold leading-relaxed text-white/45">
             Yönetim paneline girmek için admin şifresini yaz.
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs font-black uppercase tracking-wider text-slate-500">
+            <label className="mb-1.5 block text-xs font-black uppercase tracking-[0.16em] text-white/40">
               Şifre
             </label>
 
@@ -95,13 +91,13 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
               disabled={loading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full text-slate-800 bg-white border border-slate-200 focus:border-orange-500 disabled:opacity-50"
+              className="input-field w-full !border-white/10 !bg-white/[0.06] !text-white placeholder:!text-white/25 focus:!border-orange-400 disabled:opacity-50"
               placeholder="Admin şifresi"
             />
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-700">
+            <div className="flex items-start gap-2 rounded-2xl border border-red-400/20 bg-red-500/10 p-3 text-sm font-bold text-red-300">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>

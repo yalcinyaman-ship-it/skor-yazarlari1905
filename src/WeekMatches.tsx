@@ -275,18 +275,19 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
   return (
     <section className="space-y-4">
       <div className="card-base overflow-hidden">
-        <div className="border-b border-slate-200 p-5 sm:p-7 bg-white">
+        <div className="relative overflow-hidden border-b border-white/10 bg-[#101816] p-5 text-white sm:p-7">
+          <div className="pointer-events-none absolute right-0 top-0 h-48 w-96 bg-[radial-gradient(circle,rgba(240,90,40,0.2),transparent_65%)]" />
           <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-end">
             <div>
               <div className="section-title">
                 Haftanın maç merkezi
               </div>
 
-              <h2 className="font-display mt-2 text-3xl font-black uppercase tracking-[-0.02em] text-slate-800 sm:text-5xl">
+              <h2 className="font-display mt-2 text-3xl font-black uppercase tracking-[-0.04em] text-white sm:text-5xl">
                 {label}
               </h2>
 
-              <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-slate-500">
+              <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-white/40">
                 Maçları net gör, sonucu takip et, detaydan herkesin tahminini aç.
               </p>
             </div>
@@ -351,12 +352,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
             return (
               <article
                 key={match.id}
-                className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm"
+                className="match-sheet overflow-hidden rounded-[1.4rem] border border-[#d8d3c8]"
               >
                 <button
                   type="button"
                   onClick={() => setExpandedMatchId(expanded ? null : match.id)}
-                  className="block w-full p-4 text-left transition duration-200 hover:bg-slate-50 sm:p-5"
+                  className="block w-full p-4 text-left transition duration-300 hover:bg-white sm:p-5"
                 >
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
@@ -444,14 +445,14 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                         <div
                           className={`min-w-[86px] rounded-[1.35rem] border px-3 py-3 text-center shadow-sm sm:min-w-[112px] ${
                             resultKnown
-                              ? "border-orange-200 bg-orange-50 text-orange-750"
+                              ? "score-display"
                               : "border-slate-200 bg-slate-50 text-slate-800"
                           }`}
                         >
                           {resultKnown ? (
                             <div className="stat-number text-3xl sm:text-4xl">
                               {match.actualHome}
-                              <span className="mx-1.5 text-slate-400">:</span>
+                              <span className="mx-1.5 text-orange-400">:</span>
                               {match.actualAway}
                             </div>
                           ) : (

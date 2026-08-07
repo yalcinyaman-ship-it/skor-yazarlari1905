@@ -30,11 +30,11 @@ const getRankMeta = (index: number) => {
       icon: <Crown className="h-4 w-4" />,
       medalIcon: <Trophy className="h-16 w-16" />,
       cardClass:
-        "border-amber-200 bg-gradient-to-br from-amber-500/[0.07] via-amber-50/[0.02] to-white shadow-[0_15px_45px_rgba(245,158,11,0.06)]",
-      badgeClass: "border-amber-200 bg-amber-50 text-amber-800",
-      numberClass: "bg-amber-500 text-white",
-      glowClass: "bg-amber-200/30",
-      nameClass: "text-slate-800"
+        "border-orange-400/25 bg-[radial-gradient(circle_at_90%_0%,rgba(240,90,40,0.22),transparent_18rem),linear-gradient(135deg,#131b18,#07100e)] text-white shadow-[0_28px_70px_rgba(8,14,12,0.22)]",
+      badgeClass: "border-orange-300/20 bg-orange-400/10 text-orange-200",
+      numberClass: "bg-orange-500 text-white",
+      glowClass: "bg-orange-400/20",
+      nameClass: "text-white"
     };
   }
 
@@ -123,7 +123,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
             type="button"
             onClick={() => onUserClick?.(user)}
             title={user.name}
-            className={`group relative min-h-[228px] overflow-hidden rounded-[1.75rem] border p-5 text-left transition duration-200 hover:-translate-y-1 hover:border-orange-500/30 hover:shadow-[0_20px_50px_rgba(15,23,42,0.06)] active:translate-y-0 ${rank.cardClass} ${
+            className={`group relative min-h-[238px] overflow-hidden rounded-[1.5rem] border p-5 text-left transition duration-300 hover:-translate-y-1 hover:border-orange-500/30 hover:shadow-[0_24px_60px_rgba(15,23,42,0.11)] active:translate-y-0 ${rank.cardClass} ${
               isLeader ? "sm:col-span-2 xl:col-span-2 xl:row-span-1" : ""
             }`}
           >
@@ -155,7 +155,9 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
                   <div
-                    className={`relative flex shrink-0 items-center justify-center rounded-[1.25rem] bg-slate-50 shadow-sm ring-1 ring-slate-200 ${
+                    className={`relative flex shrink-0 items-center justify-center rounded-[1.15rem] shadow-sm ring-1 ${
+                      isLeader ? "bg-white/[0.08] ring-white/10" : "bg-slate-50 ring-slate-200"
+                    } ${
                       isLeader ? "h-18 w-18" : "h-15 w-15"
                     }`}
                   >
@@ -165,7 +167,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                     />
 
                     <div
-                      className={`absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full text-xs font-black shadow-sm ring-4 ring-white ${rank.numberClass}`}
+                      className={`absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full text-xs font-black shadow-sm ring-4 ${isLeader ? "ring-[#101816]" : "ring-white"} ${rank.numberClass}`}
                     >
                       {index + 1}
                     </div>
@@ -188,7 +190,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                         {rank.title}
                       </span>
 
-                      <span className="rounded-full border border-slate-100 bg-slate-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                      <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${isLeader ? "border-white/10 bg-white/[0.05] text-white/40" : "border-slate-100 bg-slate-50 text-slate-500"}`}>
                         {rank.note}
                       </span>
                     </div>
@@ -199,12 +201,12 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
               <div>
                 <div className="mb-4 flex items-end justify-between gap-4">
                   <div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">
+                    <div className={`text-[10px] font-black uppercase tracking-[0.24em] ${isLeader ? "text-white/35" : "text-slate-500"}`}>
                       Toplam Puan
                     </div>
 
                     <div
-                      className={`stat-number mt-1 font-black leading-none text-slate-800 ${
+                      className={`stat-number mt-1 font-black leading-none ${isLeader ? "text-white" : "text-slate-800"} ${
                         isLeader ? "text-6xl" : "text-5xl"
                       }`}
                     >
@@ -218,7 +220,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                       +{weekPoints}
                     </div>
                   ) : (
-                    <div className="inline-flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-black text-slate-500">
+                    <div className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-black ${isLeader ? "border-white/10 bg-white/[0.05] text-white/40" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
                       <Shield className="h-4 w-4" />
                       Stabil
                     </div>
@@ -226,35 +228,35 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-3">
-                    <div className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-slate-500">
+                  <div className={`rounded-xl border p-3 ${isLeader ? "border-white/10 bg-white/[0.05]" : "border-slate-100 bg-slate-50/50"}`}>
+                    <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isLeader ? "text-white/35" : "text-slate-500"}`}>
                       <Target className="h-3.5 w-3.5 text-orange-600" />
                       Tam
                     </div>
 
-                    <div className="mt-1 text-xl font-black text-slate-800">
+                    <div className={`mt-1 text-xl font-black ${isLeader ? "text-white" : "text-slate-800"}`}>
                       {exacts}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-3">
-                    <div className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-slate-500">
+                  <div className={`rounded-xl border p-3 ${isLeader ? "border-white/10 bg-white/[0.05]" : "border-slate-100 bg-slate-50/50"}`}>
+                    <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isLeader ? "text-white/35" : "text-slate-500"}`}>
                       <Sparkles className="h-3.5 w-3.5 text-orange-600" />
                       Sonuç
                     </div>
 
-                    <div className="mt-1 text-xl font-black text-slate-800">
+                    <div className={`mt-1 text-xl font-black ${isLeader ? "text-white" : "text-slate-800"}`}>
                       {results}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-3">
-                    <div className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-slate-500">
+                  <div className={`rounded-xl border p-3 ${isLeader ? "border-white/10 bg-white/[0.05]" : "border-slate-100 bg-slate-50/50"}`}>
+                    <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isLeader ? "text-white/35" : "text-slate-500"}`}>
                       <Trophy className="h-3.5 w-3.5 text-orange-600" />
                       İsabet
                     </div>
 
-                    <div className="mt-1 text-xl font-black text-slate-800">
+                    <div className={`mt-1 text-xl font-black ${isLeader ? "text-white" : "text-slate-800"}`}>
                       {totalHits}
                     </div>
                   </div>

@@ -20,10 +20,8 @@ import {
   collection,
   doc,
   getDocs,
-  query,
   serverTimestamp,
-  setDoc,
-  where
+  writeBatch
 } from "firebase/firestore";
 import { db } from "../firebase";
 import TeamLogo from "./TeamLogo";
@@ -67,6 +65,11 @@ const isFilledScore = (value: unknown) => {
   return typeof value === "number" && Number.isFinite(value) && value >= 0;
 };
 
+const isMatchLocked = (match: Match) => {
+  const kickoff = getDateMs(match.matchDate);
+  return kickoff > 0 && Date.now() >= kickoff;
+};
+
 const PredictionModal: React.FC<PredictionModalProps> = ({
   isVisible,
   onClose,
@@ -89,6 +92,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
 
   const completedMatchCount = useMemo(() => {
     return sortedMatches.filter((match) => {
+      if (isMatchLocked(match)) return false;
       const prediction = predictions[match.id];
 
       return (
@@ -98,8 +102,10 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
     }).length;
   }, [sortedMatches, predictions]);
 
-  const progressPct = sortedMatches.length
-    ? Math.round((completedMatchCount / sortedMatches.length) * 100)
+  const openMatchCount = sortedMatches.filter((match) => !isMatchLocked(match)).length;
+
+  const progressPct = openMatchCount
+    ? Math.round((completedMatchCount / openMatchCount) * 100)
     : 0;
 
   const unpredictedUsers = useMemo(() => {
@@ -111,15 +117,12 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
 
     const fetchExisting = async () => {
       try {
-        const q = query(
-          collection(db, "seasons", seasonId, "predictions"),
-          where("weekId", "==", activeWeek.id)
+        const submissionSnap = await getDocs(
+          collection(db, "seasons", seasonId, "weeks", activeWeek.id, "submissions")
         );
-
-        const snap = await getDocs(q);
         const uids = new Set(
-          snap.docs
-            .map((document) => document.data().userId)
+          submissionSnap.docs
+            .map((document) => document.data().userId || document.id)
             .filter(Boolean)
         );
 
@@ -186,7 +189,9 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
   const handleSave = async () => {
     if (!selectedUser) return;
 
-    const missingMatches = sortedMatches.filter((match) => {
+    const openMatches = sortedMatches.filter((match) => !isMatchLocked(match));
+
+    const missingMatches = openMatches.filter((match) => {
       const prediction = predictions[match.id];
 
       return (
@@ -205,8 +210,8 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
       return;
     }
 
-    if (sortedMatches.length === 0) {
-      setError("Bu haftaya maç eklenmemiş. Tahmin kaydedilemez.");
+    if (openMatches.length === 0) {
+      setError("Tahmine açık maç kalmadı.");
       return;
     }
 
@@ -214,11 +219,13 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
     setError(null);
 
     try {
-      const promises = sortedMatches.map((match) => {
+      const batch = writeBatch(db);
+
+      openMatches.forEach((match) => {
         const prediction = predictions[match.id];
         const targetId = `${selectedUser.id}_${match.id}`;
 
-        return setDoc(doc(db, "seasons", seasonId, "predictions", targetId), {
+        batch.set(doc(db, "seasons", seasonId, "predictions", targetId), {
           userId: selectedUser.id,
           weekId: activeWeek.id,
           matchId: match.id,
@@ -228,7 +235,15 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         });
       });
 
-      await Promise.all(promises);
+      batch.set(
+        doc(db, "seasons", seasonId, "weeks", activeWeek.id, "submissions", selectedUser.id),
+        {
+          userId: selectedUser.id,
+          createdAt: serverTimestamp()
+        }
+      );
+
+      await batch.commit();
 
       setExistingPredictors((prev) => {
         if (prev.includes(selectedUser.id)) return prev;
@@ -255,7 +270,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#07100e]/80 backdrop-blur-md"
         onClick={resetAndClose}
       />
 
@@ -263,27 +278,28 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         initial={{ opacity: 0, scale: 0.96, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
-        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl"
+        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#fffdf8] shadow-[0_36px_110px_rgba(5,10,8,0.4)]"
       >
-        <div className="border-b border-slate-150 bg-slate-50 p-5 sm:p-6">
+        <div className="relative shrink-0 overflow-hidden border-b border-white/10 bg-[#101816] p-5 text-white sm:p-6">
+          <div className="pointer-events-none absolute right-0 top-0 h-48 w-72 bg-[radial-gradient(circle,rgba(240,90,40,0.22),transparent_68%)]" />
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-orange-50 border border-orange-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-orange-700">
+                <span className="rounded-full border border-orange-400/20 bg-orange-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-orange-300">
                   {activeWeek.label}
                 </span>
 
-                <span className="rounded-full bg-slate-100 border border-slate-200 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                <span className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white/45">
                   {step === 1 ? "1/2 Oyuncu" : "2/2 Skor"}
                 </span>
               </div>
 
-              <h2 className="mt-3 flex items-center gap-3 text-2xl font-black tracking-[-0.055em] text-slate-800 sm:text-3xl">
+              <h2 className="mt-3 flex items-center gap-3 text-[1.35rem] font-black leading-tight tracking-[-0.055em] text-white sm:text-3xl">
                 {step === 2 && <UserFlag flagEmoji={selectedUser?.flagEmoji} className="h-8 w-8 text-3xl" />}
                 {step === 1 ? "Kim tahmin yapıyor?" : `${selectedUser?.name}, skorları gir`}
               </h2>
 
-              <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-500">
+              <p className="mt-2 hidden max-w-2xl text-sm font-semibold leading-6 text-white/45 sm:block">
                 {step === 1
                   ? "Adını seç. Bu hafta tahmin yapan kişi tekrar listelenmez."
                   : "Her maç için iki skoru da doldur. Eksik maç kalırsa kayıt yapılmaz."}
@@ -293,7 +309,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
             <button
               type="button"
               onClick={resetAndClose}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-500 shadow-sm transition hover:bg-slate-100 hover:text-slate-800"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-white/45 transition hover:bg-white/10 hover:text-white"
               aria-label="Tahmin penceresini kapat"
             >
               <X className="h-5 w-5" />
@@ -302,14 +318,14 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
 
           {step === 2 && !isSuccess && (
             <div className="mt-5">
-              <div className="mb-2 flex items-center justify-between gap-3 text-xs font-black uppercase tracking-wider text-slate-500">
+              <div className="mb-2 flex items-center justify-between gap-3 text-xs font-black uppercase tracking-wider text-white/40">
                 <span>
-                  Tamamlanan maç: {completedMatchCount}/{sortedMatches.length}
+                  Tamamlanan maç: {completedMatchCount}/{openMatchCount}
                 </span>
                 <span>{progressPct}%</span>
               </div>
 
-              <div className="h-3 overflow-hidden rounded-full bg-slate-100">
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
                 <div
                   className="h-full rounded-full bg-orange-600 transition-all duration-300"
                   style={{ width: `${progressPct}%` }}
@@ -319,7 +335,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto bg-slate-50/30 p-4 sm:p-6">
+        <div className="flex-1 overflow-y-auto bg-[#f3efe6] p-4 sm:p-6">
           <AnimatePresence mode="wait">
             {isSuccess ? (
               <motion.div
@@ -350,33 +366,33 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 exit={{ x: 16, opacity: 0 }}
                 className="space-y-4"
               >
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  <div className="rounded-2xl border border-[#d8d3c8] bg-[#fffdf8] p-3 shadow-sm sm:p-4">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
                       <Users className="h-4 w-4 text-orange-600" />
                       Toplam
                     </div>
-                    <div className="mt-1 text-2xl font-black text-slate-800">
+                    <div className="mt-1 text-xl font-black text-slate-800 sm:text-2xl">
                       {users.length}
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="rounded-2xl border border-[#d8d3c8] bg-[#fffdf8] p-3 shadow-sm sm:p-4">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
                       <CheckCircle2 className="h-4 w-4 text-orange-600" />
                       Yapan
                     </div>
-                    <div className="mt-1 text-2xl font-black text-slate-800">
+                    <div className="mt-1 text-xl font-black text-slate-800 sm:text-2xl">
                       {existingPredictors.length}
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="rounded-2xl border border-[#d8d3c8] bg-[#fffdf8] p-3 shadow-sm sm:p-4">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500">
                       <Clock3 className="h-4 w-4 text-amber-700" />
                       Bekleyen
                     </div>
-                    <div className="mt-1 text-2xl font-black text-slate-800">
+                    <div className="mt-1 text-xl font-black text-slate-800 sm:text-2xl">
                       {unpredictedUsers.length}
                     </div>
                   </div>
@@ -405,7 +421,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                         key={user.id}
                         type="button"
                         onClick={() => handleUserSelect(user)}
-                        className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 text-center shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-orange-500/30 hover:shadow-md active:translate-y-0"
+                        className="group relative overflow-hidden rounded-2xl border border-[#d8d3c8] bg-[#fffdf8] p-4 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-orange-500/40 hover:shadow-xl active:translate-y-0"
                       >
                         {user.colors && user.colors.length > 0 && (
                           <div
@@ -464,6 +480,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 ) : (
                   sortedMatches.map((match, index) => {
                     const prediction = predictions[match.id];
+                    const locked = isMatchLocked(match);
                     const isComplete =
                       isFilledScore(prediction?.home) &&
                       isFilledScore(prediction?.away);
@@ -472,7 +489,9 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                       <div
                         key={match.id}
                         className={`rounded-[1.5rem] border bg-white p-4 shadow-sm transition ${
-                          isComplete
+                          locked
+                            ? "border-slate-200 bg-slate-100/70 opacity-75"
+                            : isComplete
                             ? "border-orange-300 ring-1 ring-orange-400/30"
                             : "border-slate-200"
                         }`}
@@ -490,12 +509,14 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
 
                             <span
                               className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border ${
-                                isComplete
+                                locked
+                                  ? "bg-slate-200 border-slate-300 text-slate-600"
+                                  : isComplete
                                   ? "bg-orange-50 border-orange-100 text-orange-700"
                                   : "bg-slate-100 border-slate-200 text-slate-500"
                               }`}
                             >
-                              {isComplete ? "Tamam" : "Eksik"}
+                              {locked ? "Kilitlendi" : isComplete ? "Tamam" : "Eksik"}
                             </span>
                           </div>
                         </div>
@@ -533,6 +554,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                                   inputMode="numeric"
                                   min="0"
                                   max="30"
+                                  disabled={locked}
                                   value={prediction?.home ?? ""}
                                   onChange={(event) =>
                                     handleScoreChange(match.id, "home", event.target.value)
@@ -550,6 +572,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                                   inputMode="numeric"
                                   min="0"
                                   max="30"
+                                  disabled={locked}
                                   value={prediction?.away ?? ""}
                                   onChange={(event) =>
                                     handleScoreChange(match.id, "away", event.target.value)
@@ -582,6 +605,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               inputMode="numeric"
                               min="0"
                               max="30"
+                              disabled={locked}
                               value={prediction?.home ?? ""}
                               onChange={(event) =>
                                 handleScoreChange(match.id, "home", event.target.value)
@@ -597,6 +621,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               inputMode="numeric"
                               min="0"
                               max="30"
+                              disabled={locked}
                               value={prediction?.away ?? ""}
                               onChange={(event) =>
                                 handleScoreChange(match.id, "away", event.target.value)

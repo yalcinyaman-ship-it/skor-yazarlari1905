@@ -4,9 +4,11 @@ import {
   getDocs,
   onSnapshot,
   orderBy,
-  query
+  query,
+  where
 } from "firebase/firestore";
-import { db } from "../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth, db } from "../firebase";
 import {
   Match,
   Prediction,
@@ -78,14 +80,14 @@ const StatTile: React.FC<{
     <div
       className={
         dark
-          ? "rounded-3xl border border-white/10 bg-white/[0.06] p-4"
+          ? "rounded-2xl border border-white/10 bg-white/[0.055] p-4 backdrop-blur"
           : "rounded-3xl border border-slate-200 bg-slate-50/50 p-4 shadow-sm"
       }
     >
       <div
         className={
           dark
-            ? "mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500"
+            ? "mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.22em] text-white/35"
             : "mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500"
         }
       >
@@ -107,7 +109,7 @@ const StatTile: React.FC<{
         <div
           className={
             dark
-              ? "mt-1 truncate text-xs font-bold text-slate-500"
+              ? "mt-1 truncate text-xs font-bold text-white/35"
               : "mt-1 truncate text-xs font-bold text-slate-500"
           }
         >
@@ -131,7 +133,7 @@ const StatusPill: React.FC<{
           ? "border-sky-400/25 bg-sky-400/10 text-sky-300"
           : tone === "dark"
             ? "border-white/10 bg-white/10 text-white"
-            : "border-white/10 bg-white/[0.03] text-slate-500";
+            : "border-white/10 bg-white/[0.03] text-white/45";
 
   return (
     <span
@@ -171,7 +173,7 @@ const HomePage: React.FC = () => {
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"ozet" | "tahminler" | "puan-durumu" | "istatistikler">("puan-durumu");
+  const [activeTab, setActiveTab] = useState<"ozet" | "tahminler" | "puan-durumu" | "istatistikler">("ozet");
 
   const [selectedUserForProfile, setSelectedUserForProfile] = useState<any>(null);
   const [selectedArchiveSeason, setSelectedArchiveSeason] = useState<Season | null>(null);
@@ -187,6 +189,7 @@ const HomePage: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [allMatches, setAllMatches] = useState<Record<string, Match[]>>({});
   const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [submittedUserIds, setSubmittedUserIds] = useState<string[]>([]);
   const [weekPoints, setWeekPoints] = useState<any>({});
 
   const [historyWeek, setHistoryWeek] = useState<Week | null>(null);
@@ -194,6 +197,17 @@ const HomePage: React.FC = () => {
   const [historyPredictions, setHistoryPredictions] = useState<Prediction[]>([]);
 
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      const authenticatedAdmin = user?.email === "admin@skoryazarlari.app";
+      setIsAdmin(authenticatedAdmin);
+
+      if (!authenticatedAdmin) {
+        setIsAdminPanelOpen(false);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const unsubUsers = onSnapshot(
@@ -269,27 +283,72 @@ const HomePage: React.FC = () => {
       }
     );
 
-    const unsubPredictions = onSnapshot(
-      collection(db, "seasons", activeSeason.id, "predictions"),
+    return () => {
+      unsubWeeks();
+    };
+  }, [activeSeason]);
+
+  useEffect(() => {
+    if (!activeSeason || weeks.length === 0) {
+      setPredictions([]);
+      return;
+    }
+
+    const readableWeeks = isAdmin
+      ? weeks
+      : weeks.filter((week) => week.isPublished);
+
+    if (readableWeeks.length === 0) {
+      setPredictions([]);
+      return;
+    }
+
+    const predictionsByWeek = new Map<string, Prediction[]>();
+    const unsubs = readableWeeks.map((week) =>
+      onSnapshot(
+        query(
+          collection(db, "seasons", activeSeason.id, "predictions"),
+          where("weekId", "==", week.id)
+        ),
+        (snap) => {
+          predictionsByWeek.set(
+            week.id,
+            snap.docs.map((document) => ({
+              id: document.id,
+              ...document.data()
+            } as Prediction))
+          );
+          setPredictions(Array.from(predictionsByWeek.values()).flat());
+        },
+        (err) => {
+          console.error("Firestore predictions snapshot failed:", err);
+          setError("Firestore bağlantı hatası: " + err.message);
+        }
+      )
+    );
+
+    return () => unsubs.forEach((unsub) => unsub());
+  }, [activeSeason, weeks, isAdmin]);
+
+  useEffect(() => {
+    if (!activeSeason || !activeWeek) {
+      setSubmittedUserIds([]);
+      return;
+    }
+
+    return onSnapshot(
+      collection(db, "seasons", activeSeason.id, "weeks", activeWeek.id, "submissions"),
       (snap) => {
-        setPredictions(
-          snap.docs.map((document) => ({
-            id: document.id,
-            ...document.data()
-          } as Prediction))
+        setSubmittedUserIds(
+          snap.docs.map((document) => document.data().userId || document.id)
         );
       },
       (err) => {
-        console.error("Firestore predictions snapshot failed:", err);
+        console.error("Firestore submissions snapshot failed:", err);
         setError("Firestore bağlantı hatası: " + err.message);
       }
     );
-
-    return () => {
-      unsubWeeks();
-      unsubPredictions();
-    };
-  }, [activeSeason]);
+  }, [activeSeason, activeWeek]);
 
   useEffect(() => {
     if (!activeSeason || weeks.length === 0) return;
@@ -394,8 +453,13 @@ const HomePage: React.FC = () => {
   }, [activeWeek, predictions]);
 
   const existingPredictors = useMemo(() => {
-    return Array.from(new Set(activeWeekPredictions.map((prediction) => prediction.userId)));
-  }, [activeWeekPredictions]);
+    return Array.from(
+      new Set([
+        ...submittedUserIds,
+        ...activeWeekPredictions.map((prediction) => prediction.userId)
+      ].filter(Boolean))
+    );
+  }, [submittedUserIds, activeWeekPredictions]);
 
   const allUsersHavePredicted =
     users.length > 0 && users.every((user) => existingPredictors.includes(user.id));
@@ -528,7 +592,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen px-4 pb-20 pt-24">
+    <div className="min-h-screen px-3 pb-24 pt-28 sm:px-5">
       <Header
         onAdminClick={openAdmin}
         onPredictionClick={() => setIsPredictionModalOpen(true)}
@@ -537,7 +601,7 @@ const HomePage: React.FC = () => {
         hasActiveWeek={!!activeWeek && !activeWeek.isPublished && !allUsersHavePredicted}
       />
 
-      <main className="mx-auto max-w-7xl space-y-8 text-slate-900">
+      <main className="mx-auto max-w-[1440px] space-y-9 text-slate-900">
         {error && (
           <div
             className="flex items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-300 shadow-sm"
@@ -555,17 +619,17 @@ const HomePage: React.FC = () => {
 
         {/* Sitenin Klasına Uygun Tab Navigasyonu */}
         {activeSeason && (
-          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-3xl bg-slate-100 border border-slate-200 backdrop-blur-sm">
+          <div className="premium-nav flex flex-wrap items-center justify-center gap-1.5 rounded-2xl p-1.5 backdrop-blur-xl lg:justify-start">
             {/* GENEL ÖZET */}
             <button
               onClick={() => setActiveTab("ozet")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "ozet"
-                  ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                  ? "bg-[#fff8ed] text-[#101716] shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+                  : "premium-nav-button"
               }`}
             >
-              <Sparkles className="h-4 w-4 shrink-0 text-orange-600" />
+              <Sparkles className="h-4 w-4 shrink-0 text-orange-500" />
               <span>Genel Özet</span>
             </button>
 
@@ -580,13 +644,13 @@ const HomePage: React.FC = () => {
               title={predictionLocked ? "Tüm tahminler girildi veya kilitlendi." : "Haftalık tahminleri girmek için tıklayın."}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 predictionLocked
-                  ? "bg-slate-200/50 text-slate-400 cursor-not-allowed border border-slate-300"
+                  ? "cursor-not-allowed border border-white/5 bg-white/[0.03] text-white/20"
                   : activeTab === "ozet"
                     ? "bg-orange-600 text-white shadow-lg shadow-emerald-600/15 hover:bg-orange-500 hover:scale-[1.02] animate-pulse"
-                    : "bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 hover:border-orange-300"
+                    : "border border-orange-400/20 bg-orange-400/10 text-orange-300 hover:bg-orange-400/15"
               }`}
             >
-              <Target className={`h-4 w-4 shrink-0 ${predictionLocked ? "text-slate-400" : "text-orange-600"}`} />
+              <Target className={`h-4 w-4 shrink-0 ${predictionLocked ? "text-white/20" : "text-orange-400"}`} />
               <span>Maç Tahmini Yap</span>
             </button>
 
@@ -595,11 +659,11 @@ const HomePage: React.FC = () => {
               onClick={() => setActiveTab("tahminler")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "tahminler"
-                  ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                  ? "bg-[#fff8ed] text-[#101716] shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+                  : "premium-nav-button"
               }`}
             >
-              <Calendar className="h-4 w-4 shrink-0 text-orange-600" />
+              <Calendar className="h-4 w-4 shrink-0 text-orange-500" />
               <span>Tahminler</span>
             </button>
 
@@ -608,8 +672,8 @@ const HomePage: React.FC = () => {
               onClick={() => setActiveTab("puan-durumu")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "puan-durumu"
-                  ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                  ? "bg-[#fff8ed] text-[#101716] shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+                  : "premium-nav-button"
               }`}
             >
               <Medal className="h-4 w-4 shrink-0 text-amber-600" />
@@ -621,11 +685,11 @@ const HomePage: React.FC = () => {
               onClick={() => setActiveTab("istatistikler")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === "istatistikler"
-                  ? "bg-orange-600 text-white shadow-lg shadow-orange-600/25 scale-[1.02]"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                  ? "bg-[#fff8ed] text-[#101716] shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+                  : "premium-nav-button"
               }`}
             >
-              <BarChart3 className="h-4 w-4 shrink-0 text-orange-600" />
+              <BarChart3 className="h-4 w-4 shrink-0 text-orange-500" />
               <span>İstatistikler</span>
             </button>
           </div>
@@ -640,11 +704,11 @@ const HomePage: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="space-y-8"
               >
-                <section className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.04] shadow-[0_30px_110px_rgba(15,23,42,0.09)]">
-                  <div className="pointer-events-none absolute right-0 top-0 h-full w-1/3 bg-[linear-gradient(180deg,rgba(10,107,61,0.05),transparent_60%)]" />
+                <section className="premium-hero relative overflow-hidden rounded-[2rem] border border-white/10 text-white">
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-400/80 to-transparent" />
 
                   <div className="relative grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-                    <div className="p-5 sm:p-8 lg:p-10">
+                    <div className="relative p-6 sm:p-9 lg:p-12">
                       <div className="mb-6 flex flex-wrap items-center gap-2">
                         <StatusPill tone="green">
                           <Sparkles className="h-3.5 w-3.5" />
@@ -673,22 +737,26 @@ const HomePage: React.FC = () => {
                       </div>
 
                       <div className="max-w-4xl">
-                        <h1 className="font-display text-4xl font-black uppercase leading-[0.95] tracking-[-0.03em] text-slate-850 sm:text-6xl lg:text-7xl">
+                        <div className="mb-4 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.36em] text-white/40">
+                          <span className="h-px w-10 bg-orange-500" />
+                          Özel Tahmin Ligi · İstanbul
+                        </div>
+                        <h1 className="font-display text-5xl font-black uppercase leading-[0.86] tracking-[-0.055em] text-white sm:text-7xl lg:text-[5.75rem]">
                           Skor Yazarları
-                          <span className="block text-orange-400">
+                          <span className="mt-2 block text-orange-400">
                             tahmin ligi
                           </span>
                         </h1>
 
-                        <p className="mt-5 max-w-2xl text-base font-semibold leading-8 text-slate-500 sm:text-lg">
-                          Haftalık skor tahminleri, liderlik yarışı, maç sonuçları ve
-                          sezon hafızası tek ekranda. Gereksiz kalabalık yok; rekabet
-                          doğrudan ortada.
+                        <p className="mt-6 max-w-2xl text-base font-semibold leading-8 text-white/55 sm:text-lg">
+                          Dokuz yazar. Bir sezon. Her hafta yeniden kurulan bir futbol hikâyesi.
+                          Skoru yaz, riskini al, masanın zirvesine adını bırak.
                         </p>
                       </div>
 
                       <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                         <StatTile
+                          dark
                           icon={<Calendar className="h-4 w-4 text-orange-400" />}
                           label="Aktif Hafta"
                           value={activeWeek?.label || "Yok"}
@@ -696,6 +764,7 @@ const HomePage: React.FC = () => {
                         />
 
                         <StatTile
+                          dark
                           icon={<Users className="h-4 w-4 text-orange-400" />}
                           label="Katılım"
                           value={`${existingPredictors.length}/${users.length}`}
@@ -703,6 +772,7 @@ const HomePage: React.FC = () => {
                         />
 
                         <StatTile
+                          dark
                           icon={<Clock className="h-4 w-4 text-amber-600" />}
                           label="Bekleyen Maç"
                           value={pendingMatchesCount}
@@ -710,6 +780,7 @@ const HomePage: React.FC = () => {
                         />
 
                         <StatTile
+                          dark
                           icon={<Crown className="h-4 w-4 text-amber-500" />}
                           label="Lider"
                           value={leader?.name || "Yok"}
@@ -730,7 +801,7 @@ const HomePage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setActiveTab("tahminler")}
-                          className="btn-secondary justify-center"
+                          className="btn-secondary justify-center !border-white/10 !bg-white/[0.06] !text-white hover:!bg-white/[0.1]"
                         >
                           <Eye className="h-5 w-5" />
                           Haftayı Gör
@@ -739,7 +810,7 @@ const HomePage: React.FC = () => {
                         <button
                           type="button"
                           onClick={openAdmin}
-                          className="btn-secondary justify-center"
+                          className="btn-secondary justify-center !border-white/10 !bg-white/[0.06] !text-white hover:!bg-white/[0.1]"
                         >
                           <ShieldCheck className="h-5 w-5" />
                           Yönetim
@@ -747,8 +818,8 @@ const HomePage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="bg-grain bg-scoreboard relative border-t border-white/10 bg-slate-950 p-5 text-white sm:p-8 lg:border-l lg:border-t-0 lg:p-8">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(16,185,129,0.16),transparent_32rem)]" />
+                    <div className="bg-grain bg-scoreboard relative border-t border-white/10 bg-black/20 p-5 text-white sm:p-8 lg:border-l lg:border-t-0 lg:p-9">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(240,90,40,0.13),transparent_32rem)]" />
 
                       <div className="relative">
                         <div className="mb-6 flex items-start justify-between gap-4">
@@ -1337,9 +1408,8 @@ const HomePage: React.FC = () => {
           </button>
 
           <button
-            onClick={() => {
-              setIsAdmin(false);
-              setIsAdminPanelOpen(false);
+            onClick={async () => {
+              await signOut(auth);
             }}
             className="rounded-full p-2 text-slate-500 transition duration-200 hover:bg-white/[0.06] hover:text-rose-400"
             title="Yönetici Çıkışı"

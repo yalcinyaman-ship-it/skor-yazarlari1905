@@ -52,6 +52,11 @@ export interface Match {
   matchDate?: FirestoreDate | any;
   actualHome: number | null;
   actualAway: number | null;
+  externalFixtureId?: number;
+  source?: "api-football" | "manual";
+  homeTeamLogo?: string;
+  awayTeamLogo?: string;
+  externalStatus?: string;
 }
 
 export interface Prediction {

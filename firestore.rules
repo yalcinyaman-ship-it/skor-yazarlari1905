@@ -3,6 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isAdmin() {
+      return request.auth != null &&
+        request.auth.token.email == 'admin@skoryazarlari.app';
+    }
+
     function incoming() {
       return request.resource.data;
     }
@@ -24,48 +29,86 @@ service cloud.firestore {
       data.userId is string &&
       data.weekId is string &&
       data.matchId is string &&
+      data.createdAt is timestamp &&
       isSafeScore(data.predictedHome) &&
       isSafeScore(data.predictedAway);
     }
 
+    function weekExists(seasonId, weekId) {
+      return exists(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId));
+    }
+
+    function weekIsOpen(seasonId, weekId) {
+      return weekExists(seasonId, weekId) &&
+        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.isActive == true &&
+        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.get('isPublished', false) != true &&
+        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.get('pointsPublished', false) != true;
+    }
+
+    function weekIsPublished(seasonId, weekId) {
+      return weekExists(seasonId, weekId) &&
+        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.get('isPublished', false) == true;
+    }
+
     match /users/{userId} {
       allow read: if true;
-      allow write: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     match /settings/{settingsId} {
-      allow read, write: if true;
+      allow read, write: if false;
+    }
+
+    match /integrations/{integrationId} {
+      allow read, write: if isAdmin();
     }
 
     match /seasons/{seasonId} {
       allow read: if true;
-      allow write: if true;
+      allow create, update, delete: if isAdmin();
 
       match /weeks/{weekId} {
         allow read: if true;
-        allow write: if true;
+        allow create, update, delete: if isAdmin();
 
         match /matches/{matchId} {
           allow read: if true;
-          allow write: if true;
+          allow create, update, delete: if isAdmin();
+        }
+
+        match /submissions/{userId} {
+          allow read: if true;
+          allow create: if incoming().keys().hasOnly(['userId', 'createdAt']) &&
+            incoming().userId == userId &&
+            incoming().createdAt is timestamp &&
+            exists(/databases/$(database)/documents/users/$(userId)) &&
+            weekIsOpen(seasonId, weekId);
+          allow update, delete: if isAdmin();
         }
       }
 
       match /predictions/{predictionId} {
-        allow read: if true;
-        allow create: if isValidPrediction(incoming());
-        allow update, delete: if true;
+        allow read: if isAdmin() || weekIsPublished(seasonId, resource.data.weekId);
+        allow create: if isAdmin() || (
+          isValidPrediction(incoming()) &&
+          predictionId == incoming().userId + '_' + incoming().matchId &&
+          exists(/databases/$(database)/documents/users/$(incoming().userId)) &&
+          exists(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(incoming().weekId)/matches/$(incoming().matchId)) &&
+          get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(incoming().weekId)/matches/$(incoming().matchId)).data.matchDate is timestamp &&
+          request.time < get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(incoming().weekId)/matches/$(incoming().matchId)).data.matchDate &&
+          weekIsOpen(seasonId, incoming().weekId)
+        );
+        allow update, delete: if isAdmin();
       }
 
       match /weekPoints/{weekId}/userPoints/{userId} {
         allow read: if true;
-        allow write: if true;
+        allow create, update, delete: if isAdmin();
       }
     }
 
     match /{document=**} {
-      allow read: if true;
-      allow write: if false;
+      allow read, write: if false;
     }
   }
 }

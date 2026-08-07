@@ -17,18 +17,21 @@ import {
   Edit,
   Target,
   Upload,
-  Medal
+  Medal,
+  RefreshCw,
+  Loader2
 } from "lucide-react";
 import {
   collection,
   query,
   onSnapshot,
   addDoc,
-  deleteDoc,
+  deleteField,
   doc,
   updateDoc,
   serverTimestamp,
   orderBy,
+  getDoc,
   getDocs,
   writeBatch,
   Timestamp,
@@ -38,8 +41,21 @@ import { db } from "../firebase";
 import { User, Season, Week, Match, Prediction, sanitizeFlagEmoji } from "../types";
 import { calculateWeekPoints } from "../utils/calculatePoints";
 import UserFlag from "./UserFlag";
+import FixtureImporter from "../../FixtureImporter";
 
 const FLAG_OPTIONS = ["⚽", "🏆", "GS", "FB", "BJK", "TS", "BŞK", "ADS", "GÖZ", "KSK", "ESES", "BURSA", "SAMSUN", "🇹🇷"];
+
+const API_FOOTBALL_BASE = "https://v3.football.api-sports.io";
+const FINISHED_API_STATUSES = new Set(["FT", "AET", "PEN"]);
+
+type ApiFixtureResult = {
+  fixture?: { status?: { short?: string; long?: string } };
+  score?: {
+    fulltime?: { home?: number | null; away?: number | null };
+    extratime?: { home?: number | null; away?: number | null };
+    penalty?: { home?: number | null; away?: number | null };
+  };
+};
 
 type AdminTab = "users" | "seasons" | "weeks" | "matches" | "results" | "predictions" | "standings";
 
@@ -56,7 +72,173 @@ const getTodayString = () => {
   const d = new Date();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
-  return `${d.getFullYear()}-${month}-${day}`;
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return `${d.getFullYear()}-${month}-${day}T${hours}:${minutes}`;
+};
+
+const commitDeleteRefs = async (refs: any[]) => {
+  const uniqueRefs = Array.from(new Map(refs.map((ref) => [ref.path, ref])).values());
+
+  for (let index = 0; index < uniqueRefs.length; index += 400) {
+    const batch = writeBatch(db);
+    uniqueRefs.slice(index, index + 400).forEach((ref) => batch.delete(ref));
+    await batch.commit();
+  }
+};
+
+const rebuildSeasonTotals = async (seasonId: string) => {
+  const [usersSnap, weeksSnap] = await Promise.all([
+    getDocs(collection(db, "users")),
+    getDocs(collection(db, "seasons", seasonId, "weeks"))
+  ]);
+  const publishedWeeks = weeksSnap.docs.filter((week) => week.data().pointsPublished === true);
+  const totals: Record<string, { points: number; exacts: number; results: number }> = {};
+
+  usersSnap.docs.forEach((user) => {
+    totals[user.id] = { points: 0, exacts: 0, results: 0 };
+  });
+
+  for (const week of publishedWeeks) {
+    const pointsSnap = await getDocs(
+      collection(db, "seasons", seasonId, "weekPoints", week.id, "userPoints")
+    );
+    pointsSnap.docs.forEach((point) => {
+      if (!totals[point.id]) return;
+      const data = point.data();
+      totals[point.id].points += data.totalWeekPoints || 0;
+      totals[point.id].exacts += data.exacts || 0;
+      totals[point.id].results += data.results || 0;
+    });
+  }
+
+  for (let index = 0; index < usersSnap.docs.length; index += 400) {
+    const batch = writeBatch(db);
+    usersSnap.docs.slice(index, index + 400).forEach((userDoc) => {
+      const user = userDoc.data() as any;
+      const seasonTotals = totals[userDoc.id] || { points: 0, exacts: 0, results: 0 };
+      const otherPoints = Object.entries(user.seasonPoints || {})
+        .filter(([id]) => id !== seasonId)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+      const otherExacts = Object.entries(user.seasonExacts || {})
+        .filter(([id]) => id !== seasonId)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+      const otherResults = Object.entries(user.seasonResults || {})
+        .filter(([id]) => id !== seasonId)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+
+      batch.update(userDoc.ref, {
+        [`seasonPoints.${seasonId}`]: seasonTotals.points,
+        [`seasonExacts.${seasonId}`]: seasonTotals.exacts,
+        [`seasonResults.${seasonId}`]: seasonTotals.results,
+        totalPoints: otherPoints + seasonTotals.points,
+        totalExacts: otherExacts + seasonTotals.exacts,
+        totalResults: otherResults + seasonTotals.results
+      });
+    });
+    await batch.commit();
+  }
+};
+
+const deleteUserCascade = async (userId: string) => {
+  const refs: any[] = [doc(db, "users", userId)];
+  const seasonsSnap = await getDocs(collection(db, "seasons"));
+
+  for (const season of seasonsSnap.docs) {
+    const [predictionsSnap, weeksSnap] = await Promise.all([
+      getDocs(query(collection(db, "seasons", season.id, "predictions"), where("userId", "==", userId))),
+      getDocs(collection(db, "seasons", season.id, "weeks"))
+    ]);
+    predictionsSnap.docs.forEach((prediction) => refs.push(prediction.ref));
+    weeksSnap.docs.forEach((week) => {
+      refs.push(doc(db, "seasons", season.id, "weeks", week.id, "submissions", userId));
+      refs.push(doc(db, "seasons", season.id, "weekPoints", week.id, "userPoints", userId));
+    });
+  }
+
+  await commitDeleteRefs(refs);
+};
+
+const deleteMatchCascade = async (seasonId: string, weekId: string, matchId: string) => {
+  const [predictionsSnap, pointsSnap] = await Promise.all([
+    getDocs(query(collection(db, "seasons", seasonId, "predictions"), where("matchId", "==", matchId))),
+    getDocs(collection(db, "seasons", seasonId, "weekPoints", weekId, "userPoints"))
+  ]);
+  const refs: any[] = [doc(db, "seasons", seasonId, "weeks", weekId, "matches", matchId)];
+  predictionsSnap.docs.forEach((prediction) => refs.push(prediction.ref));
+  pointsSnap.docs.forEach((point) => refs.push(point.ref));
+  await commitDeleteRefs(refs);
+  await updateDoc(doc(db, "seasons", seasonId, "weeks", weekId), {
+    pointsPublished: false,
+    pointsUpdatedAt: serverTimestamp()
+  });
+  await rebuildSeasonTotals(seasonId);
+};
+
+const deleteWeekCascade = async (seasonId: string, weekId: string) => {
+  const [matchesSnap, submissionsSnap, pointsSnap, predictionsSnap] = await Promise.all([
+    getDocs(collection(db, "seasons", seasonId, "weeks", weekId, "matches")),
+    getDocs(collection(db, "seasons", seasonId, "weeks", weekId, "submissions")),
+    getDocs(collection(db, "seasons", seasonId, "weekPoints", weekId, "userPoints")),
+    getDocs(query(collection(db, "seasons", seasonId, "predictions"), where("weekId", "==", weekId)))
+  ]);
+  const refs: any[] = [doc(db, "seasons", seasonId, "weeks", weekId)];
+  matchesSnap.docs.forEach((item) => refs.push(item.ref));
+  submissionsSnap.docs.forEach((item) => refs.push(item.ref));
+  pointsSnap.docs.forEach((item) => refs.push(item.ref));
+  predictionsSnap.docs.forEach((item) => refs.push(item.ref));
+  await commitDeleteRefs(refs);
+  await rebuildSeasonTotals(seasonId);
+};
+
+const deleteSeasonCascade = async (seasonId: string) => {
+  const refs: any[] = [doc(db, "seasons", seasonId)];
+  const [weeksSnap, predictionsSnap] = await Promise.all([
+    getDocs(collection(db, "seasons", seasonId, "weeks")),
+    getDocs(collection(db, "seasons", seasonId, "predictions"))
+  ]);
+  predictionsSnap.docs.forEach((item) => refs.push(item.ref));
+
+  for (const week of weeksSnap.docs) {
+    const [matchesSnap, submissionsSnap, pointsSnap] = await Promise.all([
+      getDocs(collection(db, "seasons", seasonId, "weeks", week.id, "matches")),
+      getDocs(collection(db, "seasons", seasonId, "weeks", week.id, "submissions")),
+      getDocs(collection(db, "seasons", seasonId, "weekPoints", week.id, "userPoints"))
+    ]);
+    matchesSnap.docs.forEach((item) => refs.push(item.ref));
+    submissionsSnap.docs.forEach((item) => refs.push(item.ref));
+    pointsSnap.docs.forEach((item) => refs.push(item.ref));
+    refs.push(week.ref);
+  }
+
+  await commitDeleteRefs(refs);
+
+  const usersSnap = await getDocs(collection(db, "users"));
+  for (let index = 0; index < usersSnap.docs.length; index += 400) {
+    const batch = writeBatch(db);
+    usersSnap.docs.slice(index, index + 400).forEach((userDoc) => {
+      const user = userDoc.data() as any;
+      const otherPoints = Object.entries(user.seasonPoints || {})
+        .filter(([id]) => id !== seasonId)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+      const otherExacts = Object.entries(user.seasonExacts || {})
+        .filter(([id]) => id !== seasonId)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+      const otherResults = Object.entries(user.seasonResults || {})
+        .filter(([id]) => id !== seasonId)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+
+      batch.update(userDoc.ref, {
+        [`seasonPoints.${seasonId}`]: deleteField(),
+        [`seasonExacts.${seasonId}`]: deleteField(),
+        [`seasonResults.${seasonId}`]: deleteField(),
+        totalPoints: otherPoints,
+        totalExacts: otherExacts,
+        totalResults: otherResults
+      });
+    });
+    await batch.commit();
+  }
 };
 
 const AdminPanel: React.FC = () => {
@@ -167,11 +349,15 @@ const AdminPanel: React.FC = () => {
   };
 
   const handleDeleteUser = async (userId: string) => {
+    setLoading(true);
     try {
-      await deleteDoc(doc(db, "users", userId));
+      await deleteUserCascade(userId);
       setDeletingUserId(null);
+      alert("Kullanıcı ve bağlantılı tahmin/puan kayıtları temizlendi.");
     } catch (err) {
       alert(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -892,9 +1078,27 @@ const SeasonsTab = ({ seasons, activeSeason, seasonName, setSeasonName, loading,
               {(season.startedAt as any)?.toDate?.()?.getFullYear() || "..."} - {(season.finishedAt as any)?.toDate?.()?.getFullYear() || "..."}
             </div>
           </div>
-          <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-black text-slate-500 ring-1 ring-slate-200">
-            Arşiv
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-black text-slate-500 ring-1 ring-slate-200">
+              Arşiv
+            </span>
+            <button
+              type="button"
+              onClick={async () => {
+                if (!confirm("Bu sezon; haftaları, maçları, tahminleri ve puanlarıyla birlikte kalıcı olarak silinecek. Devam edilsin mi?")) return;
+                try {
+                  await deleteSeasonCascade(season.id);
+                  alert("Sezon ve bağlantılı bütün veriler temizlendi.");
+                } catch (err) {
+                  alert("Sezon silinirken hata oluştu: " + err);
+                }
+              }}
+              className="rounded-xl p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+              title="Sezonu ve bağlantılı verileri sil"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       ))}
     </div>
@@ -960,8 +1164,12 @@ const WeeksTab = ({ activeSeason, weeks, weekLabel, setWeekLabel, loading, handl
               </button>
               <button
                 onClick={async () => {
-                  if (confirm("Bu haftayı silmek istiyor musunuz?")) {
-                    await deleteDoc(doc(db, "seasons", activeSeason.id, "weeks", week.id));
+                  if (!confirm("Bu hafta; maçları, tahminleri ve puanlarıyla birlikte kalıcı olarak silinecek. Devam edilsin mi?")) return;
+                  try {
+                    await deleteWeekCascade(activeSeason.id, week.id);
+                    alert("Hafta ve bağlantılı bütün veriler temizlendi.");
+                  } catch (err) {
+                    alert("Hafta silinirken hata oluştu: " + err);
                   }
                 }}
                 className="rounded-xl p-2 text-slate-400 hover:bg-red-50 hover:text-red-600"
@@ -1013,6 +1221,8 @@ const MatchesTab = ({
 
       {selectedWeek && (
         <>
+          <FixtureImporter activeSeason={activeSeason} selectedWeek={selectedWeek} />
+
           <form onSubmit={handleAddMatch} className="card-base mb-6 grid grid-cols-1 gap-4 p-5 lg:grid-cols-4">
             <div>
               <label className="mb-1.5 block text-[10px] font-black uppercase tracking-wider text-slate-400">Ev sahibi</label>
@@ -1024,7 +1234,7 @@ const MatchesTab = ({
             </div>
             <div>
               <label className="mb-1.5 block text-[10px] font-black uppercase tracking-wider text-slate-400">Tarih</label>
-              <input type="date" value={matchDate} onChange={(e) => setMatchDate(e.target.value)} className="input-field w-full" required />
+              <input type="datetime-local" value={matchDate} onChange={(e) => setMatchDate(e.target.value)} className="input-field w-full" required />
             </div>
             <button className="btn-primary self-end justify-center">
               Maç Ekle
@@ -1060,13 +1270,17 @@ const MatchList = ({ seasonId, weekId }: { seasonId: string; weekId: string }) =
               {match.homeTeam} <span className="text-slate-300">vs</span> {match.awayTeam}
             </div>
             <div className="mt-1 text-xs font-semibold text-slate-400">
-              {match.matchDate?.toDate?.()?.toLocaleDateString("tr-TR", { weekday: "short", day: "numeric", month: "long" }) || "Tarih yok"}
+              {match.matchDate?.toDate?.()?.toLocaleString("tr-TR", { weekday: "short", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) || "Tarih yok"}
             </div>
           </div>
           <button
             onClick={async () => {
-              if (confirm("Maçı silmek istiyor musunuz?")) {
-                await deleteDoc(doc(db, "seasons", seasonId, "weeks", weekId, "matches", match.id));
+              if (!confirm("Bu maç ve maça bağlı tahminler silinecek; hafta puanları yeniden hesaplanmak üzere yayından kaldırılacak. Devam edilsin mi?")) return;
+              try {
+                await deleteMatchCascade(seasonId, weekId, match.id);
+                alert("Maç ve bağlantılı veriler temizlendi. Hafta puanlarını yeniden yayınlayabilirsin.");
+              } catch (err) {
+                alert("Maç silinirken hata oluştu: " + err);
               }
             }}
             className="rounded-xl p-2 text-slate-400 hover:bg-red-50 hover:text-red-600"
@@ -1270,6 +1484,11 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
             batch.delete(extraRef);
           });
         }
+
+        batch.set(
+          doc(db, "seasons", activeSeason.id, "weeks", selectedWeek.id, "submissions", userPack.userId),
+          { userId: userPack.userId, createdAt: serverTimestamp() }
+        );
       }
 
       await batch.commit();
@@ -1316,6 +1535,11 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
           batch.delete(extraRef);
         });
       }
+
+      batch.set(
+        doc(db, "seasons", activeSeason.id, "weeks", selectedWeek.id, "submissions", selectedUser.id),
+        { userId: selectedUser.id, createdAt: serverTimestamp() }
+      );
 
       await batch.commit();
       alert("Tahminler güncellendi.");
@@ -1552,6 +1776,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
   const [localScores, setLocalScores] = useState<Record<string, { home: number | null; away: number | null }>>({});
   const [previewData, setPreviewData] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [syncMessage, setSyncMessage] = useState("");
 
   useEffect(() => {
     if (!selectedWeek) return;
@@ -1591,19 +1816,140 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
     }
   };
 
+  const calculateWeekResults = async (scoredMatches: Match[]) => {
+    if (!selectedWeek) return null;
+
+    const predSnap = await getDocs(collection(db, "seasons", activeSeason.id, "predictions"));
+    const allPredictions = predSnap.docs
+      .map((d) => ({ id: d.id, ...d.data() } as Prediction))
+      .filter((prediction) => prediction.weekId === selectedWeek.id);
+
+    return calculateWeekPoints(scoredMatches, allPredictions, users);
+  };
+
+  const calculatePreviewForMatches = async (scoredMatches: Match[]) => {
+    const weekResults = await calculateWeekResults(scoredMatches);
+    if (!weekResults) return null;
+    setPreviewData(weekResults);
+    return weekResults;
+  };
+
+  const handleSyncApiResults = async () => {
+    if (!selectedWeek) return;
+
+    const importedMatches = matches.filter((match) => match.externalFixtureId);
+    if (importedMatches.length === 0) {
+      setSyncMessage("Bu haftada API-Football’dan eklenmiş maç yok.");
+      return;
+    }
+
+    setIsSaving(true);
+    setSyncMessage("");
+
+    try {
+      const integrationDoc = await getDoc(doc(db, "integrations", "apiFootball"));
+      const apiKey = integrationDoc.data()?.apiKey as string | undefined;
+
+      if (!apiKey) {
+        throw new Error("API-Football anahtarı bulunamadı. Önce Maçlar bölümünden kaydet.");
+      }
+
+      const batch = writeBatch(db);
+      const syncedScores = new Map<string, { home: number; away: number; status: string }>();
+      let waitingCount = 0;
+
+      for (const match of importedMatches) {
+        const response = await fetch(`${API_FOOTBALL_BASE}/fixtures?id=${match.externalFixtureId}`, {
+          headers: { "x-apisports-key": apiKey }
+        });
+
+        if (!response.ok) {
+          throw new Error(`API yanıtı: ${response.status}`);
+        }
+
+        const payload = await response.json();
+        if (payload.errors && Object.keys(payload.errors).length > 0) {
+          throw new Error(Object.values(payload.errors).map(String).join(", "));
+        }
+
+        const fixture = payload.response?.[0] as ApiFixtureResult | undefined;
+        if (!fixture) {
+          waitingCount += 1;
+          continue;
+        }
+
+        const status = fixture.fixture?.status?.short || match.externalStatus || "NS";
+        const fulltimeHome = fixture.score?.fulltime?.home;
+        const fulltimeAway = fixture.score?.fulltime?.away;
+        const matchRef = doc(
+          db,
+          "seasons",
+          activeSeason.id,
+          "weeks",
+          selectedWeek.id,
+          "matches",
+          match.id
+        );
+
+        const updateData: Record<string, any> = {
+          externalStatus: status,
+          updatedAt: serverTimestamp()
+        };
+
+        // API-Football fulltime alanı 90 dakika sonucudur.
+        // AET/PEN durumlarında extratime ve penalty değerleri özellikle kullanılmaz.
+        if (
+          FINISHED_API_STATUSES.has(status) &&
+          typeof fulltimeHome === "number" &&
+          typeof fulltimeAway === "number"
+        ) {
+          updateData.actualHome = fulltimeHome;
+          updateData.actualAway = fulltimeAway;
+          syncedScores.set(match.id, { home: fulltimeHome, away: fulltimeAway, status });
+        } else {
+          waitingCount += 1;
+        }
+
+        batch.update(matchRef, updateData);
+      }
+
+      await batch.commit();
+
+      const updatedMatches = matches.map((match) => {
+        const synced = syncedScores.get(match.id);
+        return synced
+          ? { ...match, actualHome: synced.home, actualAway: synced.away, externalStatus: synced.status }
+          : match;
+      });
+
+      setMatches(updatedMatches);
+      setLocalScores((previous) => {
+        const next = { ...previous };
+        syncedScores.forEach((score, matchId) => {
+          next[matchId] = { home: score.home, away: score.away };
+        });
+        return next;
+      });
+
+      await calculatePreviewForMatches(updatedMatches);
+      setSyncMessage(
+        `${syncedScores.size} maçın 90 dakika skoru alındı ve puan önizlemesi hazırlandı.` +
+          (waitingCount > 0 ? ` ${waitingCount} maç henüz bitmemiş.` : "")
+      );
+    } catch (err: any) {
+      setSyncMessage(err?.message || "Skorlar API’den alınamadı.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleCalculatePreview = async () => {
     if (!selectedWeek) return;
 
     setIsSaving(true);
 
     try {
-      const predSnap = await getDocs(collection(db, "seasons", activeSeason.id, "predictions"));
-      const allPredictions = predSnap.docs
-        .map((d) => ({ id: d.id, ...d.data() } as Prediction))
-        .filter((prediction) => prediction.weekId === selectedWeek.id);
-
-      const weekResults = calculateWeekPoints(matches, allPredictions, users);
-      setPreviewData(weekResults);
+      await calculatePreviewForMatches(matches);
     } catch (err) {
       alert(err);
     } finally {
@@ -1611,81 +1957,126 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
     }
   };
 
+  const persistWeekResults = async (weekResults: Record<string, any>, successMessage: string) => {
+    if (!selectedWeek) return;
+
+    const weeksSnap = await getDocs(collection(db, "seasons", activeSeason.id, "weeks"));
+    const allWeeks = weeksSnap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+    const publishedWeeks = allWeeks.filter(
+      (week) => week.pointsPublished || week.id === selectedWeek.id
+    );
+
+    const userTotals: Record<string, { points: number; exacts: number; results: number }> = {};
+    users.forEach((user: any) => {
+      userTotals[user.id] = { points: 0, exacts: 0, results: 0 };
+    });
+
+    for (const week of publishedWeeks) {
+      if (week.id === selectedWeek.id) {
+        Object.entries(weekResults).forEach(([userId, data]: [string, any]) => {
+          if (!userTotals[userId]) return;
+          userTotals[userId].points += data.totalWeekPoints || 0;
+          userTotals[userId].exacts += data.exacts || 0;
+          userTotals[userId].results += data.results || 0;
+        });
+        continue;
+      }
+
+      const userPointsSnap = await getDocs(
+        collection(db, "seasons", activeSeason.id, "weekPoints", week.id, "userPoints")
+      );
+      userPointsSnap.docs.forEach((document) => {
+        if (!userTotals[document.id]) return;
+        const data = document.data();
+        userTotals[document.id].points += data.totalWeekPoints || 0;
+        userTotals[document.id].exacts += data.exacts || 0;
+        userTotals[document.id].results += data.results || 0;
+      });
+    }
+
+    // Haftalık puanlar, hafta durumu ve bütün kullanıcı toplamları tek commit ile güncellenir.
+    // Böylece sonuç düzeltmesi sırasında yarım kalmış veya birbiriyle çelişen puan verisi oluşmaz.
+    const atomicBatch = writeBatch(db);
+
+    Object.entries(weekResults).forEach(([userId, data]: [string, any]) => {
+      const pointsRef = doc(
+        db,
+        "seasons",
+        activeSeason.id,
+        "weekPoints",
+        selectedWeek.id,
+        "userPoints",
+        userId
+      );
+      atomicBatch.set(pointsRef, { ...data, updatedAt: serverTimestamp() });
+    });
+
+    atomicBatch.update(doc(db, "seasons", activeSeason.id, "weeks", selectedWeek.id), {
+      pointsPublished: true,
+      pointsUpdatedAt: serverTimestamp()
+    });
+
+    users.forEach((user: any) => {
+      const totals = userTotals[user.id] || { points: 0, exacts: 0, results: 0 };
+      const otherSeasonsPoints = Object.entries(user.seasonPoints || {})
+        .filter(([seasonId]) => seasonId !== activeSeason.id)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+      const otherSeasonsExacts = Object.entries(user.seasonExacts || {})
+        .filter(([seasonId]) => seasonId !== activeSeason.id)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+      const otherSeasonsResults = Object.entries(user.seasonResults || {})
+        .filter(([seasonId]) => seasonId !== activeSeason.id)
+        .reduce((sum, [_, value]) => sum + (value as number), 0);
+
+      atomicBatch.update(doc(db, "users", user.id), {
+        [`seasonPoints.${activeSeason.id}`]: totals.points,
+        [`seasonExacts.${activeSeason.id}`]: totals.exacts,
+        [`seasonResults.${activeSeason.id}`]: totals.results,
+        totalPoints: otherSeasonsPoints + totals.points,
+        totalExacts: otherSeasonsExacts + totals.exacts,
+        totalResults: otherSeasonsResults + totals.results
+      });
+    });
+
+    await atomicBatch.commit();
+    alert(successMessage);
+    setPreviewData(null);
+  };
+
   const handleSaveAndPublish = async () => {
     if (!selectedWeek || !previewData) return;
-
     setIsSaving(true);
 
     try {
-      const batch = writeBatch(db);
-
-      Object.entries(previewData).forEach(([userId, data]: [string, any]) => {
-        const pointsRef = doc(db, "seasons", activeSeason.id, "weekPoints", selectedWeek.id, "userPoints", userId);
-        batch.set(pointsRef, data);
-      });
-
-      const weekRef = doc(db, "seasons", activeSeason.id, "weeks", selectedWeek.id);
-      batch.update(weekRef, { pointsPublished: true });
-
-      await batch.commit();
-
-      const weeksSnap = await getDocs(collection(db, "seasons", activeSeason.id, "weeks"));
-      const allWeeks = weeksSnap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
-      const publishedWeeks = allWeeks.filter((week) => week.pointsPublished || week.id === selectedWeek.id);
-
-      const userTotals: Record<string, { points: number; exacts: number; results: number }> = {};
-
-      users.forEach((user: any) => {
-        userTotals[user.id] = { points: 0, exacts: 0, results: 0 };
-      });
-
-      for (const week of publishedWeeks) {
-        const userPointsSnap = await getDocs(collection(db, "seasons", activeSeason.id, "weekPoints", week.id, "userPoints"));
-        userPointsSnap.docs.forEach((document) => {
-          if (userTotals[document.id]) {
-            const data = document.data();
-            userTotals[document.id].points += data.totalWeekPoints || 0;
-            userTotals[document.id].exacts += data.exacts || 0;
-            userTotals[document.id].results += data.results || 0;
-          }
-        });
-      }
-
-      const updateBatch = writeBatch(db);
-
-      users.forEach((user: any) => {
-        const totals = userTotals[user.id] || { points: 0, exacts: 0, results: 0 };
-
-        const otherSeasonsPoints = Object.entries(user.seasonPoints || {})
-          .filter(([seasonId]) => seasonId !== activeSeason.id)
-          .reduce((sum, [_, value]) => sum + (value as number), 0);
-
-        const otherSeasonsExacts = Object.entries(user.seasonExacts || {})
-          .filter(([seasonId]) => seasonId !== activeSeason.id)
-          .reduce((sum, [_, value]) => sum + (value as number), 0);
-
-        const otherSeasonsResults = Object.entries(user.seasonResults || {})
-          .filter(([seasonId]) => seasonId !== activeSeason.id)
-          .reduce((sum, [_, value]) => sum + (value as number), 0);
-
-        const userRef = doc(db, "users", user.id);
-
-        updateBatch.update(userRef, {
-          [`seasonPoints.${activeSeason.id}`]: totals.points,
-          [`seasonExacts.${activeSeason.id}`]: totals.exacts,
-          [`seasonResults.${activeSeason.id}`]: totals.results,
-          totalPoints: otherSeasonsPoints + totals.points,
-          totalExacts: otherSeasonsExacts + totals.exacts,
-          totalResults: otherSeasonsResults + totals.results
-        });
-      });
-
-      await updateBatch.commit();
-
-      alert("Puanlar kaydedildi ve yayınlandı.");
-      setPreviewData(null);
+      await persistWeekResults(previewData, "Puanlar kaydedildi ve yayınlandı.");
     } catch (err) {
       alert("Puanlar kaydedilirken hata oluştu: " + err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRecalculateAndPublish = async () => {
+    if (!selectedWeek) return;
+    if (matches.some((match) => match.actualHome === null || match.actualAway === null)) {
+      alert("Yeniden hesaplamadan önce bütün maç sonuçları tamamlanmalı.");
+      return;
+    }
+
+    if (!confirm("Bu haftanın puanları ve genel toplamlar güncel sonuçlara göre yeniden hesaplanacak. Devam edilsin mi?")) {
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const freshResults = await calculateWeekResults(matches);
+      if (!freshResults) return;
+      await persistWeekResults(
+        freshResults,
+        "Hafta puanları ve genel toplamlar güncel sonuçlara göre yeniden hesaplandı."
+      );
+    } catch (err) {
+      alert("Puanlar yeniden hesaplanırken hata oluştu: " + err);
     } finally {
       setIsSaving(false);
     }
@@ -1713,6 +2104,38 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
 
       {selectedWeek && (
         <div className="space-y-4">
+          <div className="overflow-hidden rounded-[1.75rem] border border-orange-400/20 bg-slate-950 p-5 text-white shadow-xl">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-orange-300">
+                  <RefreshCw className="h-4 w-4" /> Otomatik sonuç merkezi
+                </div>
+                <p className="mt-2 text-sm font-semibold text-slate-300">
+                  Biten maçların 90 dakika skorunu getirir ve puan önizlemesini hazırlar.
+                </p>
+                <p className="mt-1 text-[11px] font-bold text-slate-500">
+                  Uzatma ve penaltı skorları puanlamaya dahil edilmez.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSyncApiResults}
+                disabled={isSaving}
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-orange-500 px-5 py-3 text-xs font-black text-white shadow-lg shadow-orange-500/20 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                {isSaving ? "Skorlar alınıyor..." : "Skorları Getir + Hesapla"}
+              </button>
+            </div>
+
+            {syncMessage && (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-xs font-bold text-slate-200">
+                {syncMessage}
+              </div>
+            )}
+          </div>
+
           {matches.map((match) => (
             <div key={match.id} className="card-base flex flex-col items-center justify-between gap-4 p-4 sm:flex-row">
               <div className="flex-1 text-right font-black text-slate-950">{match.homeTeam}</div>
@@ -1763,14 +2186,32 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
             </div>
           ))}
 
-          <button
-            onClick={handleCalculatePreview}
-            disabled={isSaving || matches.some((match) => match.actualHome === null)}
-            className="btn-primary w-full justify-center py-4"
-          >
-            <Eye className="h-5 w-5" />
-            Puanları Hesapla ve Önizle
-          </button>
+          <div className="grid gap-3 md:grid-cols-2">
+            <button
+              onClick={handleCalculatePreview}
+              disabled={
+                isSaving ||
+                matches.some((match) => match.actualHome === null || match.actualAway === null)
+              }
+              className="btn-primary w-full justify-center py-4"
+            >
+              <Eye className="h-5 w-5" />
+              Puanları Hesapla ve Önizle
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRecalculateAndPublish}
+              disabled={
+                isSaving ||
+                matches.some((match) => match.actualHome === null || match.actualAway === null)
+              }
+              className="btn-secondary w-full justify-center border-amber-200 bg-amber-50 py-4 text-amber-800 hover:bg-amber-100"
+            >
+              {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <RefreshCw className="h-5 w-5" />}
+              Puanları Yeniden Hesapla
+            </button>
+          </div>
 
           {previewData && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card-base space-y-4 p-6">
