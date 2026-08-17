@@ -43,13 +43,11 @@ const defaultSeason = () => {
 };
 
 const formatFixtureDate = (value: string) =>
-  new Date(value).toLocaleString("tr-TR", {
+  new Date(value).toLocaleDateString("tr-TR", {
     timeZone: "Europe/Istanbul",
     weekday: "short",
     day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit"
+    month: "short"
   });
 
 const FixtureImporter: React.FC<{

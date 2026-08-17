@@ -52,12 +52,10 @@ const formatMatchDate = (matchDate: any) => {
 
   if (!ms) return "Tarih bekleniyor";
 
-  return new Date(ms).toLocaleString("tr-TR", {
+  return new Date(ms).toLocaleDateString("tr-TR", {
     weekday: "short",
     day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit"
+    month: "short"
   });
 };
 

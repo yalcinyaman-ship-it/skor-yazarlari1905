@@ -72,9 +72,7 @@ const getTodayString = () => {
   const d = new Date();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
-  const hours = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
-  return `${d.getFullYear()}-${month}-${day}T${hours}:${minutes}`;
+  return `${d.getFullYear()}-${month}-${day}`;
 };
 
 const commitDeleteRefs = async (refs: any[]) => {
@@ -493,7 +491,13 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
 
     try {
-      const [year, month, day] = matchDate.split("-").map(Number);
+      const datePart = matchDate.split("T")[0];
+      const [year, month, day] = datePart.split("-").map(Number);
+
+      if (!year || !month || !day || isNaN(year) || isNaN(month) || isNaN(day)) {
+        throw new Error("Lütfen geçerli bir tarih seçiniz.");
+      }
+
       const dateObj = new Date(year, month - 1, day);
 
       await addDoc(collection(db, "seasons", activeSeason.id, "weeks", selectedWeek.id, "matches"), {
@@ -506,9 +510,8 @@ const AdminPanel: React.FC = () => {
 
       setHomeTeam("");
       setAwayTeam("");
-      // Do not clear matchDate to allow the user to easily adjust it back and forth
-    } catch (err) {
-      alert(err);
+    } catch (err: any) {
+      alert("Maç eklenirken hata oluştu: " + (err?.message || err));
     } finally {
       setLoading(false);
     }
@@ -1234,7 +1237,7 @@ const MatchesTab = ({
             </div>
             <div>
               <label className="mb-1.5 block text-[10px] font-black uppercase tracking-wider text-slate-400">Tarih</label>
-              <input type="datetime-local" value={matchDate} onChange={(e) => setMatchDate(e.target.value)} className="input-field w-full" required />
+              <input type="date" value={matchDate.split("T")[0]} onChange={(e) => setMatchDate(e.target.value)} className="input-field w-full" required />
             </div>
             <button className="btn-primary self-end justify-center">
               Maç Ekle
@@ -1270,7 +1273,8 @@ const MatchList = ({ seasonId, weekId }: { seasonId: string; weekId: string }) =
               {match.homeTeam} <span className="text-slate-300">vs</span> {match.awayTeam}
             </div>
             <div className="mt-1 text-xs font-semibold text-slate-400">
-              {match.matchDate?.toDate?.()?.toLocaleString("tr-TR", { weekday: "short", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) || "Tarih yok"}
+              {match.matchDate?.toDate?.()?.toLocaleDateString("tr-TR", { weekday: "short", day: "numeric", month: "long" }) ||
+               (match.matchDate ? new Date(getDateMs(match.matchDate)).toLocaleDateString("tr-TR", { weekday: "short", day: "numeric", month: "long" }) : "Tarih yok")}
             </div>
           </div>
           <button
