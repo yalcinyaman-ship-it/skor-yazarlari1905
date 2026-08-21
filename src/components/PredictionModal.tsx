@@ -63,9 +63,9 @@ const isFilledScore = (value: unknown) => {
   return typeof value === "number" && Number.isFinite(value) && value >= 0;
 };
 
-const isMatchLocked = (match: Match) => {
-  const kickoff = getDateMs(match.matchDate);
-  return kickoff > 0 && Date.now() >= kickoff;
+const isMatchLocked = (_match: Match) => {
+  // Zaman kilitlenmesi kaldırıldı - Tüm maçlar tahmine açık
+  return false;
 };
 
 const PredictionModal: React.FC<PredictionModalProps> = ({
