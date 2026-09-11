@@ -19,7 +19,9 @@ import {
   Upload,
   Medal,
   RefreshCw,
-  Loader2
+  Loader2,
+  Lock,
+  Unlock
 } from "lucide-react";
 import {
   collection,
@@ -1277,20 +1279,54 @@ const MatchList = ({ seasonId, weekId }: { seasonId: string; weekId: string }) =
                (match.matchDate ? new Date(getDateMs(match.matchDate)).toLocaleDateString("tr-TR", { weekday: "short", day: "numeric", month: "long" }) : "Tarih yok")}
             </div>
           </div>
-          <button
-            onClick={async () => {
-              if (!confirm("Bu maç ve maça bağlı tahminler silinecek; hafta puanları yeniden hesaplanmak üzere yayından kaldırılacak. Devam edilsin mi?")) return;
-              try {
-                await deleteMatchCascade(seasonId, weekId, match.id);
-                alert("Maç ve bağlantılı veriler temizlendi. Hafta puanlarını yeniden yayınlayabilirsin.");
-              } catch (err) {
-                alert("Maç silinirken hata oluştu: " + err);
-              }
-            }}
-            className="rounded-xl p-2 text-slate-400 hover:bg-red-50 hover:text-red-600"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={async () => {
+                const newStatus = !match.isLocked;
+                try {
+                  await updateDoc(
+                    doc(db, "seasons", seasonId, "weeks", weekId, "matches", match.id),
+                    { isLocked: newStatus }
+                  );
+                } catch (err: any) {
+                  alert("Maç durumu güncellenemedi: " + err.message);
+                }
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all border shadow-sm ${
+                match.isLocked
+                  ? "bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100"
+                  : "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+              }`}
+              title={match.isLocked ? "Tahmine Açmak İçin Tıklayın" : "Tahmine Kapatmak İçin Tıklayın"}
+            >
+              {match.isLocked ? (
+                <>
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Tahmine Kapalı</span>
+                </>
+              ) : (
+                <>
+                  <Unlock className="w-3.5 h-3.5" />
+                  <span>Tahmine Açık</span>
+                </>
+              )}
+            </button>
+            <button
+              onClick={async () => {
+                if (!confirm("Bu maç ve maça bağlı tahminler silinecek; hafta puanları yeniden hesaplanmak üzere yayından kaldırılacak. Devam edilsin mi?")) return;
+                try {
+                  await deleteMatchCascade(seasonId, weekId, match.id);
+                  alert("Maç ve bağlantılı veriler temizlendi. Hafta puanlarını yeniden yayınlayabilirsin.");
+                } catch (err) {
+                  alert("Maç silinirken hata oluştu: " + err);
+                }
+              }}
+              className="rounded-xl p-2 text-slate-400 hover:bg-red-50 hover:text-red-600"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       ))}
     </div>
