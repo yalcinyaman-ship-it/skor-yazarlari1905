@@ -43,13 +43,13 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
         <section className="relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-56 bg-amber-500/10 blur-[100px] pointer-events-none rounded-full" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 items-end">
             {/* 2. SIRA (GÜMÜŞ) */}
             {top2 && (
               <button
                 type="button"
                 onClick={() => onUserClick?.(top2)}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-400/40 bg-gradient-to-b from-slate-400/15 via-slate-900/85 to-slate-950/95 p-5 sm:p-6 text-left shadow-[0_0_25px_rgba(148,163,184,0.12)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 cursor-pointer order-2 md:order-1 min-h-[280px]"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-400/40 bg-gradient-to-b from-slate-400/15 via-slate-900/85 to-slate-950/95 p-3.5 sm:p-6 text-left shadow-[0_0_25px_rgba(148,163,184,0.12)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 cursor-pointer order-2 md:order-1 col-span-1 min-h-[250px] sm:min-h-[280px]"
               >
                 {top2.colors && top2.colors.length > 0 && (
                   <div
@@ -62,60 +62,60 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
                     }}
                   />
                 )}
-                <div className="relative flex items-center justify-between gap-2 z-10">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-400/50 bg-slate-400/20 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-slate-200">
-                    <Medal className="h-3.5 w-3.5 text-slate-300" />
-                    2. Sıra · Gümüş
+                <div className="relative flex items-center justify-between gap-1.5 z-10">
+                  <span className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-slate-400/50 bg-slate-400/20 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-200">
+                    <Medal className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-slate-300" />
+                    2. Sıra
                   </span>
                   {(top2.weekPoints ?? 0) > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald-400">
-                      <TrendingUp className="h-3 w-3" />
+                    <span className="inline-flex items-center gap-0.5 sm:gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-emerald-400">
+                      <TrendingUp className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
                       +{top2.weekPoints}
                     </span>
                   )}
                 </div>
 
-                <div className="relative my-4 flex flex-col items-center text-center z-10">
-                  <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-slate-400/60 bg-slate-800/90 p-1.5 shadow-[0_0_20px_rgba(148,163,184,0.3)] ring-2 ring-slate-400/30">
+                <div className="relative my-3 sm:my-4 flex flex-col items-center text-center z-10">
+                  <div className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl border-2 border-slate-400/60 bg-slate-800/90 p-1 sm:p-1.5 shadow-[0_0_20px_rgba(148,163,184,0.3)] ring-2 ring-slate-400/30">
                     {top2.clubLogo || flagUrlForEmoji(top2.flagEmoji, 80) ? (
                       <img
                         src={top2.clubLogo || flagUrlForEmoji(top2.flagEmoji, 80)!}
                         alt={top2.name}
                         referrerPolicy="no-referrer"
-                        className="h-12 w-12 object-contain"
+                        className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                         loading="lazy"
                       />
                     ) : (
-                      <UserFlag flagEmoji={top2.flagEmoji} className="h-12 w-12 text-3xl" />
+                      <UserFlag flagEmoji={top2.flagEmoji} className="h-10 w-10 sm:h-12 sm:w-12 text-2xl sm:text-3xl" />
                     )}
-                    <span className="absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-slate-400 text-xs font-black text-slate-950 font-mono">
+                    <span className="absolute -bottom-2 -right-2 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-slate-400 text-[11px] sm:text-xs font-black text-slate-950 font-mono">
                       2
                     </span>
                   </div>
 
-                  <h3 className="mt-3 font-sports text-lg sm:text-xl font-bold uppercase tracking-tight text-white">
+                  <h3 className="mt-2.5 sm:mt-3 font-sports text-sm sm:text-xl font-bold uppercase tracking-tight text-white truncate max-w-full">
                     {top2.name}
                   </h3>
-                  <div className="mt-3 font-mono text-3xl sm:text-4xl font-black text-slate-200 tabular-nums">
+                  <div className="mt-2 sm:mt-3 font-mono text-2xl sm:text-4xl font-black text-slate-200 tabular-nums">
                     {top2.totalPoints ?? 0}
-                    <span className="ml-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 font-sans">
-                      Puan
+                    <span className="ml-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 font-sans">
+                      P
                     </span>
                   </div>
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2 border-t border-slate-800/80 pt-3 text-center z-10">
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                    <div className="text-[9px] font-bold uppercase text-emerald-400">Tam</div>
-                    <div className="font-mono text-sm font-black text-white">{top2.exacts ?? 0}</div>
+                <div className="relative grid grid-cols-3 gap-1 sm:gap-2 border-t border-slate-800/80 pt-2.5 sm:pt-3 text-center z-10">
+                  <div className="rounded-lg sm:rounded-xl border border-slate-800 bg-slate-900/80 p-1 sm:p-2">
+                    <div className="text-[8px] sm:text-[9px] font-bold uppercase text-emerald-400">Tam</div>
+                    <div className="font-mono text-xs sm:text-sm font-black text-white">{top2.exacts ?? 0}</div>
                   </div>
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                    <div className="text-[9px] font-bold uppercase text-blue-400">Sonuç</div>
-                    <div className="font-mono text-sm font-black text-white">{top2.results ?? 0}</div>
+                  <div className="rounded-lg sm:rounded-xl border border-slate-800 bg-slate-900/80 p-1 sm:p-2">
+                    <div className="text-[8px] sm:text-[9px] font-bold uppercase text-blue-400">Sonuç</div>
+                    <div className="font-mono text-xs sm:text-sm font-black text-white">{top2.results ?? 0}</div>
                   </div>
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                    <div className="text-[9px] font-bold uppercase text-slate-400">İsabet</div>
-                    <div className="font-mono text-sm font-black text-white">{(top2.exacts ?? 0) + (top2.results ?? 0)}</div>
+                  <div className="rounded-lg sm:rounded-xl border border-slate-800 bg-slate-900/80 p-1 sm:p-2">
+                    <div className="text-[8px] sm:text-[9px] font-bold uppercase text-slate-400">İsabet</div>
+                    <div className="font-mono text-xs sm:text-sm font-black text-white">{(top2.exacts ?? 0) + (top2.results ?? 0)}</div>
                   </div>
                 </div>
               </button>
@@ -126,7 +126,7 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
               <button
                 type="button"
                 onClick={() => onUserClick?.(top1)}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border-2 border-amber-400/70 bg-gradient-to-b from-amber-500/20 via-slate-900/90 to-slate-950/95 p-6 sm:p-7 text-left shadow-[0_0_40px_rgba(245,158,11,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-amber-300 cursor-pointer order-1 md:order-2 md:-translate-y-3 min-h-[320px] ring-1 ring-amber-400/40"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border-2 border-amber-400/70 bg-gradient-to-b from-amber-500/20 via-slate-900/90 to-slate-950/95 p-5 sm:p-7 text-left shadow-[0_0_40px_rgba(245,158,11,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-amber-300 cursor-pointer order-1 md:order-2 col-span-2 md:col-span-1 md:-translate-y-3 min-h-[290px] sm:min-h-[320px] ring-1 ring-amber-400/40"
               >
                 {top1.colors && top1.colors.length > 0 && (
                   <div
@@ -140,7 +140,7 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
                   />
                 )}
                 <div className="relative flex items-center justify-between gap-2 z-10">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/60 bg-gradient-to-r from-amber-500/30 to-amber-600/30 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/60 bg-gradient-to-r from-amber-500/30 to-amber-600/30 px-3.5 py-1 sm:py-1.5 text-xs font-black uppercase tracking-wider text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
                     <Crown className="h-4 w-4 text-amber-300 fill-amber-300" />
                     1. Sıra · Şampiyonluk Lideri
                   </span>
@@ -152,25 +152,25 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
                   )}
                 </div>
 
-                <div className="relative my-4 flex flex-col items-center text-center z-10">
-                  <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl border-2 border-amber-400 bg-slate-950 p-2 shadow-[0_0_30px_rgba(245,158,11,0.45)] ring-4 ring-amber-400/30">
+                <div className="relative my-3 sm:my-4 flex flex-col items-center text-center z-10">
+                  <div className="relative flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-2xl border-2 border-amber-400 bg-slate-950 p-1.5 sm:p-2 shadow-[0_0_30px_rgba(245,158,11,0.45)] ring-4 ring-amber-400/30">
                     {top1.clubLogo || flagUrlForEmoji(top1.flagEmoji, 80) ? (
                       <img
                         src={top1.clubLogo || flagUrlForEmoji(top1.flagEmoji, 80)!}
                         alt={top1.name}
                         referrerPolicy="no-referrer"
-                        className="h-14 w-14 object-contain"
+                        className="h-12 w-12 sm:h-14 sm:w-14 object-contain"
                         loading="lazy"
                       />
                     ) : (
-                      <UserFlag flagEmoji={top1.flagEmoji} className="h-14 w-14 text-4xl" />
+                      <UserFlag flagEmoji={top1.flagEmoji} className="h-12 w-12 sm:h-14 sm:w-14 text-3xl sm:text-4xl" />
                     )}
-                    <span className="absolute -bottom-2.5 -right-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 text-sm font-black text-slate-950 font-mono ring-2 ring-slate-950">
+                    <span className="absolute -bottom-2.5 -right-2.5 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 text-xs sm:text-sm font-black text-slate-950 font-mono ring-2 ring-slate-950">
                       ★ 1
                     </span>
                   </div>
 
-                  <h3 className="mt-3.5 font-sports text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                  <h3 className="mt-3 sm:mt-3.5 font-sports text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
                     {top1.name}
                   </h3>
                   <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-amber-400">
@@ -178,26 +178,26 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
                     Zirvede Tek Başına
                   </div>
 
-                  <div className="mt-3 font-mono text-4xl sm:text-5xl font-black text-amber-400 tracking-tight tabular-nums">
+                  <div className="mt-2.5 sm:mt-3 font-mono text-3xl sm:text-5xl font-black text-amber-400 tracking-tight tabular-nums">
                     {top1.totalPoints ?? 0}
-                    <span className="ml-2 text-xs font-bold uppercase tracking-wider text-amber-300/80 font-sans">
+                    <span className="ml-1.5 sm:ml-2 text-xs font-bold uppercase tracking-wider text-amber-300/80 font-sans">
                       Puan
                     </span>
                   </div>
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2.5 border-t border-amber-500/30 pt-3.5 text-center z-10">
-                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5">
-                    <div className="text-[10px] font-bold uppercase text-amber-300">Tam</div>
-                    <div className="font-mono text-base font-black text-white">{top1.exacts ?? 0}</div>
+                <div className="relative grid grid-cols-3 gap-2 sm:gap-2.5 border-t border-amber-500/30 pt-3 sm:pt-3.5 text-center z-10">
+                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2 sm:p-2.5">
+                    <div className="text-[9px] sm:text-[10px] font-bold uppercase text-amber-300">Tam</div>
+                    <div className="font-mono text-sm sm:text-base font-black text-white">{top1.exacts ?? 0}</div>
                   </div>
-                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5">
-                    <div className="text-[10px] font-bold uppercase text-blue-300">Sonuç</div>
-                    <div className="font-mono text-base font-black text-white">{top1.results ?? 0}</div>
+                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2 sm:p-2.5">
+                    <div className="text-[9px] sm:text-[10px] font-bold uppercase text-blue-300">Sonuç</div>
+                    <div className="font-mono text-sm sm:text-base font-black text-white">{top1.results ?? 0}</div>
                   </div>
-                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5">
-                    <div className="text-[10px] font-bold uppercase text-amber-400">İsabet</div>
-                    <div className="font-mono text-base font-black text-white">{(top1.exacts ?? 0) + (top1.results ?? 0)}</div>
+                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2 sm:p-2.5">
+                    <div className="text-[9px] sm:text-[10px] font-bold uppercase text-amber-400">İsabet</div>
+                    <div className="font-mono text-sm sm:text-base font-black text-white">{(top1.exacts ?? 0) + (top1.results ?? 0)}</div>
                   </div>
                 </div>
               </button>
@@ -208,7 +208,7 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
               <button
                 type="button"
                 onClick={() => onUserClick?.(top3)}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-amber-700/40 bg-gradient-to-b from-amber-700/15 via-slate-900/85 to-slate-950/95 p-5 sm:p-6 text-left shadow-[0_0_25px_rgba(180,83,9,0.12)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-amber-600 cursor-pointer order-3 md:order-3 min-h-[280px]"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-amber-700/40 bg-gradient-to-b from-amber-700/15 via-slate-900/85 to-slate-950/95 p-3.5 sm:p-6 text-left shadow-[0_0_25px_rgba(180,83,9,0.12)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-amber-600 cursor-pointer order-3 md:order-3 col-span-1 min-h-[250px] sm:min-h-[280px]"
               >
                 {top3.colors && top3.colors.length > 0 && (
                   <div
@@ -221,60 +221,60 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
                     }}
                   />
                 )}
-                <div className="relative flex items-center justify-between gap-2 z-10">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-700/50 bg-amber-700/20 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-amber-300">
-                    <Award className="h-3.5 w-3.5 text-amber-500" />
-                    3. Sıra · Bronz
+                <div className="relative flex items-center justify-between gap-1.5 z-10">
+                  <span className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-amber-700/50 bg-amber-700/20 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-300">
+                    <Award className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-amber-500" />
+                    3. Sıra
                   </span>
                   {(top3.weekPoints ?? 0) > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald-400">
-                      <TrendingUp className="h-3 w-3" />
+                    <span className="inline-flex items-center gap-0.5 sm:gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-emerald-400">
+                      <TrendingUp className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
                       +{top3.weekPoints}
                     </span>
                   )}
                 </div>
 
-                <div className="relative my-4 flex flex-col items-center text-center z-10">
-                  <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-amber-700/60 bg-slate-800/90 p-1.5 shadow-[0_0_20px_rgba(180,83,9,0.3)] ring-2 ring-amber-700/30">
+                <div className="relative my-3 sm:my-4 flex flex-col items-center text-center z-10">
+                  <div className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl border-2 border-amber-700/60 bg-slate-800/90 p-1 sm:p-1.5 shadow-[0_0_20px_rgba(180,83,9,0.3)] ring-2 ring-amber-700/30">
                     {top3.clubLogo || flagUrlForEmoji(top3.flagEmoji, 80) ? (
                       <img
                         src={top3.clubLogo || flagUrlForEmoji(top3.flagEmoji, 80)!}
                         alt={top3.name}
                         referrerPolicy="no-referrer"
-                        className="h-12 w-12 object-contain"
+                        className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                         loading="lazy"
                       />
                     ) : (
-                      <UserFlag flagEmoji={top3.flagEmoji} className="h-12 w-12 text-3xl" />
+                      <UserFlag flagEmoji={top3.flagEmoji} className="h-10 w-10 sm:h-12 sm:w-12 text-2xl sm:text-3xl" />
                     )}
-                    <span className="absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-amber-700 text-xs font-black text-white font-mono">
+                    <span className="absolute -bottom-2 -right-2 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-amber-700 text-[11px] sm:text-xs font-black text-white font-mono">
                       3
                     </span>
                   </div>
 
-                  <h3 className="mt-3 font-sports text-lg sm:text-xl font-bold uppercase tracking-tight text-white">
+                  <h3 className="mt-2.5 sm:mt-3 font-sports text-sm sm:text-xl font-bold uppercase tracking-tight text-white truncate max-w-full">
                     {top3.name}
                   </h3>
-                  <div className="mt-3 font-mono text-3xl sm:text-4xl font-black text-amber-200/90 tabular-nums">
+                  <div className="mt-2 sm:mt-3 font-mono text-2xl sm:text-4xl font-black text-amber-200/90 tabular-nums">
                     {top3.totalPoints ?? 0}
-                    <span className="ml-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 font-sans">
-                      Puan
+                    <span className="ml-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 font-sans">
+                      P
                     </span>
                   </div>
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2 border-t border-slate-800/80 pt-3 text-center z-10">
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                    <div className="text-[9px] font-bold uppercase text-emerald-400">Tam</div>
-                    <div className="font-mono text-sm font-black text-white">{top3.exacts ?? 0}</div>
+                <div className="relative grid grid-cols-3 gap-1 sm:gap-2 border-t border-slate-800/80 pt-2.5 sm:pt-3 text-center z-10">
+                  <div className="rounded-lg sm:rounded-xl border border-slate-800 bg-slate-900/80 p-1 sm:p-2">
+                    <div className="text-[8px] sm:text-[9px] font-bold uppercase text-emerald-400">Tam</div>
+                    <div className="font-mono text-xs sm:text-sm font-black text-white">{top3.exacts ?? 0}</div>
                   </div>
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                    <div className="text-[9px] font-bold uppercase text-blue-400">Sonuç</div>
-                    <div className="font-mono text-sm font-black text-white">{top3.results ?? 0}</div>
+                  <div className="rounded-lg sm:rounded-xl border border-slate-800 bg-slate-900/80 p-1 sm:p-2">
+                    <div className="text-[8px] sm:text-[9px] font-bold uppercase text-blue-400">Sonuç</div>
+                    <div className="font-mono text-xs sm:text-sm font-black text-white">{top3.results ?? 0}</div>
                   </div>
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                    <div className="text-[9px] font-bold uppercase text-slate-400">İsabet</div>
-                    <div className="font-mono text-sm font-black text-white">{(top3.exacts ?? 0) + (top3.results ?? 0)}</div>
+                  <div className="rounded-lg sm:rounded-xl border border-slate-800 bg-slate-900/80 p-1 sm:p-2">
+                    <div className="text-[8px] sm:text-[9px] font-bold uppercase text-slate-400">İsabet</div>
+                    <div className="font-mono text-xs sm:text-sm font-black text-white">{(top3.exacts ?? 0) + (top3.results ?? 0)}</div>
                   </div>
                 </div>
               </button>
@@ -283,141 +283,195 @@ const Standings: React.FC<StandingsProps> = ({ users, onUserClick }) => {
         </section>
       )}
 
-      {/* 2. RACER LANES FULL TABLE */}
+      {/* 2. FULL STANDINGS TABLE (RESPONSIVE STICKY-COLUMN ARENA) */}
       <section className="overflow-hidden rounded-3xl border border-slate-800/90 bg-slate-900/85 shadow-2xl backdrop-blur-xl">
-        <div className="relative border-b border-slate-800 bg-slate-950/70 p-5 sm:p-6 text-slate-100">
-          <div className="flex items-center justify-between">
+        <div className="relative border-b border-slate-800 bg-slate-950/70 p-4 sm:p-6 text-slate-100">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 shadow-inner">
                 <Trophy className="h-5 w-5" />
               </div>
-              <h3 className="font-sports text-lg sm:text-xl font-bold uppercase tracking-tight text-white">
-                Genel Lig Sıralaması
-              </h3>
+              <div>
+                <h3 className="font-sports text-lg sm:text-xl font-bold uppercase tracking-tight text-white">
+                  Genel Lig Sıralaması
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Tüm yazarların tam skor, doğru sonuç ve toplam puan tablosu
+                </p>
+              </div>
             </div>
-            <span className="rounded-full border border-slate-800 bg-slate-900 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">
-              {users.length} Yazar
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="sm:hidden text-[10px] font-bold uppercase tracking-wider text-blue-400/90">
+                Yatay Kaydır →
+              </span>
+              <span className="rounded-full border border-slate-800 bg-slate-900 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">
+                {users.length} Yazar
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="hidden sm:grid grid-cols-[56px_1fr_100px_100px_100px_120px_40px] items-center gap-3 px-6 py-3 border-b border-slate-800/80 bg-slate-950/40 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-          <span className="text-center font-mono">SIRA</span>
-          <span>YAZAR & KULÜP</span>
-          <span className="text-center">TAM SKOR</span>
-          <span className="text-center">DOĞRU SONUÇ</span>
-          <span className="text-center">İSABET</span>
-          <span className="text-right font-mono">TOPLAM PUAN</span>
-          <span />
-        </div>
-
-        <div className="p-3 sm:p-5 space-y-2.5 bg-slate-950/40">
-          {users.map((user, index) => {
-            const exacts = user.exacts ?? 0;
-            const results = user.results ?? 0;
-            const totalHits = exacts + results;
-            const isTop1 = index === 0;
-            const isTop2 = index === 1;
-            const isTop3 = index === 2;
-
-            return (
-              <button
-                key={user.id}
-                type="button"
-                onClick={() => onUserClick?.(user)}
-                className={`group relative w-full overflow-hidden rounded-2xl border p-3 sm:p-4 text-left backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl cursor-pointer ${
-                  isTop1
-                    ? "border-amber-400/50 bg-gradient-to-r from-amber-500/10 via-slate-900/90 to-slate-900/95"
-                    : isTop2
-                      ? "border-slate-400/40 bg-gradient-to-r from-slate-400/10 via-slate-900/85 to-slate-900/95"
-                      : isTop3
-                        ? "border-amber-700/35 bg-gradient-to-r from-amber-700/10 via-slate-900/85 to-slate-900/95"
-                        : "border-slate-850 bg-slate-900/70 hover:border-slate-700"
-                }`}
-              >
-                {user.colors && user.colors.length > 0 && (
-                  <div
-                    className="absolute left-0 top-0 bottom-0 w-1.5"
-                    style={{
-                      background:
-                        user.colors.length > 1
-                          ? `linear-gradient(to bottom, ${user.colors.join(", ")})`
-                          : user.colors[0]
-                    }}
-                  />
-                )}
-
-                <div className="hidden sm:grid grid-cols-[56px_1fr_100px_100px_100px_120px_40px] items-center gap-3">
-                  <div className="flex items-center justify-center">
-                    <span className="font-mono text-sm font-bold text-slate-400">
-                      {index + 1}
-                    </span>
+        {/* Scrollable Table Container with Sticky Left Column */}
+        <div className="overflow-x-auto scrollbar-none sm:scrollbar-thin">
+          <table className="w-full min-w-[620px] sm:min-w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-slate-800/80 bg-slate-950/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                <th scope="col" className="sticky left-0 z-20 bg-slate-950/95 backdrop-blur-md px-4 sm:px-6 py-3 min-w-[210px] sm:min-w-[260px] shadow-[4px_0_12px_rgba(0,0,0,0.6)]">
+                  <div className="flex items-center gap-3">
+                    <span className="w-7 text-center font-mono">SIRA</span>
+                    <span>YAZAR & KULÜP</span>
                   </div>
+                </th>
+                <th scope="col" className="px-3 py-3 text-center w-24">TAM SKOR</th>
+                <th scope="col" className="px-3 py-3 text-center w-28">DOĞRU SONUÇ</th>
+                <th scope="col" className="px-3 py-3 text-center w-24">İSABET</th>
+                <th scope="col" className="px-4 py-3 text-right font-mono w-32">TOPLAM PUAN</th>
+                <th scope="col" className="px-3 py-3 text-right w-10"></th>
+              </tr>
+            </thead>
 
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-800/90 p-1">
-                      {user.clubLogo || flagUrlForEmoji(user.flagEmoji, 80) ? (
-                        <img
-                          src={user.clubLogo || flagUrlForEmoji(user.flagEmoji, 80)!}
-                          alt={user.name}
-                          referrerPolicy="no-referrer"
-                          className="h-7 w-7 object-contain"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <UserFlag flagEmoji={user.flagEmoji} className="h-7 w-7 text-xl" />
-                      )}
-                    </div>
-                    <span className="truncate font-sports text-sm sm:text-base font-bold uppercase text-white group-hover:text-amber-300">
-                      {user.name}
-                    </span>
-                  </div>
+            <tbody className="divide-y divide-slate-800/60 bg-slate-950/40">
+              {users.map((user, index) => {
+                const exacts = user.exacts ?? 0;
+                const results = user.results ?? 0;
+                const totalHits = exacts + results;
+                const weekPoints = user.weekPoints ?? 0;
+                const isTop1 = index === 0;
+                const isTop2 = index === 1;
+                const isTop3 = index === 2;
 
-                  <div className="flex justify-center">
-                    <span className="inline-flex items-center justify-center min-w-[54px] rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-1 font-mono text-xs font-black text-emerald-400">
-                      {exacts}
-                    </span>
-                  </div>
+                return (
+                  <tr
+                    key={user.id}
+                    onClick={() => onUserClick?.(user)}
+                    className={`group transition-colors duration-150 hover:bg-slate-800/50 cursor-pointer ${
+                      isTop1
+                        ? "bg-amber-500/[0.04]"
+                        : isTop2
+                          ? "bg-slate-400/[0.03]"
+                          : isTop3
+                            ? "bg-amber-700/[0.03]"
+                            : ""
+                    }`}
+                  >
+                    {/* Sticky Left Column: Rank + Logo + Name */}
+                    <td className="sticky left-0 z-10 bg-slate-900/95 backdrop-blur-md px-4 sm:px-6 py-3 shadow-[4px_0_12px_rgba(0,0,0,0.6)] group-hover:bg-slate-850/95 transition-colors">
+                      <div className="relative flex items-center gap-3">
+                        {/* Team Accent Left Stripe */}
+                        {user.colors && user.colors.length > 0 && (
+                          <div
+                            className="absolute -left-4 sm:-left-6 top-0 bottom-0 w-1"
+                            style={{
+                              background:
+                                user.colors.length > 1
+                                  ? `linear-gradient(to bottom, ${user.colors.join(", ")})`
+                                  : user.colors[0]
+                            }}
+                          />
+                        )}
 
-                  <div className="flex justify-center">
-                    <span className="inline-flex items-center justify-center min-w-[54px] rounded-xl border border-blue-500/30 bg-blue-500/15 px-2.5 py-1 font-mono text-xs font-black text-blue-400">
-                      {results}
-                    </span>
-                  </div>
+                        {/* Rank Badge */}
+                        <div className="flex w-7 shrink-0 items-center justify-center">
+                          {isTop1 ? (
+                            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 font-mono text-xs font-black text-slate-950 shadow-md ring-1 ring-amber-300">
+                              1
+                            </span>
+                          ) : isTop2 ? (
+                            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-400 font-mono text-xs font-black text-slate-950 shadow-sm">
+                              2
+                            </span>
+                          ) : isTop3 ? (
+                            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-700 font-mono text-xs font-black text-white shadow-sm">
+                              3
+                            </span>
+                          ) : (
+                            <span className="font-mono text-sm font-bold text-slate-400">
+                              {index + 1}
+                            </span>
+                          )}
+                        </div>
 
-                  <div className="flex justify-center">
-                    <span className="inline-flex items-center justify-center min-w-[54px] rounded-xl border border-slate-700 bg-slate-800/80 px-2.5 py-1 font-mono text-xs font-black text-slate-300">
-                      {totalHits}
-                    </span>
-                  </div>
+                        {/* Author Avatar/Flag */}
+                        <div className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-800/90 p-1 shadow-inner">
+                          {user.clubLogo || flagUrlForEmoji(user.flagEmoji, 80) ? (
+                            <img
+                              src={user.clubLogo || flagUrlForEmoji(user.flagEmoji, 80)!}
+                              alt={user.name}
+                              referrerPolicy="no-referrer"
+                              className="h-6 w-6 sm:h-7 sm:w-7 object-contain drop-shadow-xs"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <UserFlag flagEmoji={user.flagEmoji} className="h-6 w-6 sm:h-7 sm:w-7 text-lg sm:text-xl" />
+                          )}
+                        </div>
 
-                  <div className="text-right">
-                    <span className="font-mono text-xl sm:text-2xl font-black text-white tabular-nums">
-                      {user.totalPoints ?? 0}
-                    </span>
-                  </div>
+                        {/* Author Name + Status */}
+                        <div className="min-w-0 max-w-[140px] sm:max-w-[190px]">
+                          <div className="flex items-center gap-1.5">
+                            <span className="truncate font-sports text-sm sm:text-base font-bold uppercase text-white group-hover:text-amber-300 transition-colors">
+                              {user.name}
+                            </span>
 
-                  <div className="flex justify-end text-slate-500 group-hover:text-slate-300">
-                    <ChevronRight className="h-4 w-4" />
-                  </div>
-                </div>
+                            {isTop1 && (
+                              <span className="shrink-0 rounded-full border border-amber-400/50 bg-amber-500/20 px-1.5 py-0.2 text-[8px] font-black uppercase tracking-wider text-amber-300">
+                                Lider
+                              </span>
+                            )}
+                          </div>
 
-                <div className="flex items-center justify-between gap-3 sm:hidden">
-                  <div className="flex min-w-0 items-center gap-2.5">
-                    <span className="font-mono text-xs font-bold text-slate-400">
-                      {index + 1}
-                    </span>
-                    <div className="truncate font-sports text-sm font-bold uppercase text-white">
-                      {user.name}
-                    </div>
-                  </div>
-                  <div className="font-mono text-xl font-black text-white">
-                    {user.totalPoints ?? 0}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
+                          {weekPoints > 0 && (
+                            <div className="mt-0.5">
+                              <span className="inline-flex items-center gap-0.5 rounded-md border border-emerald-500/30 bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-mono font-bold text-emerald-400">
+                                +{weekPoints} bu hafta
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Tam Skor (Exacts) Column */}
+                    <td className="px-3 py-3 text-center">
+                      <span className="inline-flex items-center justify-center min-w-[48px] sm:min-w-[54px] rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-2 py-1 font-mono text-xs font-black text-emerald-400 shadow-inner">
+                        {exacts}
+                      </span>
+                    </td>
+
+                    {/* Doğru Sonuç (Results) Column */}
+                    <td className="px-3 py-3 text-center">
+                      <span className="inline-flex items-center justify-center min-w-[48px] sm:min-w-[54px] rounded-xl border border-blue-500/30 bg-blue-500/15 px-2 py-1 font-mono text-xs font-black text-blue-400 shadow-inner">
+                        {results}
+                      </span>
+                    </td>
+
+                    {/* Toplam İsabet Column */}
+                    <td className="px-3 py-3 text-center">
+                      <span className="inline-flex items-center justify-center min-w-[48px] sm:min-w-[54px] rounded-xl border border-slate-700 bg-slate-800/80 px-2 py-1 font-mono text-xs font-black text-slate-300 shadow-inner">
+                        {totalHits}
+                      </span>
+                    </td>
+
+                    {/* Toplam Puan Column */}
+                    <td className="px-4 py-3 text-right">
+                      <span
+                        className={`font-mono text-lg sm:text-2xl font-black tabular-nums tracking-tight ${
+                          isTop1 ? "text-amber-400" : "text-emerald-400 font-bold"
+                        }`}
+                      >
+                        {user.totalPoints ?? 0}
+                      </span>
+                    </td>
+
+                    {/* Action Chevron */}
+                    <td className="px-3 py-3 text-right text-slate-500 group-hover:text-slate-300">
+                      <ChevronRight className="h-4 w-4 inline-block group-hover:translate-x-0.5 transition-transform" />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </section>
     </div>
