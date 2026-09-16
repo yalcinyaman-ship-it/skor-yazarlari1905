@@ -96,21 +96,18 @@ const AuthorClubLens: React.FC<{ user: User; hasPredicted: boolean }> = ({ user,
 
   return (
     <div
-      className={`relative flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-2xl bg-[#FFFFFF] transition-all duration-200 ${
+      className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950/80 transition-all duration-200 ${
         hasPredicted
-          ? "ring-2 ring-emerald-500/70 shadow-[0_3px_8px_rgba(0,0,0,0.06),0_0_12px_rgba(16,185,129,0.20)]"
-          : "opacity-50 group-hover:opacity-85 shadow-[0_3px_8px_rgba(0,0,0,0.06)]"
+          ? "border border-emerald-500/60 ring-2 ring-emerald-500/40 shadow-[0_0_14px_rgba(16,185,129,0.35)]"
+          : "border border-slate-700/60 opacity-60 group-hover:opacity-100 group-hover:border-slate-500 shadow-sm"
       }`}
-      style={{
-        border: hasPredicted ? "1px solid rgba(16,185,129,0.3)" : "1px solid rgba(0,0,0,0.08)"
-      }}
     >
       {logoUrl ? (
         <img
           src={logoUrl}
           alt={user.name}
           referrerPolicy="no-referrer"
-          className="h-7 w-7 max-h-[75%] max-w-[75%] object-contain"
+          className="h-7 w-7 max-h-[75%] max-w-[75%] object-contain drop-shadow-xs"
           loading="lazy"
           onError={() => setImgError(true)}
         />
@@ -118,12 +115,19 @@ const AuthorClubLens: React.FC<{ user: User; hasPredicted: boolean }> = ({ user,
         <UserFlag flagEmoji={user.flagEmoji} className="h-6 w-6 text-base" />
       )}
 
-      {/* Tahmin yapmamış yazar için zarif mikro bekleme noktası */}
-      {!hasPredicted && (
+      {/* Tahmin durumu onay / bekleme rozeti */}
+      {hasPredicted ? (
         <span
-          className="absolute -bottom-0.5 -right-0.5 flex h-2 w-2 rounded-full bg-amber-400 ring-2 ring-white"
-          title="Tahmin bekleniyor"
-        />
+          className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[9px] font-black text-slate-950 ring-2 ring-slate-900 shadow-sm"
+          title="Tahmin gönderildi"
+        >
+          ✓
+        </span>
+      ) : (
+        <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5 items-center justify-center">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500 ring-2 ring-slate-900" title="Tahmin bekleniyor"></span>
+        </span>
       )}
     </div>
   );
@@ -149,28 +153,37 @@ const isPlayed = (match: Match) => {
 
 const StatTile: React.FC<{
   icon?: React.ReactNode;
+  iconBg?: string;
   label: string;
   value: React.ReactNode;
   helper?: string;
   dark?: boolean;
   glass?: boolean;
-}> = ({ icon, label, value, helper }) => {
+}> = ({ icon, iconBg = "bg-blue-500/10 border-blue-500/20 text-blue-400", label, value, helper }) => {
   return (
-    <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3.5 sm:p-4 transition-all shadow-2xs">
-      <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[#64748B]">
-        {icon && <span className="opacity-90">{icon}</span>}
-        <span>{label}</span>
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-lg backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700/90 hover:bg-slate-900/80">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+          {label}
+        </span>
+        {icon && (
+          <div className={`flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl border shadow-inner ${iconBg}`}>
+            {icon}
+          </div>
+        )}
       </div>
 
-      <div className="mt-1 truncate font-mono text-lg sm:text-[19px] font-bold tracking-tight text-[#0F172A]">
-        {value}
-      </div>
-
-      {helper && (
-        <div className="mt-0.5 truncate text-xs text-[#64748B]">
-          {helper}
+      <div className="mt-3">
+        <div className="font-mono text-2xl sm:text-[26px] font-extrabold tracking-tight text-white tabular-nums">
+          {value}
         </div>
-      )}
+
+        {helper && (
+          <p className="mt-1 truncate text-xs font-medium text-slate-400">
+            {helper}
+          </p>
+        )}
+      </div>
     </div>
   );
 };
@@ -701,7 +714,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] px-3 pb-24 pt-36 sm:pt-40 sm:px-5">
+    <div className="min-h-screen bg-transparent px-3 pb-24 pt-6 sm:pt-8 sm:px-5">
       <Header
         onAdminClick={openAdmin}
         onPredictionClick={() => setIsPredictionModalOpen(true)}
@@ -710,7 +723,7 @@ const HomePage: React.FC = () => {
         hasActiveWeek={!!activeWeek && !activeWeek.isPublished && !allUsersHavePredicted}
       />
 
-      <main className="mx-auto max-w-[1440px] space-y-8 text-[#1A1A1E]">
+      <main className="mx-auto max-w-[1440px] space-y-8 text-slate-100 pt-6">
         {error && (
           <div
             className="flex items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-300 shadow-sm"
@@ -726,24 +739,24 @@ const HomePage: React.FC = () => {
           </div>
         )}
 
-        {/* Apple / Linear Tarzı Centered Segmented Control */}
+        {/* UEFA / Premier League Broadcast Floating Navigation Bar */}
         {activeSeason && (
           <div className="flex w-full items-center justify-center">
             <div
-              className="inline-flex flex-wrap items-center justify-center gap-1 rounded-full border border-[#CBD5E1]/80 bg-white/95 p-1 shadow-[0_4px_20px_rgba(15,23,42,0.06)] backdrop-blur-md"
+              className="inline-flex max-w-full items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none rounded-2xl border border-slate-700/50 bg-slate-900/70 p-1.5 shadow-2xl backdrop-blur-md"
             >
               {/* GENEL ÖZET */}
               <button
                 onClick={() => setActiveTab("ozet")}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
+                className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 text-xs tracking-wide transition-all duration-200 ${
                   activeTab === "ozet"
-                    ? "bg-[#0F172A] text-white shadow-xs"
-                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)] font-semibold"
+                    : "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 border border-transparent font-medium"
                 }`}
               >
                 <LayoutGrid
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "ozet" ? "text-amber-400" : "text-[#64748B]"}`}
-                  strokeWidth={1.75}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "ozet" ? "text-emerald-400" : "text-slate-400"}`}
+                  strokeWidth={activeTab === "ozet" ? 2 : 1.75}
                 />
                 <span>Genel Özet</span>
               </button>
@@ -757,28 +770,28 @@ const HomePage: React.FC = () => {
                 }}
                 disabled={predictionLocked}
                 title={predictionLocked ? "Tüm tahminler girildi veya kilitlendi." : "Haftalık tahminleri girmek için tıklayın."}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-all duration-150 ${
+                className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 text-xs font-bold tracking-wide transition-all duration-200 ${
                   predictionLocked
-                    ? "cursor-not-allowed text-[#94A3B8] opacity-65"
-                    : "bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 text-[#1E3A8A] hover:border-blue-300 hover:bg-blue-100/70 active:scale-[0.98]"
+                    ? "cursor-not-allowed text-slate-500 opacity-50 bg-slate-800/30 border border-slate-800"
+                    : "bg-gradient-to-r from-emerald-500/15 to-teal-500/15 border border-emerald-500/40 text-emerald-300 hover:from-emerald-500/25 hover:to-teal-500/25 hover:border-emerald-400/60 shadow-[0_0_12px_rgba(16,185,129,0.15)] active:scale-[0.98]"
                 }`}
               >
-                <Crosshair className="h-3.5 w-3.5 shrink-0 stroke-[2] text-[#1E3A8A]" />
+                <Crosshair className="h-3.5 w-3.5 shrink-0 stroke-[2] text-emerald-400" />
                 <span>Maç Tahmini Yap</span>
               </button>
 
               {/* TAHMİNLER */}
               <button
                 onClick={() => setActiveTab("tahminler")}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
+                className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 text-xs tracking-wide transition-all duration-200 ${
                   activeTab === "tahminler"
-                    ? "bg-[#0F172A] text-white shadow-xs"
-                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)] font-semibold"
+                    : "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 border border-transparent font-medium"
                 }`}
               >
                 <Calendar
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "tahminler" ? "text-amber-400" : "text-[#64748B]"}`}
-                  strokeWidth={1.75}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "tahminler" ? "text-emerald-400" : "text-slate-400"}`}
+                  strokeWidth={activeTab === "tahminler" ? 2 : 1.75}
                 />
                 <span>Tahminler</span>
               </button>
@@ -786,15 +799,15 @@ const HomePage: React.FC = () => {
               {/* PUAN DURUMU */}
               <button
                 onClick={() => setActiveTab("puan-durumu")}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
+                className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 text-xs tracking-wide transition-all duration-200 ${
                   activeTab === "puan-durumu"
-                    ? "bg-[#0F172A] text-white shadow-xs"
-                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)] font-semibold"
+                    : "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 border border-transparent font-medium"
                 }`}
               >
                 <Trophy
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "puan-durumu" ? "text-amber-400" : "text-[#64748B]"}`}
-                  strokeWidth={1.75}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "puan-durumu" ? "text-emerald-400" : "text-slate-400"}`}
+                  strokeWidth={activeTab === "puan-durumu" ? 2 : 1.75}
                 />
                 <span>Puan Durumu</span>
               </button>
@@ -802,15 +815,15 @@ const HomePage: React.FC = () => {
               {/* İSTATİSTİKLER */}
               <button
                 onClick={() => setActiveTab("istatistikler")}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
+                className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 text-xs tracking-wide transition-all duration-200 ${
                   activeTab === "istatistikler"
-                    ? "bg-[#0F172A] text-white shadow-xs"
-                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)] font-semibold"
+                    : "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 border border-transparent font-medium"
                 }`}
               >
                 <TrendingUp
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "istatistikler" ? "text-amber-400" : "text-[#64748B]"}`}
-                  strokeWidth={1.75}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "istatistikler" ? "text-emerald-400" : "text-slate-400"}`}
+                  strokeWidth={activeTab === "istatistikler" ? 2 : 1.75}
                 />
                 <span>İstatistikler</span>
               </button>
@@ -818,15 +831,15 @@ const HomePage: React.FC = () => {
               {/* LİG HAFIZASI */}
               <button
                 onClick={() => setActiveTab("hafiza")}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
+                className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 text-xs tracking-wide transition-all duration-200 ${
                   activeTab === "hafiza"
-                    ? "bg-[#0F172A] text-white shadow-xs"
-                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)] font-semibold"
+                    : "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 border border-transparent font-medium"
                 }`}
               >
                 <Archive
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "hafiza" ? "text-amber-400" : "text-[#64748B]"}`}
-                  strokeWidth={1.75}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "hafiza" ? "text-emerald-400" : "text-slate-400"}`}
+                  strokeWidth={activeTab === "hafiza" ? 2 : 1.75}
                 />
                 <span>Lig Hafızası</span>
               </button>
@@ -845,82 +858,93 @@ const HomePage: React.FC = () => {
               >
                 <div className="grid gap-6 lg:grid-cols-[1.18fr_0.82fr] items-stretch">
                   {/* SOL KART: Hero ve 4 Metrik (Haftanın Ana Etkinlik Vitrini) */}
-                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#CBD5E1]/90 bg-gradient-to-b from-white via-white to-[#F8FAFC] p-6 sm:p-8 lg:p-9 text-[#0F172A] shadow-[0_4px_24px_rgba(15,23,42,0.05)] transition-all duration-200 hover:border-slate-400">
+                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/85 p-6 sm:p-8 lg:p-9 text-slate-100 shadow-xl backdrop-blur-md transition-all duration-200 hover:border-slate-700">
                     {/* Üst Maç Haftası & Rekabet Vurgusu Çizgisi */}
-                    <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-[#1E3A8A] via-[#D97706] to-[#059669]" />
+                    <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-blue-600 via-amber-500 to-emerald-500" />
 
                     <div>
                       {/* Üst Bilgi Satırı - Editoryal Maç Haftası Etiketi */}
                       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                         <div className="flex items-center gap-2 text-xs">
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#BFDBFE] bg-[#EFF6FF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8]">
-                            <Sparkles className="h-3 w-3 text-[#1D4ED8]" />
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/40 bg-blue-500/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-300 backdrop-blur-xs">
+                            <Sparkles className="h-3 w-3 text-amber-400" />
                             Maç Haftası
                           </span>
-                          <span className="font-bold text-[#0F172A]">{activeSeason.name}</span>
-                          <span className="text-slate-300">•</span>
-                          <span className="font-semibold text-[#475569]">{formatWeekLabel(activeWeek?.label) || "Aktif Hafta Yok"}</span>
+                          <span className="font-bold text-white font-sports tracking-wide">{activeSeason.name}</span>
+                          <span className="text-slate-600">•</span>
+                          <span className="font-semibold text-slate-300">{formatWeekLabel(activeWeek?.label) || "Aktif Hafta Yok"}</span>
                         </div>
 
                         {activeWeek && (
                           <span
-                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold tracking-wide border shadow-2xs ${
+                            className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-wide border shadow-sm backdrop-blur-md ${
                               activeWeek.isPublished
-                                ? "bg-blue-50 text-blue-800 border-blue-200"
+                                ? "bg-blue-500/15 text-blue-300 border-blue-500/40"
                                 : allUsersHavePredicted
-                                  ? "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]"
-                                  : "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]"
+                                  ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.25)]"
+                                  : "bg-emerald-500/15 text-emerald-300 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.25)]"
                             }`}
                           >
-                            <span className={`h-1.5 w-1.5 rounded-full ${
-                              activeWeek.isPublished ? "bg-blue-600" : allUsersHavePredicted ? "bg-[#047857]" : "bg-[#D97706] animate-pulse"
-                            }`} />
-                            {activeWeek.isPublished
-                              ? "Tahminler yayında"
-                              : allUsersHavePredicted
-                                ? "Tahminler tamamlandı"
-                                : "Tahminler açık"}
+                            <span className="relative flex h-2 w-2 shrink-0">
+                              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                                activeWeek.isPublished ? "bg-blue-400" : "bg-emerald-400"
+                              }`} />
+                              <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                                activeWeek.isPublished ? "bg-blue-500" : "bg-emerald-500"
+                              }`} />
+                            </span>
+                            <span className="uppercase tracking-wider text-[10px]">
+                              {activeWeek.isPublished
+                                ? "Tahminler yayında"
+                                : allUsersHavePredicted
+                                  ? "Tahminler tamamlandı"
+                                  : "Tahminler açık"}
+                            </span>
                           </span>
                         )}
                       </div>
 
                       {/* Başlık ve Editoryal Hikâye */}
                       <div className="space-y-3">
-                        <h1 className="font-serif text-[28px] sm:text-[34px] lg:text-[38px] font-bold leading-[1.15] tracking-tight text-[#0F172A]">
+                        <h1 className="font-sports text-[26px] sm:text-[32px] lg:text-[36px] font-black leading-[1.15] tracking-tight text-white uppercase drop-shadow-sm">
                           {activeWeek ? `${formatWeekLabel(activeWeek.label)} Tahminleri & Maç Dengesi` : "5. Hafta Tahminleri & Maç Dengesi"}
                         </h1>
 
-                        <p className="font-serif max-w-xl text-sm sm:text-base italic leading-relaxed text-[#475569]">
+                        <p className="max-w-xl text-sm sm:text-base leading-relaxed text-slate-300 font-normal">
                           On yazar. Bir sezon. Her hafta yeniden kurulan bir futbol hikâyesi.
                           Skoru yaz, riskini al, masanın zirvesine adını bırak.
                         </p>
                       </div>
 
-                      {/* 4 Ayrı, Bağımsız Mini Kart */}
+                      {/* 4 Ayrı, Bağımsız Hızlı İstatistik Kartı */}
                       <div className="mt-7 grid grid-cols-2 gap-3 xl:grid-cols-4">
                         <StatTile
-                          icon={<Calendar className="h-4 w-4 text-[#1E3A8A]" />}
+                          icon={<Calendar className="h-4 w-4" />}
+                          iconBg="bg-blue-500/15 border-blue-500/30 text-blue-400"
                           label="Aktif Hafta"
                           value={formatWeekLabel(activeWeek?.label) || "Yok"}
                           helper={activeSeason?.name || "Sezon bekleniyor"}
                         />
 
                         <StatTile
-                          icon={<Users className="h-4 w-4 text-[#2563EB]" />}
+                          icon={<Users className="h-4 w-4" />}
+                          iconBg="bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
                           label="Katılım"
                           value={`${existingPredictors.length}/${users.length}`}
                           helper={`%${participationPercent} tamamlandı`}
                         />
 
                         <StatTile
-                          icon={<Clock className="h-4 w-4 text-[#D97706]" />}
+                          icon={<Clock className="h-4 w-4" />}
+                          iconBg="bg-amber-500/15 border-amber-500/30 text-amber-400"
                           label="Bekleyen Maç"
                           value={pendingMatchesCount}
                           helper={`${playedMatchesCount} maç sonuçlandı`}
                         />
 
                         <StatTile
-                          icon={<Trophy className="h-4 w-4 text-[#059669]" />}
+                          icon={<Trophy className="h-4 w-4" />}
+                          iconBg="bg-amber-500/15 border-amber-500/30 text-amber-400"
                           label="Lider"
                           value={leader?.name || "Yok"}
                           helper={leader ? `${leader.totalPoints || 0} puan` : "Puan bekleniyor"}
@@ -928,45 +952,47 @@ const HomePage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Aksiyon Butonları */}
-                    <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-[#E2E8F0] pt-6">
+                    {/* Aksiyon Butonları (CTA Group) */}
+                    <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-slate-800/80 pt-6">
+                      <button
+                        onClick={() => setIsPredictionModalOpen(true)}
+                        disabled={predictionLocked}
+                        className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                          predictionLocked
+                            ? "cursor-not-allowed opacity-50 bg-slate-800 border border-slate-700 text-slate-400"
+                            : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.35)] active:scale-[0.98] border border-emerald-400/50"
+                        }`}
+                      >
+                        <CheckCircle2 className="h-4 w-4 stroke-[2.5]" />
+                        <span>{allUsersHavePredicted ? "Tahminler Tamamlandı" : "Tahmin Yap"}</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => setActiveTab("tahminler")}
-                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_4px_14px_rgba(15,23,42,0.3)] transition-all duration-150 hover:bg-[#1E293B] active:scale-[0.99]"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white backdrop-blur-md shadow-md transition-all duration-150 active:scale-[0.98]"
                       >
                         <ArrowRight className="h-4 w-4 stroke-[2.5]" />
                         <span>Haftayı Gör</span>
                       </button>
-
-                      <button
-                        onClick={() => setIsPredictionModalOpen(true)}
-                        disabled={predictionLocked}
-                        className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#CBD5E1] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F172A] shadow-2xs transition-all duration-150 hover:border-slate-400 hover:bg-[#F8FAFC] active:scale-[0.99] ${
-                          predictionLocked ? "cursor-not-allowed opacity-75" : ""
-                        }`}
-                      >
-                        <CheckCircle2 className="h-4 w-4 text-[#059669] stroke-[2]" />
-                        <span>{allUsersHavePredicted ? "Tahminler Tamamlandı" : "Tahmin Yap"}</span>
-                      </button>
                     </div>
                   </div>
 
-                  {/* SAĞ KART: Haftanın Nabzı */}
-                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#CBD5E1]/90 bg-gradient-to-b from-white via-white to-[#F8FAFC] p-6 sm:p-8 lg:p-9 text-[#0F172A] shadow-[0_4px_24px_rgba(15,23,42,0.05)] transition-all duration-200 hover:border-slate-400">
+                  {/* SAĞ KART: Haftanın Nabzı & Liderlik Paneli */}
+                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/85 p-6 sm:p-8 lg:p-9 text-slate-100 shadow-xl backdrop-blur-md transition-all duration-200 hover:border-slate-700">
                     {/* Üst Rekabet & Prestij Vurgusu */}
-                    <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-[#1E3A8A] via-[#D97706] to-[#059669]" />
+                    <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-blue-600 via-amber-500 to-emerald-500" />
 
                     <div>
                       {/* Başlık & Durum */}
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#1E3A8A]">
-                            <Flame className="h-3.5 w-3.5 text-[#D97706]" />
+                          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-blue-400">
+                            <Flame className="h-3.5 w-3.5 text-amber-400" />
                             <span>Haftanın Nabzı</span>
                           </div>
 
-                          <div className="font-serif mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
+                          <div className="font-sports mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-white">
                             {formatWeekLabel(activeWeek?.label) || "Beklemede"}
                           </div>
                         </div>
@@ -974,10 +1000,10 @@ const HomePage: React.FC = () => {
                         <div
                           className={`rounded-full px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider border shadow-2xs ${
                             activeWeek?.isPublished
-                              ? "bg-blue-50 text-blue-800 border-blue-200"
+                              ? "bg-blue-500/15 text-blue-300 border-blue-500/40"
                               : allUsersHavePredicted
-                                ? "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]"
-                                : "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]"
+                                ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/40"
+                                : "bg-amber-500/15 text-amber-300 border-amber-500/40"
                           }`}
                         >
                           {activeWeek?.isPublished
@@ -989,110 +1015,109 @@ const HomePage: React.FC = () => {
                       </div>
 
                       {/* Haftalık Editoryal Maç Özeti & Katılım Barı */}
-                      <div className="mt-5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4.5 shadow-2xs">
+                      <div className="mt-5 rounded-xl border border-slate-800 bg-slate-950/60 p-4.5 shadow-2xs">
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Katılım:</span>
-                            <span className="font-mono text-xl sm:text-2xl font-black text-[#0F172A]">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Katılım:</span>
+                            <span className="font-mono text-xl sm:text-2xl font-black text-white tabular-nums">
                               %{participationPercent}
                             </span>
                             {allUsersHavePredicted && (
-                              <span className="inline-flex items-center gap-1 rounded-full border border-[#A7F3D0] bg-[#ECFDF5] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#047857]">
-                                <span className="h-1.5 w-1.5 rounded-full bg-[#047857]" />
+                              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                                 Tamamlandı
                               </span>
                             )}
                           </div>
 
-                          <span className="text-xs font-semibold text-[#64748B]">
+                          <span className="text-xs font-semibold text-slate-400">
                             {allUsersHavePredicted
                               ? "Tüm yazarlar tamamladı"
                               : `${existingPredictors.length}/${users.length} yazar tamamladı`}
                           </span>
                         </div>
 
-                        {/* İnce zarif ilerleme çubuğu */}
-                        <div className="mt-3.5 h-2.5 w-full overflow-hidden rounded-full bg-[#E2E8F0]">
+                        {/* İnce parlayan ilerleme çubuğu */}
+                        <div className="mt-3.5 h-2.5 w-full overflow-hidden rounded-full bg-slate-800/80">
                           <div
                             className="h-full rounded-full transition-all duration-500"
                             style={{
                               width: `${participationPercent}%`,
                               background: allUsersHavePredicted
-                                ? "linear-gradient(90deg, #059669 0%, #10B981 100%)"
-                                : "linear-gradient(90deg, #1E3A8A 0%, #2563EB 100%)"
+                                ? "linear-gradient(90deg, #10B981 0%, #14B8A6 100%)"
+                                : "linear-gradient(90deg, #10B981 0%, #06B6D4 100%)",
+                              boxShadow: "0 0 10px rgba(16, 185, 129, 0.35)"
                             }}
                           />
                         </div>
 
-                        <div className="mt-3.5 grid grid-cols-3 gap-2 border-t border-[#E2E8F0] pt-3 text-center">
+                        <div className="mt-3.5 grid grid-cols-3 gap-2 border-t border-slate-800 pt-3 text-center">
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Maç</div>
-                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-[#0F172A]">{activeWeekMatches.length}</div>
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Maç</div>
+                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-white tabular-nums">{activeWeekMatches.length}</div>
                           </div>
-                          <div className="border-x border-[#E2E8F0]">
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Sonuç</div>
-                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-[#0F172A]">{playedMatchesCount}</div>
+                          <div className="border-x border-slate-800">
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Sonuç</div>
+                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-white tabular-nums">{playedMatchesCount}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Bekleyen</div>
-                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-[#0F172A]">{pendingMatchesCount}</div>
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Bekleyen</div>
+                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-white tabular-nums">{pendingMatchesCount}</div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Liderlik Durumu: Altın / Zirve Rozetiyle Vurgulanan Editoryal Kart */}
+                      {/* Liderlik Durumu: Altın / Zirve Vurgusu */}
                       {leader && (
-                        <div className="mt-4 relative overflow-hidden rounded-xl border border-amber-200/90 bg-gradient-to-r from-amber-50/80 via-white to-amber-50/50 p-4 shadow-2xs">
+                        <div className="mt-4 relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-slate-900/80 to-slate-950/90 p-4 shadow-[0_0_20px_rgba(245,158,11,0.12)]">
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex min-w-0 items-center gap-3">
-                              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white text-xs font-bold text-[#0F172A] shadow-xs">
+                              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-400/50 bg-slate-950 text-xs font-bold text-white shadow-md ring-2 ring-amber-400/40">
                                 {leader.clubLogo || flagUrlForEmoji(leader.flagEmoji, 80) ? (
                                   <img
                                     src={leader.clubLogo || flagUrlForEmoji(leader.flagEmoji, 80)!}
                                     alt={leader.name}
                                     referrerPolicy="no-referrer"
-                                    className="h-7 w-7 object-contain drop-shadow-2xs"
+                                    className="h-7 w-7 object-contain drop-shadow-xs"
                                     loading="lazy"
                                   />
                                 ) : (
                                   <UserFlag flagEmoji={leader.flagEmoji} className="h-7 w-7 text-lg" />
                                 )}
-                                <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[9px] font-black text-white ring-2 ring-white">
+                                <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[9px] font-black text-slate-950 ring-2 ring-slate-900 shadow-xs">
                                   ★
                                 </span>
                               </div>
                               <div className="min-w-0">
-                                <div className="flex items-center gap-1.5">
-                                  <span className="truncate text-sm font-bold text-[#0F172A]">
+                                <div className="flex items-center gap-2">
+                                  <span className="truncate text-sm font-bold text-white font-sports">
                                     {leader.name}
                                   </span>
-                                  <span className="inline-flex items-center rounded-md border border-amber-300 bg-amber-100/90 px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider text-amber-900">
+                                  <span className="inline-flex items-center rounded-md border border-amber-400/40 bg-amber-500/20 px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider text-amber-300">
                                     Lider
                                   </span>
                                 </div>
-                                <div className="text-xs font-medium text-[#64748B]">
+                                <div className="text-xs font-medium text-slate-400">
                                   {leader.totalPoints || 0} puan ile zirvede
                                 </div>
                               </div>
                             </div>
 
                             <div className="text-right">
-                              <div className="font-mono text-base font-bold text-[#0F172A]">
-                                +{leaderGap}
-                              </div>
-                              <div className="text-[9px] font-bold uppercase tracking-wider text-[#64748B]">
-                                fark
+                              <div className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-400/15 px-2.5 py-1 text-xs font-mono font-bold text-amber-300">
+                                <span>+{leaderGap}</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/80">Fark</span>
                               </div>
                             </div>
                           </div>
                         </div>
                       )}
 
-                      {/* Yazarlar: Editoryal Kartuş Formatında Kulüp Armaları */}
+                      {/* 10 Yazarın Katılım Matrisi */}
                       <div className="mt-4">
-                        <div className="mb-2.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
-                          <span className="font-semibold text-[#0F172A]">Yazarlar ({existingPredictors.length}/${users.length})</span>
-                          <span className="text-[10px] text-[#94A3B8]">
+                        <div className="mb-2.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                          <span className="font-semibold text-white">YAZARLAR ({existingPredictors.length}/{users.length})</span>
+                          <span className="text-[10px] text-slate-400">
                             {allUsersHavePredicted ? "Tümü hazır" : `${users.length - existingPredictors.length} bekliyor`}
                           </span>
                         </div>
@@ -1112,11 +1137,10 @@ const HomePage: React.FC = () => {
                                 <AuthorClubLens user={user} hasPredicted={hasPredicted} />
 
                                 <span
-                                  className="w-full truncate text-center font-medium leading-tight"
+                                  className="w-full truncate text-center font-medium leading-tight font-sports text-slate-200"
                                   style={{
                                     fontSize: "11px",
-                                    letterSpacing: "-0.01em",
-                                    color: "#0F172A"
+                                    letterSpacing: "-0.01em"
                                   }}
                                   title={user.name}
                                 >
@@ -1129,14 +1153,14 @@ const HomePage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Bekleyenler: Dikkat Çeken Editoryal Bilgi Şeridi */}
+                    {/* Bekleyenler: Rafine Editoryal Bildirim Kutusu */}
                     {!allUsersHavePredicted && activeWeek && (
-                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/90 p-3.5 text-xs leading-relaxed shadow-2xs">
-                        <div className="flex items-center gap-1.5 mb-1 font-bold text-amber-900">
-                          <Clock3 className="h-3.5 w-3.5 text-amber-700 shrink-0" />
-                          <span>Tahmini Beklenen Yazarlar:</span>
+                      <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-950/40 p-3.5 text-xs leading-relaxed shadow-sm backdrop-blur-md text-amber-200">
+                        <div className="flex items-center gap-1.5 mb-1 font-bold text-amber-400">
+                          <Clock3 className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                          <span className="uppercase tracking-wider text-[11px]">Tahmini Beklenen Yazarlar:</span>
                         </div>
-                        <span className="text-amber-950 font-semibold">
+                        <span className="text-amber-100 font-medium">
                           {waitingUsers.map((user) => user.name).join(", ") || "Bekleyen yok"}
                         </span>
                       </div>
@@ -1153,19 +1177,19 @@ const HomePage: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <section id="mac-takvimi" className="scroll-mt-28">
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_4px_16px_rgba(0,0,0,0.04)]">
+                  <div className="rounded-2xl border border-slate-800/80 bg-slate-900/85 p-5 sm:p-6 shadow-xl backdrop-blur-md">
                     <div className="mb-5 flex items-center justify-between gap-3">
                       <div>
-                        <div className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Hafta Seçimi</div>
-                        <h2 className="mt-1 font-serif text-xl font-bold tracking-tight text-[#0F172A]">
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400">Hafta Seçimi</div>
+                        <h2 className="mt-1 font-sports text-xl font-bold tracking-tight text-white">
                           Haftalar ve Maç Detayı
                         </h2>
                       </div>
 
-                      <History className="h-5 w-5 text-[#1E3A8A]" />
+                      <History className="h-5 w-5 text-blue-400" />
                     </div>
 
-                    {/* Desktop/Tablet Week Buttons - Modern White/Navy Pills */}
+                    {/* Desktop/Tablet Week Buttons */}
                     <div className="hidden sm:flex mb-5 gap-2 overflow-x-auto pb-2 scrollbar-thin">
                       {weeks.map((week) => (
                         <button
@@ -1174,17 +1198,17 @@ const HomePage: React.FC = () => {
                           onClick={() => setSelectedWeekId(week.id)}
                           className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
                             selectedWeekId === week.id
-                              ? "border-[#1E3A8A] bg-[#1E3A8A] text-white shadow-sm"
-                              : "border-[#E2E8F0] bg-white text-[#0F172A] hover:border-slate-300 hover:bg-[#F8FAFC]"
+                              ? "border-blue-500 bg-blue-600 text-white shadow-md"
+                              : "border-slate-800 bg-slate-800/80 text-slate-300 hover:border-slate-700 hover:bg-slate-750"
                           }`}
                         >
                           <div className="flex items-center gap-1.5">
-                            <span>{formatWeekLabel(week.label)}</span>
+                            <span className="font-sports">{formatWeekLabel(week.label)}</span>
                             <span
                               className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                                 selectedWeekId === week.id
                                   ? "bg-white/20 text-white"
-                                  : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B]"
+                                  : "bg-slate-900 border border-slate-700 text-slate-400"
                               }`}
                             >
                               {week.isActive
@@ -1202,14 +1226,14 @@ const HomePage: React.FC = () => {
 
                     {/* Mobile Week Select Dropdown */}
                     <div className="block sm:hidden mb-5">
-                      <label htmlFor="week-select-mobile" className="block text-xs font-bold uppercase tracking-wider text-[#64748B] mb-2">
+                      <label htmlFor="week-select-mobile" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
                         Hafta Seçin:
                       </label>
                       <select
                         id="week-select-mobile"
                         value={selectedWeekId}
                         onChange={(e) => setSelectedWeekId(e.target.value)}
-                        className="w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-sm font-semibold text-[#0F172A] outline-none focus:border-[#1E3A8A]"
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white outline-none focus:border-blue-500"
                       >
                         {weeks.map((week) => (
                           <option key={week.id} value={week.id}>
@@ -1230,8 +1254,8 @@ const HomePage: React.FC = () => {
                         isAdmin={isAdmin}
                       />
                     ) : (
-                      <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-8 text-center">
-                        <p className="font-semibold text-gray-500">
+                      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center">
+                        <p className="font-semibold text-slate-400">
                           Henüz hafta bulunmuyor.
                         </p>
                       </div>
@@ -1250,16 +1274,16 @@ const HomePage: React.FC = () => {
                 <section className="space-y-4">
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A8A]">Canlı Sıralama</div>
-                      <h2 className="font-serif mt-1 text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400">Canlı Sıralama</div>
+                      <h2 className="font-sports mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
                         Sezon Puan Durumu
                       </h2>
-                      <p className="mt-1 max-w-2xl text-xs sm:text-sm text-[#64748B]">
+                      <p className="mt-1 max-w-2xl text-xs sm:text-sm text-slate-400">
                         Liderlik, tam isabet ve doğru sonuç performansı tek bakışta.
                       </p>
                     </div>
 
-                    <div className="rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#64748B]">
+                    <div className="rounded-full border border-slate-800 bg-slate-900 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-400">
                       {weeks.length} Hafta · {users.length} Yazar
                     </div>
                   </div>
@@ -1280,11 +1304,11 @@ const HomePage: React.FC = () => {
               >
                 <section className="space-y-4">
                   <div>
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A8A]">Performans Analizi</div>
-                    <h2 className="font-serif mt-1 text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400">Performans Analizi</div>
+                    <h2 className="font-sports mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
                       İstatistik Merkezi
                     </h2>
-                    <p className="mt-1 max-w-2xl text-xs sm:text-sm text-[#64748B]">
+                    <p className="mt-1 max-w-2xl text-xs sm:text-sm text-slate-400">
                       Tahmin kalitesi, isabet dengesi ve oyuncu performansı burada okunur.
                     </p>
                   </div>
@@ -1305,29 +1329,29 @@ const HomePage: React.FC = () => {
                 className="space-y-6"
               >
                 {/* Üst Bilgi Kartı */}
-                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-[#E2E8F0]">
+                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center rounded-2xl bg-slate-900/85 p-5 sm:p-6 shadow-xl border border-slate-800 backdrop-blur-md">
                   <div>
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#1E3A8A]">
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-400">
                       <Archive className="h-4 w-4 stroke-[1.5]" />
                       Lig Hafızası
                     </div>
-                    <h2 className="mt-1 font-serif text-2xl font-bold tracking-tight text-[#0F172A]">
+                    <h2 className="mt-1 font-sports text-2xl font-bold tracking-tight text-white">
                       Geçmiş Sezonlar & Arşiv
                     </h2>
-                    <p className="mt-1 text-xs text-[#64748B]">
+                    <p className="mt-1 text-xs text-slate-400">
                       Eski liglerin şampiyonları, puan tabloları ve haftalık maç detayları burada saklanır.
                     </p>
                   </div>
 
                   <div className="flex items-center gap-2 self-start sm:self-auto">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#A7F3D0] bg-[#ECFDF5] px-3.5 py-1.5 text-xs font-semibold text-[#047857]">
-                      <span className="h-2 w-2 rounded-full bg-[#059669]" />
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3.5 py-1.5 text-xs font-semibold text-emerald-300">
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
                       {finishedSeasons.length} Kayıtlı Sezon
                     </span>
                   </div>
                 </div>
 
-                {/* 2 Sütunlu Sezon Kartları Izgarası */}
+                {/* 2 Sütunlu Sezon Kartları Izgarası (Hall of Fame Arşivi) */}
                 {finishedSeasons.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {finishedSeasons.map((season) => {
@@ -1349,73 +1373,84 @@ const HomePage: React.FC = () => {
                           key={season.id}
                           type="button"
                           onClick={() => setSelectedArchiveSeason(season)}
-                          className="group rounded-2xl bg-white p-5 text-left border border-[#E2E8F0] shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 cursor-pointer"
+                          className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/90 p-5 text-left border border-slate-800 shadow-xl backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40 hover:shadow-2xl hover:shadow-amber-500/5 cursor-pointer"
                         >
-                          <div className="mb-4 flex items-start justify-between gap-3">
+                          <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-amber-500/5 blur-2xl group-hover:bg-amber-500/10 transition-colors" />
+
+                          <div className="mb-4 flex items-start justify-between gap-3 relative">
                             <div>
-                              <h3 className="font-serif text-base font-bold text-[#0F172A] transition group-hover:text-[#1E3A8A]">
+                              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400">
+                                <Trophy className="h-3 w-3" />
+                                Lig Arşivi
+                              </div>
+                              <h3 className="font-sports text-lg font-bold text-white transition group-hover:text-amber-300 mt-0.5">
                                 {season.name}
                               </h3>
-                              <p className="mt-0.5 text-xs text-[#64748B]">
-                                Tamamlanan Sezon
-                              </p>
                             </div>
 
-                            <span className="rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#64748B]">
-                              Arşiv
+                            <span className="rounded-full border border-slate-700/80 bg-slate-800/80 px-2.5 py-0.5 text-[10px] font-mono font-extrabold uppercase tracking-wider text-slate-300">
+                              Tamamlandı
                             </span>
                           </div>
 
                           {champion ? (
-                            <div className="mb-4 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3.5">
-                              <div className="mb-1.5 text-[10px] font-medium text-[#64748B]">
-                                Şampiyon
+                            <div className="mb-4 rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-950/60 to-slate-950/80 p-3.5 shadow-inner">
+                              <div className="mb-1.5 flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400/90">
+                                <span>🏆 SEZON ŞAMPİYONU</span>
+                                <span className="text-slate-400">Nihai Skor</span>
                               </div>
 
                               <div className="flex items-center justify-between gap-3">
                                 <div className="flex items-center gap-2.5">
-                                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white p-0.5 shadow-2xs border border-[#E2E8F0]">
+                                  <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 p-0.5 shadow-md border border-amber-400/50">
                                     {champion.clubLogo || flagUrlForEmoji(champion.flagEmoji, 80) ? (
                                       <img
                                         src={champion.clubLogo || flagUrlForEmoji(champion.flagEmoji, 80)!}
                                         alt={champion.name}
                                         referrerPolicy="no-referrer"
-                                        className="h-6 w-6 object-contain"
+                                        className="h-7 w-7 object-contain"
                                         loading="lazy"
                                       />
                                     ) : (
-                                      <UserFlag flagEmoji={champion.flagEmoji} className="h-6 w-6 text-base" />
+                                      <UserFlag flagEmoji={champion.flagEmoji} className="h-7 w-7 text-lg" />
                                     )}
+                                    <span className="absolute -bottom-1 -right-1 text-[10px]">👑</span>
                                   </div>
-                                  <span className="text-sm font-bold text-[#0F172A]">
-                                    {champion.name}
-                                  </span>
+                                  <div>
+                                    <span className="text-sm font-bold text-white font-sports block">
+                                      {champion.name}
+                                    </span>
+                                    <span className="text-[10px] font-mono text-slate-400">
+                                      {champion.exacts} Tam • {champion.results} Sonuç
+                                    </span>
+                                  </div>
                                 </div>
 
-                                <span className="rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] px-2.5 py-1 text-xs font-bold text-[#1D4ED8] shadow-2xs">
-                                  {champion.score} Puan
+                                <span className="rounded-xl bg-amber-400 text-slate-950 px-3 py-1.5 text-xs font-black shadow-md font-mono">
+                                  {champion.score} PUAN
                                 </span>
                               </div>
                             </div>
                           ) : (
-                            <div className="mb-4 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3.5 text-xs text-[#64748B]">
-                              Şampiyon bilgisi bekleniyor.
+                            <div className="mb-4 rounded-xl border border-blue-500/20 bg-blue-500/5 p-3.5 text-xs font-medium text-blue-300/90 flex items-center gap-2">
+                              <Sparkles className="h-4 w-4 text-blue-400 shrink-0" />
+                              <span>Sezon Tamamlanmadı / Arşivleniyor</span>
                             </div>
                           )}
 
-                          <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-3 text-xs font-semibold text-[#1E3A8A]">
-                            <span>Sezon Detayları</span>
-                            <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1 stroke-[1.75]" />
+                          <div className="flex items-center justify-between border-t border-slate-800/80 pt-3 text-xs font-bold text-slate-400 group-hover:text-amber-300 transition-colors">
+                            <span className="font-mono text-[11px] uppercase tracking-wider">Tüm Sıralama & Maçlar</span>
+                            <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1 stroke-[2]" />
                           </div>
                         </button>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-[#E2E8F0] bg-white p-12 text-center shadow-xs">
-                    <Archive className="mx-auto h-10 w-10 text-slate-400 stroke-[1.5]" />
-                    <h3 className="mt-3 text-base font-bold text-[#0F172A]">Henüz Arşivlenmiş Sezon Yok</h3>
-                    <p className="mt-1 text-xs text-[#64748B]">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/85 p-12 text-center shadow-xl backdrop-blur-md">
+                    <Archive className="mx-auto h-10 w-10 text-slate-500 stroke-[1.5]" />
+                    <h3 className="mt-3 text-base font-bold text-white font-sports">Henüz Arşivlenmiş Sezon Yok</h3>
+                    <p className="mt-1 text-xs text-slate-400">
                       Aktif sezon tamamlandığında lig verileri buraya otomatik olarak arşivlenir.
                     </p>
                   </div>
@@ -1530,49 +1565,49 @@ const HomePage: React.FC = () => {
                         key={season.id}
                         type="button"
                         onClick={() => setSelectedArchiveSeason(season)}
-                        className="card-base card-hover group p-5 text-left"
+                        className="group relative overflow-hidden rounded-2xl bg-slate-900/90 p-5 text-left border border-slate-800 shadow-xl backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40 cursor-pointer"
                       >
-                        <div className="mb-5 flex items-start justify-between gap-3">
+                        <div className="mb-4 flex items-start justify-between gap-3">
                           <div>
-                            <h3 className="text-lg font-bold text-[#1A1A1A] transition group-hover:text-[#D96B43]">
+                            <h3 className="font-sports text-base font-bold text-white transition group-hover:text-amber-300">
                               {season.name}
                             </h3>
-                            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-[#6B6760]">
-                              Tamamlanan sezon
+                            <p className="mt-0.5 text-xs text-slate-400">
+                              Tamamlanan Sezon
                             </p>
                           </div>
 
-                          <span className="rounded-full border border-[#EAE6DF] bg-[#FAF8F5] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+                          <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-slate-300">
                             Arşiv
                           </span>
                         </div>
 
                         {champion ? (
-                          <div className="mb-5 rounded-2xl border border-[#EAE6DF] bg-[#FAF8F5] p-3">
-                            <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+                          <div className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3">
+                            <div className="mb-1 text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">
                               Şampiyon
                             </div>
 
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex items-center gap-2">
                                 <UserFlag flagEmoji={champion.flagEmoji} className="h-6 w-6 text-2xl" />
-                                <span className="font-bold text-[#1A1A1A]">
+                                <span className="font-bold text-white font-sports">
                                   {champion.name}
                                 </span>
                               </div>
 
-                              <span className="rounded-xl bg-[#FDF4F0] border border-[#F3DCD2] px-3 py-1.5 text-sm font-black text-[#D96B43]">
+                              <span className="rounded-lg bg-amber-400 text-slate-950 px-2.5 py-1 text-xs font-black font-mono">
                                 {champion.score} Puan
                               </span>
                             </div>
                           </div>
                         ) : (
-                          <div className="mb-5 rounded-2xl border border-[#EAE6DF] bg-[#FAF8F5] p-3 text-sm font-semibold text-[#6B6760]">
+                          <div className="mb-4 rounded-xl border border-slate-800 bg-slate-950/60 p-3 text-xs text-slate-400">
                             Şampiyon bilgisi bekleniyor.
                           </div>
                         )}
 
-                        <div className="flex items-center justify-between border-t border-[#EAE6DF] pt-4 text-xs font-bold uppercase tracking-wider text-[#D96B43]">
+                        <div className="flex items-center justify-between border-t border-slate-800 pt-3 text-xs font-bold text-amber-400">
                           <span>Sezon Detayları</span>
                           <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" />
                         </div>
@@ -1586,34 +1621,72 @@ const HomePage: React.FC = () => {
         )}
       </main>
 
-      <footer className="mx-auto mt-16 flex max-w-7xl flex-col items-center justify-center gap-3 border-t border-[#E2E8F0] pb-12 pt-8">
-        <p className="text-xs font-medium text-[#64748B]">
-          &copy; {new Date().getFullYear()} Skor Yazarları. Süper Lig Özel Tahmin Ligi.
-        </p>
+      {/* Stadium Matchday Footer */}
+      <footer className="mx-auto mt-20 max-w-7xl border-t border-slate-800/80 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+          {/* Logo & Brand Identity */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 text-emerald-400 shadow-md">
+              <Trophy className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-sports text-sm font-bold uppercase tracking-wider text-white">
+                  Skor Yazarları
+                </span>
+                <span className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-widest text-emerald-400">
+                  v2.6 Live
+                </span>
+              </div>
+              <p className="text-xs font-medium text-slate-400">
+                Süper Lig Maç Tahmin ve Rekabet Arenası
+              </p>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={openAdmin}
-            className="rounded-full p-2 text-slate-400 opacity-60 transition duration-200 hover:opacity-100 hover:bg-[#F8FAFC] hover:text-[#0F172A]"
-            title={isAdmin ? "Yönetici Panelini Aç" : "Yönetici Girişi"}
-            id="admin-footer-btn-login"
-          >
-            {isAdmin ? <Unlock className="h-3.5 w-3.5 text-[#059669]" /> : <Lock className="h-3.5 w-3.5" />}
-          </button>
+          {/* Quick Info & Admin Access */}
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-[11px] text-slate-500">
+              &copy; {new Date().getFullYear()} Skor Yazarları Ligi
+            </span>
 
-          {isAdmin && (
-            <button
-              onClick={async () => {
-                await signOut(auth);
-                setIsAdmin(false);
-              }}
-              className="rounded-full p-2 text-slate-400 opacity-60 transition duration-200 hover:opacity-100 hover:bg-[#F8FAFC] hover:text-rose-600"
-              title="Yönetici Çıkışı"
-              id="admin-footer-btn-logout"
-            >
-              <Lock className="h-3.5 w-3.5" />
-            </button>
-          )}
+            <div className="h-4 w-px bg-slate-800" />
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={openAdmin}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-xs font-medium text-slate-400 transition hover:border-slate-700 hover:bg-slate-800 hover:text-white cursor-pointer"
+                title={isAdmin ? "Yönetici Panelini Aç" : "Yönetici Girişi"}
+                id="admin-footer-btn-login"
+              >
+                {isAdmin ? (
+                  <>
+                    <Unlock className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="font-mono text-[11px] font-bold text-emerald-400">Admin Aktif</span>
+                  </>
+                ) : (
+                  <>
+                    <Lock className="h-3.5 w-3.5 text-slate-500" />
+                    <span className="font-mono text-[11px]">Yönetici</span>
+                  </>
+                )}
+              </button>
+
+              {isAdmin && (
+                <button
+                  onClick={async () => {
+                    await signOut(auth);
+                    setIsAdmin(false);
+                  }}
+                  className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-2 text-rose-400 transition hover:bg-rose-500/20 cursor-pointer"
+                  title="Yönetici Çıkışı"
+                  id="admin-footer-btn-logout"
+                >
+                  <Lock className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </footer>
 

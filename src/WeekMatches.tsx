@@ -75,8 +75,8 @@ const getPredictionStatus = (
     return {
       label: "Sonuç bekliyor",
       points: null,
-      className: "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]",
-      icon: <Clock3 className="h-3.5 w-3.5 text-[#94A3B8]" />
+      className: "border-slate-800 bg-slate-900/60 text-slate-400",
+      icon: <Clock3 className="h-3.5 w-3.5 text-slate-500" />
     };
   }
 
@@ -105,8 +105,8 @@ const getPredictionStatus = (
     return {
       label: bonus ? "Tek bilen tam isabet" : "Tam isabet",
       points: 2 + bonus,
-      className: "border-[#BFDBFE] bg-[#EFF6FF] text-[#1D4ED8] shadow-2xs",
-      icon: <Trophy className="h-3.5 w-3.5 text-[#D97706]" />
+      className: "border-amber-400/50 bg-amber-950/30 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.15)]",
+      icon: <Trophy className="h-3.5 w-3.5 text-amber-400" />
     };
   }
 
@@ -116,16 +116,16 @@ const getPredictionStatus = (
     return {
       label: bonus ? "Tek bilen sonuç" : "Doğru sonuç",
       points: 1 + bonus,
-      className: "border-[#A7F3D0] bg-[#ECFDF5] text-[#047857] shadow-2xs",
-      icon: <CheckCircle2 className="h-3.5 w-3.5 text-[#047857]" />
+      className: "border-emerald-500/40 bg-emerald-950/30 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.15)]",
+      icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
     };
   }
 
   return {
     label: "Yanlış",
     points: 0,
-    className: "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]",
-    icon: <XCircle className="h-3.5 w-3.5 text-[#94A3B8]" />
+    className: "border-slate-800 bg-slate-900/50 text-slate-500",
+    icon: <XCircle className="h-3.5 w-3.5 text-slate-600" />
   };
 };
 
@@ -135,12 +135,12 @@ const SmallStat: React.FC<{
   value: React.ReactNode;
 }> = ({ icon, label, value }) => {
   return (
-    <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2.5 shadow-2xs">
-      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+    <div className="rounded-2xl border border-slate-800/80 bg-slate-900/70 p-3.5 shadow-md backdrop-blur-md">
+      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
         {icon}
         <span>{label}</span>
       </div>
-      <div className="mt-1 font-mono text-lg font-black text-[#0F172A]">
+      <div className="mt-1 font-mono text-xl font-black text-white tabular-nums">
         {value}
       </div>
     </div>
@@ -171,66 +171,78 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
   if (!isPublished && !isAdmin) {
     return (
-      <section className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.04)]">
-        <div className="border-b border-[#E5E7EB] bg-[#F9FAFB] p-5 text-[#111827] sm:p-7">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-            <div>
-              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#E25822]">
-                <Lock className="h-4 w-4" />
-                Hafta kilitli
+      <section className="overflow-hidden rounded-3xl border border-slate-800/90 bg-slate-900/85 shadow-2xl backdrop-blur-xl">
+        <div className="relative border-b border-slate-800 bg-slate-950/70 p-6 sm:p-8 text-slate-100">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[1px] w-3/4 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
+
+          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 text-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.2)]">
+                <Lock className="h-7 w-7 stroke-[2]" />
               </div>
 
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#111827] sm:text-3xl">
-                {label}
-              </h2>
+              <div>
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">
+                  <span>Hafta Kilitli</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                </div>
 
-              <p className="mt-1.5 max-w-2xl text-sm text-gray-500">
-                Admin haftayı yayınlayana kadar tahmin detayları kapalı kalır.
-              </p>
+                <h2 className="mt-1 text-2xl font-bold tracking-tight text-white font-sports sm:text-3xl">
+                  {label}
+                </h2>
+
+                <p className="mt-1 max-w-xl text-xs sm:text-sm font-medium text-slate-400 leading-relaxed">
+                  Tüm yazarlar tahminlerini tamamlayana veya maçlar başlayana kadar tahmin detayları gizli tutulur.
+                </p>
+              </div>
             </div>
 
-            <div className="rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-800">
-              Yayın bekliyor
+            <div className="self-start sm:self-auto rounded-full border border-amber-500/40 bg-amber-500/15 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+              Yayın Bekliyor
             </div>
           </div>
         </div>
 
-        <div className="grid gap-3 p-5 sm:grid-cols-3 sm:p-7">
+        <div className="grid gap-3 p-5 sm:grid-cols-3 sm:p-6 bg-slate-950/40">
           <SmallStat
-            icon={<Users className="h-4 w-4 text-[#E25822]" />}
-            label="Katılan"
-            value={`${uniquePredictorIds.size}/${users.length}`}
+            icon={<Users className="h-4 w-4 text-blue-400" />}
+            label="Tahmin Yapan Yazar"
+            value={`${uniquePredictorIds.size} / ${users.length}`}
           />
 
           <SmallStat
-            icon={<CalendarDays className="h-4 w-4 text-[#E25822]" />}
-            label="Maç"
+            icon={<CalendarDays className="h-4 w-4 text-amber-400" />}
+            label="Toplam Maç"
             value={matches.length}
           />
 
           <SmallStat
-            icon={<ShieldCheck className="h-4 w-4 text-[#059669]" />}
-            label="Durum"
-            value="Gizli"
+            icon={<ShieldCheck className="h-4 w-4 text-emerald-400" />}
+            label="Gizlilik Koruması"
+            value="Aktif (Gizli)"
           />
         </div>
 
-        <div className="border-t border-[#E5E7EB] p-5 sm:p-7">
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="border-t border-slate-800/90 p-5 sm:p-6">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            Yazar Katılım Durumu
+          </div>
+
+          <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
             {users.map((user) => {
               const hasSubmitted = uniquePredictorIds.has(user.id);
 
               return (
                 <div
                   key={user.id}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-3"
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3 shadow-md backdrop-blur-sm transition-all hover:border-slate-700"
                 >
-                  <div className="flex min-w-0 items-center gap-2">
+                  <div className="flex min-w-0 items-center gap-2.5">
                     <span className={`shrink-0 ${hasSubmitted ? "" : "grayscale opacity-40"}`}>
-                      <UserFlag flagEmoji={user.flagEmoji} className="h-5 w-5 text-lg" />
+                      <UserFlag flagEmoji={user.flagEmoji} className="h-6 w-6 text-xl" />
                     </span>
 
-                    <span className="truncate text-sm font-bold text-[#111827]">
+                    <span className="truncate text-xs font-bold text-white font-sports">
                       {user.name}
                     </span>
                   </div>
@@ -238,11 +250,11 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                   <span
                     className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border ${
                       hasSubmitted
-                        ? "bg-[#ECFDF5] border-emerald-200 text-[#059669]"
-                        : "bg-white border-[#E5E7EB] text-gray-500"
+                        ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+                        : "bg-slate-800 border-slate-700 text-slate-400"
                     }`}
                   >
-                    {hasSubmitted ? "Yaptı" : "Bekliyor"}
+                    {hasSubmitted ? "Tamamlandı" : "Bekleniyor"}
                   </span>
                 </div>
               );
@@ -255,56 +267,60 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
   if (!sortedMatches.length) {
     return (
-      <section className="rounded-2xl border border-[#E5E7EB] bg-white p-8 text-center shadow-[0_4px_16px_rgba(0,0,0,0.04)]">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F9FAFB] text-gray-500 border border-[#E5E7EB]">
-          <CalendarDays className="h-7 w-7 text-[#E25822]" />
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-10 text-center shadow-xl backdrop-blur-md">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-800 text-slate-400 border border-slate-700 shadow-inner">
+          <CalendarDays className="h-8 w-8 text-amber-400" />
         </div>
 
-        <h3 className="text-lg font-bold text-[#111827]">
-          Bu haftaya maç eklenmemiş
+        <h3 className="text-xl font-bold text-white font-sports">
+          Bu Haftaya Henüz Maç Eklenmemiş
         </h3>
 
-        <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
-          Maçlar admin panelinden eklendiğinde burada listelenecek.
+        <p className="mx-auto mt-2 max-w-md text-xs sm:text-sm font-medium text-slate-400">
+          Maçlar eklendikten sonra fikstür ve yazar tahminleri burada canlı olarak görüntülenecektir.
         </p>
       </section>
     );
   }
 
   return (
-    <section className="space-y-4">
-      <div className="overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs">
-        <div className="border-b border-[#E2E8F0] bg-[#F8FAFC] p-5 sm:p-7">
+    <section className="space-y-5">
+      <div className="overflow-hidden rounded-3xl border border-slate-800/90 bg-slate-900/85 shadow-2xl backdrop-blur-xl">
+        {/* Header Bar */}
+        <div className="relative border-b border-slate-800 bg-slate-950/70 p-5 sm:p-7">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[1px] w-3/4 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+
           <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-end">
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A8A]">
-                Haftanın Maç Merkezi
+              <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-emerald-400">
+                <Target className="h-3.5 w-3.5" />
+                <span>Haftanın Maç Arenası</span>
               </div>
 
-              <h2 className="font-serif mt-1 text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
+              <h2 className="font-sports mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
                 {label}
               </h2>
 
-              <p className="mt-1.5 max-w-2xl text-sm text-[#64748B]">
-                Maçları net gör, sonucu takip et, detaydan herkesin tahminini aç.
+              <p className="mt-1 max-w-2xl text-xs sm:text-sm font-medium text-slate-400 leading-relaxed">
+                Resmi maç sonuçlarını canlı takip et, detaydan tüm yazarların tahminlerini ve puanlamalarını incele.
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 xl:w-[420px]">
+            <div className="grid grid-cols-3 gap-2.5 xl:w-[420px]">
               <SmallStat
-                icon={<CalendarDays className="h-4 w-4 text-[#1E3A8A]" />}
-                label="Maç"
+                icon={<CalendarDays className="h-4 w-4 text-blue-400" />}
+                label="Toplam Maç"
                 value={sortedMatches.length}
               />
 
               <SmallStat
-                icon={<ShieldCheck className="h-4 w-4 text-[#059669]" />}
-                label="Biten"
+                icon={<ShieldCheck className="h-4 w-4 text-emerald-400" />}
+                label="Biten Maç"
                 value={playedCount}
               />
 
               <SmallStat
-                icon={<Clock3 className="h-4 w-4 text-[#D97706]" />}
+                icon={<Clock3 className="h-4 w-4 text-amber-400" />}
                 label="Bekleyen"
                 value={pendingCount}
               />
@@ -312,7 +328,8 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
           </div>
         </div>
 
-        <div className="grid gap-3.5 p-4 sm:p-6 bg-[#F8FAFC]">
+        {/* Matches List */}
+        <div className="grid gap-4 p-4 sm:p-6 bg-slate-950/50">
           {sortedMatches.map((match) => {
             const matchPredictions = predictions.filter(
               (prediction) => prediction.matchId === match.id
@@ -350,147 +367,151 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
             return (
               <article
                 key={match.id}
-                className="relative overflow-hidden rounded-2xl border border-[#CBD5E1]/80 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-slate-400 hover:shadow-[0_4px_16px_rgba(15,23,42,0.08)]"
+                className="relative overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-900/80 shadow-lg backdrop-blur-md transition-all duration-200 hover:border-slate-700 hover:shadow-xl"
               >
-                {/* İnce Rekabet & Fikstür Dengesi Üst Çizgisi */}
-                <div className="absolute left-0 right-0 top-0 h-[2.5px] bg-gradient-to-r from-[#1E3A8A] via-slate-300 to-[#0F172A] opacity-70" />
+                {/* Stadium Light Top Accent Line */}
+                <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-500 opacity-75" />
 
                 <button
                   type="button"
                   onClick={() => setExpandedMatchId(expanded ? null : match.id)}
-                  className="block w-full p-4.5 text-left transition duration-150 hover:bg-[#F8FAFC]/70 sm:p-6"
+                  className="block w-full p-4.5 text-left transition duration-150 hover:bg-slate-800/30 sm:p-6 cursor-pointer"
                 >
                   <div className="flex flex-col gap-4">
+                    {/* Top Row: Date & Badges */}
                     <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-                      <div className="flex items-center gap-2 text-xs font-bold text-[#0F172A]">
-                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#EFF6FF] text-[#1E3A8A]">
-                          <CalendarDays className="h-3.5 w-3.5 text-[#1E3A8A]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-blue-500/20 text-blue-400">
+                          <CalendarDays className="h-3.5 w-3.5" />
                         </span>
                         <span>{formatMatchDate(match.matchDate)}</span>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2">
                         <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border shadow-2xs ${
+                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border shadow-sm ${
                             resultKnown
-                              ? "bg-[#ECFDF5] border-[#A7F3D0] text-[#047857]"
-                              : "bg-[#FFFBEB] border-[#FDE68A] text-[#B45309]"
+                              ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
+                              : "bg-amber-500/15 border-amber-500/40 text-amber-300"
                           }`}
                         >
-                          <span className={`h-1.5 w-1.5 rounded-full ${resultKnown ? "bg-[#059669]" : "bg-[#D97706] animate-pulse"}`} />
-                          {resultKnown ? "Sonuçlandı" : "Bekliyor"}
+                          <span className={`h-1.5 w-1.5 rounded-full ${resultKnown ? "bg-emerald-400" : "bg-amber-400 animate-pulse"}`} />
+                          {resultKnown ? "Sonuçlandı" : "Maç Bekleniyor"}
                         </span>
 
-                        <span className="rounded-full bg-[#F8FAFC] border border-[#E2E8F0] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+                        <span className="rounded-full bg-slate-800/90 border border-slate-700 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
                           {total} tahmin
                         </span>
                       </div>
                     </div>
 
-                    {/* Mobile layout (stacked & responsive) */}
+                    {/* Mobile View */}
                     <div className="flex flex-col gap-3 sm:hidden">
                       <div className="flex items-center justify-between">
                         {/* Home Team */}
-                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 shadow-2xs">
-                            <TeamLogo teamName={match.homeTeam} className="h-8 w-8 shrink-0 object-contain drop-shadow-xs" />
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 p-1 shadow-inner">
+                            <TeamLogo teamName={match.homeTeam} className="h-8 w-8 shrink-0 object-contain" />
                           </div>
-                          <span className="truncate text-sm font-bold text-[#0F172A]">
+                          <span className="truncate text-xs font-bold text-white font-sports uppercase">
                             {match.homeTeam}
                           </span>
                         </div>
 
-                        {/* Score/VS block in middle */}
+                        {/* Digital Scoreboard Box */}
                         <div className="mx-2 shrink-0">
-                          <div className="min-w-[80px] rounded-xl border border-[#CBD5E1] bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] px-3 py-2 text-center shadow-2xs">
+                          <div className="min-w-[84px] rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-center shadow-inner">
                             {resultKnown ? (
-                              <span className="font-mono text-base font-black text-[#0F172A]">
+                              <span className="font-mono text-base font-black text-white tabular-nums tracking-tight">
                                 {match.actualHome} : {match.actualAway}
                               </span>
                             ) : (
-                              <span className="text-[11px] font-black text-[#64748B] uppercase tracking-widest">VS</span>
+                              <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">VS</span>
                             )}
                           </div>
                         </div>
 
                         {/* Away Team */}
-                        <div className="flex items-center gap-2.5 min-w-0 flex-1 justify-end">
-                          <span className="truncate text-sm font-bold text-[#0F172A] text-right">
+                        <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+                          <span className="truncate text-xs font-bold text-white font-sports uppercase text-right">
                             {match.awayTeam}
                           </span>
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 shadow-2xs">
-                            <TeamLogo teamName={match.awayTeam} className="h-8 w-8 shrink-0 object-contain drop-shadow-xs" />
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 p-1 shadow-inner">
+                            <TeamLogo teamName={match.awayTeam} className="h-8 w-8 shrink-0 object-contain" />
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Desktop layout (3 columns side-by-side) */}
+                    {/* Desktop View (3 Columns Versus Arena) */}
                     <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-6">
+                      {/* Home Team Side */}
                       <div className="min-w-0">
                         <div className="flex items-center justify-end gap-4">
                           <div className="min-w-0 text-right">
-                            <div className="truncate text-xl font-bold tracking-tight text-[#0F172A] sm:text-2xl font-serif">
+                            <div className="truncate text-xl font-bold tracking-tight text-white font-sports uppercase sm:text-2xl">
                               {match.homeTeam}
                             </div>
-                            <div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                            <div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                               Ev Sahibi
                             </div>
                           </div>
 
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white to-[#F8FAFC] p-1.5 shadow-xs transition-transform duration-200 hover:scale-105">
+                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/90 p-2 shadow-inner transition-transform duration-200 hover:scale-105">
                             <TeamLogo
                               teamName={match.homeTeam}
-                              className="h-12 w-12 shrink-0 object-contain drop-shadow-xs"
+                              className="h-12 w-12 shrink-0 object-contain drop-shadow-md"
                             />
                           </div>
                         </div>
                       </div>
 
+                      {/* Center Digital Scoreboard */}
                       <div className="flex flex-col items-center">
-                        <div className="min-w-[104px] rounded-2xl border border-[#CBD5E1] bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] px-5 py-3 text-center shadow-xs sm:min-w-[128px]">
+                        <div className="min-w-[120px] rounded-2xl border border-slate-700 bg-slate-950 px-6 py-3 text-center shadow-[0_0_20px_rgba(0,0,0,0.6)]">
                           {resultKnown ? (
-                            <div className="font-mono text-3xl font-black text-[#0F172A] sm:text-4xl tracking-tight">
+                            <div className="font-mono text-3xl font-black text-white tracking-tight tabular-nums sm:text-4xl">
                               {match.actualHome}
-                              <span className="mx-1.5 text-[#94A3B8]">:</span>
+                              <span className="mx-2 text-slate-500">:</span>
                               {match.actualAway}
                             </div>
                           ) : (
-                            <div className="text-base font-black uppercase tracking-[0.3em] text-[#475569] sm:text-lg">
+                            <div className="text-base font-black uppercase tracking-[0.3em] text-slate-400 sm:text-lg">
                               VS
                             </div>
                           )}
                         </div>
 
-                        <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+                        <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                           {resultKnown ? (
                             <>
-                              <ShieldCheck className="h-3.5 w-3.5 text-[#059669]" />
-                              <span>Resmi Skor</span>
+                              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                              <span className="text-emerald-400">Resmi Skor</span>
                             </>
                           ) : (
                             <>
-                              <Clock3 className="h-3.5 w-3.5 text-[#D97706]" />
-                              <span>Maç Bekliyor</span>
+                              <Clock3 className="h-3.5 w-3.5 text-amber-400" />
+                              <span>Maç Bekleniyor</span>
                             </>
                           )}
                         </div>
                       </div>
 
+                      {/* Away Team Side */}
                       <div className="min-w-0">
                         <div className="flex items-center justify-start gap-4">
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white to-[#F8FAFC] p-1.5 shadow-xs transition-transform duration-200 hover:scale-105">
+                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/90 p-2 shadow-inner transition-transform duration-200 hover:scale-105">
                             <TeamLogo
                               teamName={match.awayTeam}
-                              className="h-12 w-12 shrink-0 object-contain drop-shadow-xs"
+                              className="h-12 w-12 shrink-0 object-contain drop-shadow-md"
                             />
                           </div>
 
                           <div className="min-w-0 text-left">
-                            <div className="truncate text-xl font-bold tracking-tight text-[#0F172A] sm:text-2xl font-serif">
+                            <div className="truncate text-xl font-bold tracking-tight text-white font-sports uppercase sm:text-2xl">
                               {match.awayTeam}
                             </div>
-                            <div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                            <div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                               Deplasman
                             </div>
                           </div>
@@ -498,31 +519,32 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                       </div>
                     </div>
 
-                    <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto] sm:items-center">
-                      <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2">
-                        <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-[#1E3A8A]">
+                    {/* Bottom Quick Analytics & Accordion Toggle */}
+                    <div className="grid gap-2.5 sm:grid-cols-[1fr_1fr_auto] sm:items-center pt-1 border-t border-slate-800/70">
+                      <div className="rounded-xl border border-slate-800 bg-slate-800/50 px-3.5 py-2">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-400">
                           <BarChart3 className="h-3.5 w-3.5" />
                           Favori Tahmin
                         </div>
-                        <div className="mt-0.5 truncate text-sm font-bold text-[#0F172A]">
+                        <div className="mt-0.5 truncate text-xs sm:text-sm font-bold text-white font-sports">
                           {popularPick}
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2">
-                        <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-[#059669]">
+                      <div className="rounded-xl border border-slate-800 bg-slate-800/50 px-3.5 py-2">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                           <Target className="h-3.5 w-3.5" />
-                          Puan Durumu
+                          Puanlama Durumu
                         </div>
-                        <div className="mt-0.5 truncate text-sm font-bold text-[#0F172A]">
+                        <div className="mt-0.5 truncate text-xs sm:text-sm font-bold text-white font-sports">
                           {pointsPublished ? "Puanlandı" : "Bekliyor"}
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-xs font-semibold text-[#0F172A] shadow-2xs transition-all hover:bg-[#F8FAFC] sm:min-w-[130px]">
-                        <span>{expanded ? "Kapat" : "Detay Aç"}</span>
+                      <div className="flex items-center justify-between gap-2 rounded-xl border border-slate-750 bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-200 shadow-sm transition hover:border-slate-600 hover:bg-slate-750 sm:min-w-[130px]">
+                        <span>{expanded ? "Detay Kapat" : "Detay Aç"}</span>
                         <ChevronDown
-                          className={`h-4 w-4 text-[#1E3A8A] transition-transform duration-300 ${
+                          className={`h-4 w-4 text-emerald-400 transition-transform duration-300 ${
                             expanded ? "rotate-180" : ""
                           }`}
                         />
@@ -531,100 +553,107 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                   </div>
                 </button>
 
+                {/* Expanded Predictions Accordion Panel */}
                 {expanded && (
-                  <div className="border-t border-[#E2E8F0] bg-white">
-                    <div className="border-b border-[#E2E8F0] bg-[#F8FAFC] px-5 py-4 sm:px-6">
+                  <div className="border-t border-slate-800 bg-slate-950/80 animate-fadeIn">
+                    {/* Accordion Header */}
+                    <div className="border-b border-slate-800 bg-slate-900/60 px-5 py-4 sm:px-6">
                       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                         <div>
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-[#1E3A8A]">
-                            Açılan maç
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                            Fikstür Detayı
                           </div>
 
-                          <h3 className="font-serif mt-0.5 text-base font-bold text-[#0F172A]">
+                          <h3 className="font-sports mt-0.5 text-sm sm:text-base font-bold text-white uppercase">
                             {match.homeTeam} - {match.awayTeam}
                           </h3>
 
-                          <p className="mt-0.5 text-xs text-[#64748B]">
+                          <p className="mt-0.5 text-xs text-slate-400">
                             {formatMatchDate(match.matchDate)}
                           </p>
                         </div>
 
-                        <div className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-2 text-center shadow-2xs">
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
-                            Skor
+                        <div className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-center shadow-inner">
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Resmi Sonuç
                           </div>
 
-                          <div className="font-mono text-xl font-black text-[#0F172A] tracking-tight">
+                          <div className="font-mono text-lg sm:text-xl font-black text-white tracking-tight tabular-nums">
                             {resultKnown
                               ? `${match.actualHome} - ${match.actualAway}`
-                              : "Bekliyor"}
+                              : "Sonuç Bekleniyor"}
                           </div>
                         </div>
                       </div>
                     </div>
 
+                    {/* Predictions Distribution */}
                     <div className="p-5 sm:p-6">
-                      <div className="mb-4 flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+                      <div className="mb-3 flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
                         <div>
-                          <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
-                            Tahmin dağılımı
+                          <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Yazar Tahmin Dağılımı
                           </h4>
-
-                          <p className="mt-0.5 text-xs text-[#475569]">
-                            Kim hangi tarafa oynamış, hızlıca gör.
+                          <p className="mt-0.5 text-xs text-slate-300">
+                            Yazarların taraf tercihleri ve yüzdeleri
                           </p>
                         </div>
 
-                        <span className="rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-2.5 py-0.5 text-[10px] font-bold text-[#475569]">
-                          {total > 0 ? `${total} tahmin` : "Tahmin yok"}
+                        <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1 text-[10px] font-bold text-slate-300">
+                          {total > 0 ? `${total} Yazar Tahmini` : "Tahmin Yok"}
                         </span>
                       </div>
 
-                      {/* Tahmin Dağılım Çubuğu (% Barı): Champions League Navy, Slate Light, Pitch Dark */}
-                      <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
-                        <div className="flex h-9 w-full">
+                      {/* Distribution Progress Bar */}
+                      <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-inner">
+                        <div className="flex h-8 w-full">
                           <div
                             style={{ width: `${homePct}%` }}
-                            className="flex items-center justify-center bg-[#1E3A8A] text-[10px] font-bold text-white transition-all duration-300"
+                            className="flex items-center justify-center bg-blue-600 font-mono text-[10px] font-extrabold text-white transition-all duration-300"
                           >
                             {homePct >= 12 ? `${homePct}%` : ""}
                           </div>
 
                           <div
                             style={{ width: `${drawPct}%` }}
-                            className="flex items-center justify-center bg-[#CBD5E1] text-[10px] font-bold text-[#0F172A] transition-all duration-300"
+                            className="flex items-center justify-center bg-slate-600 font-mono text-[10px] font-extrabold text-slate-200 transition-all duration-300"
                           >
                             {drawPct >= 12 ? `${drawPct}%` : ""}
                           </div>
 
                           <div
                             style={{ width: `${awayPct}%` }}
-                            className="flex items-center justify-center bg-[#0F172A] text-[10px] font-bold text-white transition-all duration-300"
+                            className="flex items-center justify-center bg-emerald-600 font-mono text-[10px] font-extrabold text-white transition-all duration-300"
                           >
                             {awayPct >= 12 ? `${awayPct}%` : ""}
                           </div>
                         </div>
                       </div>
 
-                      <div className="mt-2.5 grid grid-cols-3 gap-2 text-[10px] font-bold uppercase tracking-wider">
-                        <span className="truncate text-[#1E3A8A]">
+                      <div className="mt-2.5 grid grid-cols-3 gap-2 text-[10px] font-bold uppercase tracking-wider font-sports">
+                        <span className="truncate text-blue-400">
                           {match.homeTeam} ({homeWins})
                         </span>
 
-                        <span className="flex items-center justify-center gap-1 text-[#64748B]">
+                        <span className="flex items-center justify-center gap-1 text-slate-400">
                           <Minus className="h-3 w-3" />
                           Beraberlik ({draws})
                         </span>
 
-                        <span className="truncate text-right text-[#0F172A]">
+                        <span className="truncate text-right text-emerald-400">
                           {match.awayTeam} ({awayWins})
                         </span>
                       </div>
                     </div>
 
-                    <div className="border-t border-[#E2E8F0] bg-[#F8FAFC] p-5 sm:p-6">
+                    {/* Author Predictions Cards Matrix */}
+                    <div className="border-t border-slate-800 bg-slate-950/60 p-5 sm:p-6">
+                      <div className="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Yazar Skor Tahminleri ve Puanlar
+                      </div>
+
                       {matchPredictions.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
                           {users.map((user) => {
                             const prediction = matchPredictions.find(
                               (item) => item.userId === user.id
@@ -641,7 +670,7 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                             return (
                               <div
                                 key={user.id}
-                                className={`relative overflow-hidden rounded-xl border px-3.5 py-3 shadow-2xs transition-all duration-150 hover:-translate-y-0.5 ${status.className}`}
+                                className={`relative overflow-hidden rounded-2xl border p-3.5 shadow-md backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 ${status.className}`}
                               >
                                 {user.colors && user.colors.length > 0 && (
                                   <div
@@ -657,10 +686,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
 
                                 <div className="flex items-center justify-between gap-3">
                                   <div className="flex min-w-0 items-center gap-2.5">
-                                    <UserFlag flagEmoji={user.flagEmoji} className="h-5 w-5 text-lg" />
+                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-800/90 border border-slate-700/80 p-0.5 shadow-inner">
+                                      <UserFlag flagEmoji={user.flagEmoji} className="h-6 w-6 text-lg" />
+                                    </span>
 
                                     <div className="min-w-0">
-                                      <div className="truncate text-xs font-bold text-[#0F172A]">
+                                      <div className="truncate text-xs font-bold text-white font-sports">
                                         {user.name}
                                       </div>
 
@@ -672,12 +703,12 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                                   </div>
 
                                   <div className="shrink-0 text-right">
-                                    <div className="font-mono text-base font-bold text-[#0F172A]">
+                                    <div className="font-mono text-base font-black text-white tabular-nums">
                                       {prediction.predictedHome} - {prediction.predictedAway}
                                     </div>
 
                                     {status.points !== null && (
-                                      <div className={`text-[10px] font-bold uppercase tracking-wider ${status.points > 0 ? "text-[#059669]" : "text-[#94A3B8]"}`}>
+                                      <div className={`text-[10px] font-bold uppercase tracking-wider ${status.points > 0 ? "text-emerald-400" : "text-slate-500"}`}>
                                         {status.points > 0 ? `+${status.points}` : "0"} puan
                                       </div>
                                     )}
@@ -688,11 +719,10 @@ const WeekMatches: React.FC<WeekMatchesProps> = ({
                           })}
                         </div>
                       ) : (
-                        <div className="rounded-xl border border-dashed border-[#E2E8F0] bg-white p-6 text-center">
-                          <Sparkles className="mx-auto mb-2 h-5 w-5 text-[#1E3A8A]/60" />
-
-                          <p className="text-sm font-medium text-[#64748B]">
-                            Bu maç için henüz tahmin yok.
+                        <div className="rounded-2xl border border-dashed border-slate-800 bg-slate-900/50 p-6 text-center">
+                          <Sparkles className="mx-auto mb-2 h-5 w-5 text-emerald-400/60" />
+                          <p className="text-xs sm:text-sm font-medium text-slate-400">
+                            Bu maç için henüz yazar tahmini bulunmuyor.
                           </p>
                         </div>
                       )}

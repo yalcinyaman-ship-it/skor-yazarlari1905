@@ -268,7 +268,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
         onClick={resetAndClose}
       />
 
@@ -276,37 +276,47 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
         initial={{ opacity: 0, scale: 0.96, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
-        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[1.5rem] border border-[#EAE6DF] bg-white shadow-2xl"
+        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-slate-800/90 bg-slate-950/95 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] backdrop-blur-2xl text-slate-100"
       >
-        <div className="relative shrink-0 overflow-hidden border-b border-[#EAE6DF] bg-white p-5 text-[#1A1A1A] sm:p-6">
+        {/* Modal Header */}
+        <div className="relative shrink-0 overflow-hidden border-b border-slate-800 bg-slate-900/60 p-5 sm:p-6 backdrop-blur-md">
+          {/* Subtle Top Stadium Light */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[1px] w-3/4 bg-gradient-to-r from-transparent via-emerald-500/60 to-transparent" />
+
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-[#F3DCD2] bg-[#FDF4F0] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#D96B43]">
+                <span className="rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
                   {activeWeek.label}
                 </span>
 
-                <span className="rounded-full border border-[#EAE6DF] bg-[#FAF8F5] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#6B6760]">
-                  {step === 1 ? "1/2 Oyuncu" : "2/2 Skor"}
+                <span className="rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">
+                  {step === 1 ? "1/2 Yazar Seçimi" : "2/2 Skor Girişi"}
                 </span>
               </div>
 
-              <h2 className="mt-3 flex items-center gap-3 text-[1.35rem] font-bold leading-tight tracking-[-0.03em] text-[#1A1A1A] sm:text-3xl">
-                {step === 2 && <UserFlag flagEmoji={selectedUser?.flagEmoji} className="h-8 w-8 text-3xl" />}
-                {step === 1 ? "Kim tahmin yapıyor?" : `${selectedUser?.name}, skorları gir`}
+              <h2 className="mt-3 flex items-center gap-3 text-xl font-bold leading-tight tracking-tight text-white font-sports sm:text-2xl">
+                {step === 2 && (
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 p-0.5 shadow-inner">
+                    <UserFlag flagEmoji={selectedUser?.flagEmoji} className="h-7 w-7 text-2xl" />
+                  </span>
+                )}
+                <span>
+                  {step === 1 ? "Kim tahmin yapıyor?" : `${selectedUser?.name}, skorları gir`}
+                </span>
               </h2>
 
-              <p className="mt-2 hidden max-w-2xl text-sm font-semibold leading-6 text-[#6B6760] sm:block">
+              <p className="mt-1.5 hidden max-w-2xl text-xs sm:text-sm font-medium leading-relaxed text-slate-400 sm:block">
                 {step === 1
-                  ? "Adını seç. Bu hafta tahmin yapan kişi tekrar listelenmez."
-                  : "Her maç için iki skoru da doldur. Eksik maç kalırsa kayıt yapılmaz."}
+                  ? "Tahmin yapacak yazarı seç. Bu hafta tahmin gönderen yazar tekrar listelenmez."
+                  : "Her maç için skorları gir. Eksik maç kalırsa kayıt işlemi tamamlanmaz."}
               </p>
             </div>
 
             <button
               type="button"
               onClick={resetAndClose}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760] transition hover:bg-[#EAE6DF] hover:text-[#1A1A1A]"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-900/80 text-slate-400 transition hover:border-slate-600 hover:bg-slate-800 hover:text-white"
               aria-label="Tahmin penceresini kapat"
             >
               <X className="h-5 w-5" />
@@ -314,17 +324,18 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
           </div>
 
           {step === 2 && !isSuccess && (
-            <div className="mt-5">
-              <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-wider text-[#6B6760]">
-                <span>
-                  Tamamlanan maç: {completedMatchCount}/{openMatchCount}
+            <div className="mt-4 pt-3 border-t border-slate-800/80">
+              <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <Target className="h-3.5 w-3.5 text-emerald-400" />
+                  Tamamlanan Maç: <strong className="text-white font-mono">{completedMatchCount}/{openMatchCount}</strong>
                 </span>
-                <span>{progressPct}%</span>
+                <span className="font-mono text-emerald-400 font-extrabold">{progressPct}%</span>
               </div>
 
-              <div className="h-2 overflow-hidden rounded-full bg-[#EAE6DF]">
+              <div className="h-2 overflow-hidden rounded-full bg-slate-900 border border-slate-800">
                 <div
-                  className="h-full rounded-full bg-[#D96B43] transition-all duration-300"
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300 shadow-[0_0_10px_rgba(16,185,129,0.4)]"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
@@ -332,26 +343,27 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto bg-[#FAF8F5] p-4 sm:p-6">
+        {/* Modal Content */}
+        <div className="flex-1 overflow-y-auto bg-slate-950/90 p-4 sm:p-6 scrollbar-thin">
           <AnimatePresence mode="wait">
             {isSuccess ? (
               <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex min-h-[340px] flex-col items-center justify-center gap-5 rounded-[1.5rem] border border-[#F3DCD2] bg-[#FDF4F0] p-8 text-center"
+                className="flex min-h-[340px] flex-col items-center justify-center gap-5 rounded-3xl border border-emerald-500/40 bg-emerald-950/30 p-8 text-center shadow-[0_0_40px_rgba(16,185,129,0.15)]"
               >
-                <div className="flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-[#D96B43] text-white shadow-sm">
-                  <CheckCircle className="h-11 w-11" />
+                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 shadow-[0_0_25px_rgba(16,185,129,0.4)]">
+                  <CheckCircle className="h-11 w-11 stroke-[2.2]" />
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-bold tracking-[-0.03em] text-[#1A1A1A]">
-                    Tahminler kaydedildi
+                  <h3 className="text-2xl font-bold tracking-tight text-white font-sports">
+                    Tahminler Başarıyla Kaydedildi
                   </h3>
 
-                  <p className="mx-auto mt-2 max-w-md text-sm font-semibold leading-6 text-[#6B6760]">
-                    İşlem tamam. Sonuçlar açıklanınca puanlar haftanın merkezinde görünecek.
+                  <p className="mx-auto mt-2 max-w-md text-sm font-medium leading-relaxed text-slate-300">
+                    Haftalık maçlar oynandıkça puanlar otomatik hesaplanıp puan tablosuna yansıtılacaktır.
                   </p>
                 </div>
               </motion.div>
@@ -363,51 +375,52 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 exit={{ x: 16, opacity: 0 }}
                 className="space-y-4"
               >
-                <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                  <div className="rounded-2xl border border-[#EAE6DF] bg-white p-3 shadow-sm sm:p-4">
-                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
-                      <Users className="h-4 w-4 text-[#D96B43]" />
-                      Toplam
+                {/* Stats Summary Tiles */}
+                <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-3 shadow-md backdrop-blur-sm sm:p-4">
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <Users className="h-4 w-4 text-blue-400" />
+                      Toplam Yazar
                     </div>
-                    <div className="mt-1 text-xl font-black text-[#1A1A1A] sm:text-2xl">
+                    <div className="mt-1 font-mono text-xl font-black text-white tabular-nums sm:text-2xl">
                       {users.length}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[#EAE6DF] bg-white p-3 shadow-sm sm:p-4">
-                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
-                      <CheckCircle2 className="h-4 w-4 text-[#2E7D32]" />
-                      Yapan
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-3 shadow-md backdrop-blur-sm sm:p-4">
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                      Tahmin Yapan
                     </div>
-                    <div className="mt-1 text-xl font-black text-[#1A1A1A] sm:text-2xl">
+                    <div className="mt-1 font-mono text-xl font-black text-emerald-400 tabular-nums sm:text-2xl">
                       {existingPredictors.length}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[#EAE6DF] bg-white p-3 shadow-sm sm:p-4">
-                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
-                      <Clock3 className="h-4 w-4 text-[#D96B43]" />
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-3 shadow-md backdrop-blur-sm sm:p-4">
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <Clock3 className="h-4 w-4 text-amber-400" />
                       Bekleyen
                     </div>
-                    <div className="mt-1 text-xl font-black text-[#1A1A1A] sm:text-2xl">
+                    <div className="mt-1 font-mono text-xl font-black text-amber-400 tabular-nums sm:text-2xl">
                       {unpredictedUsers.length}
                     </div>
                   </div>
                 </div>
 
                 {unpredictedUsers.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center gap-4 rounded-[1.5rem] border border-[#EAE6DF] bg-white px-4 py-12 text-center shadow-sm">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]">
-                      <CheckCircle className="h-8 w-8" />
+                  <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-slate-800 bg-slate-900/70 px-4 py-12 text-center shadow-xl">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-500/40 bg-emerald-500/15 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                      <CheckCircle className="h-8 w-8 stroke-[2]" />
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-bold tracking-tight text-[#1A1A1A]">
-                        Herkes tahminini yaptı
+                      <h3 className="text-lg font-bold tracking-tight text-white font-sports">
+                        Tüm Yazarlar Tahminlerini Tamamladı
                       </h3>
 
-                      <p className="mt-2 max-w-md text-sm font-semibold leading-6 text-[#6B6760]">
-                        Bu hafta için bekleyen yazar kalmadı. Artık sonuçları bekleme zamanı.
+                      <p className="mt-1.5 max-w-md text-xs sm:text-sm font-medium leading-relaxed text-slate-400">
+                        Bu hafta için bekleyen yazar kalmadı. Maçlar oynandıkça sonuçları takip edebilirsiniz.
                       </p>
                     </div>
                   </div>
@@ -418,11 +431,11 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                         key={user.id}
                         type="button"
                         onClick={() => handleUserSelect(user)}
-                        className="group relative overflow-hidden rounded-2xl border border-[#EAE6DF] bg-white p-4 text-center shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#D96B43]/50 hover:bg-[#FAF8F5] active:translate-y-0"
+                        className="group relative overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-900/70 p-4 text-center shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-slate-850 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] active:translate-y-0 cursor-pointer"
                       >
                         {user.colors && user.colors.length > 0 && (
                           <div
-                            className="absolute bottom-0 left-0 h-1.5 w-full opacity-70"
+                            className="absolute bottom-0 left-0 h-1.5 w-full opacity-80"
                             style={{
                               background:
                                 user.colors.length > 1
@@ -432,15 +445,15 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                           />
                         )}
 
-                        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FAF8F5] ring-1 ring-[#EAE6DF] transition group-hover:scale-105">
+                        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800/90 border border-slate-700/80 p-1 shadow-inner transition-transform duration-200 group-hover:scale-105 group-hover:border-emerald-500/40">
                           <UserFlag flagEmoji={user.flagEmoji} className="h-11 w-11 text-4xl" />
                         </div>
 
-                        <div className="truncate text-sm font-bold text-[#1A1A1A]">
+                        <div className="truncate text-sm font-bold text-white font-sports tracking-wide">
                           {user.name}
                         </div>
 
-                        <div className="mt-2 inline-flex items-center justify-center gap-1 rounded-full bg-[#FAF8F5] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6B6760] transition group-hover:bg-[#FDF4F0] group-hover:text-[#D96B43]">
+                        <div className="mt-2.5 inline-flex items-center justify-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400 transition-all duration-200 group-hover:bg-emerald-500 group-hover:text-slate-950 group-hover:shadow-[0_0_12px_rgba(16,185,129,0.4)]">
                           <UserRound className="h-3.5 w-3.5" />
                           Seç
                         </div>
@@ -458,20 +471,20 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 className="space-y-4"
               >
                 {error && (
-                  <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-800">
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                    <span className="whitespace-pre-line leading-6">{error}</span>
+                  <div className="flex items-start gap-3 rounded-2xl border border-rose-500/40 bg-rose-500/15 p-4 text-xs sm:text-sm font-semibold text-rose-300 shadow-md">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+                    <span className="whitespace-pre-line leading-relaxed">{error}</span>
                   </div>
                 )}
 
                 {sortedMatches.length === 0 ? (
-                  <div className="rounded-[1.5rem] border border-[#EAE6DF] bg-white p-8 text-center shadow-sm">
-                    <Trophy className="mx-auto mb-3 h-8 w-8 text-[#6B6760]" />
-                    <h3 className="text-lg font-bold text-[#1A1A1A]">
-                      Maç bulunamadı
+                  <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-8 text-center shadow-xl">
+                    <Trophy className="mx-auto mb-3 h-8 w-8 text-slate-500" />
+                    <h3 className="text-lg font-bold text-white font-sports">
+                      Bu Haftaya Maç Eklenmemiş
                     </h3>
-                    <p className="mt-2 text-sm font-semibold text-[#6B6760]">
-                      Bu haftaya maç eklenmeden tahmin girilemez.
+                    <p className="mt-1.5 text-xs sm:text-sm font-medium text-slate-400">
+                      Maçlar eklendikten sonra tahmin girişi yapılabilir.
                     </p>
                   </div>
                 ) : (
@@ -485,67 +498,71 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                     return (
                       <div
                         key={match.id}
-                        className={`rounded-[1.5rem] border bg-white p-4 shadow-sm transition ${
+                        className={`relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg backdrop-blur-md transition-all duration-200 ${
                           locked
-                            ? "border-[#EAE6DF] bg-slate-100/70 opacity-75"
+                            ? "border-slate-800 bg-slate-900/40 opacity-70"
                             : isComplete
-                            ? "border-[#F3DCD2] ring-1 ring-[#D96B43]/30"
-                            : "border-[#EAE6DF]"
+                            ? "border-emerald-500/40 bg-slate-900/80 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                            : "border-slate-800/90 bg-slate-900/60 hover:border-slate-700/90"
                         }`}
                       >
+                        {/* Top Indicator Line */}
                         <div className="mb-3 flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
-                            <Target className="h-4 w-4 text-[#D96B43]" />
+                          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-400">
+                            <Target className="h-3.5 w-3.5" />
                             Maç {index + 1}
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <span className="hidden text-[10px] font-bold uppercase tracking-wider text-[#6B6760] sm:inline">
+                            <span className="hidden text-[10px] font-semibold text-slate-400 sm:inline">
                               {formatMatchDate(match.matchDate)}
                             </span>
 
                             <span
-                              className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border ${
+                              className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
                                 locked
-                                  ? "bg-slate-200 border-slate-300 text-slate-600"
+                                  ? "bg-slate-800 border-slate-700 text-slate-400"
                                   : isComplete
-                                  ? "bg-[#FDF4F0] border-[#F3DCD2] text-[#D96B43]"
-                                  : "bg-[#FAF8F5] border-[#EAE6DF] text-[#6B6760]"
+                                  ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
+                                  : "bg-amber-500/15 border-amber-500/30 text-amber-400"
                               }`}
                             >
-                              {locked ? "Kilitlendi" : isComplete ? "Tamam" : "Eksik"}
+                              {locked ? "Kilitli" : isComplete ? "Tamamlandı" : "Eksik"}
                             </span>
                           </div>
                         </div>
 
-                        {/* Mobile view (stacked columns for better legibility on mobile screens) */}
+                        {/* Mobile View */}
                         <div className="flex flex-col gap-3 sm:hidden">
-                          <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center justify-between gap-2">
                             {/* Home Team */}
                             <div className="flex items-center gap-2 min-w-0 flex-1">
-                              <TeamLogo teamName={match.homeTeam} className="h-8 w-8 shrink-0" />
-                              <span className="text-sm font-bold text-[#1A1A1A] truncate">
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 p-1 shadow-inner">
+                                <TeamLogo teamName={match.homeTeam} className="h-7 w-7 object-contain" />
+                              </div>
+                              <span className="text-xs font-bold text-white font-sports truncate uppercase">
                                 {match.homeTeam}
                               </span>
                             </div>
-                            
-                            {/* VS separator */}
-                            <span className="text-xs font-bold text-[#6B6760]">vs</span>
+
+                            <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest px-1">VS</span>
 
                             {/* Away Team */}
                             <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
-                              <span className="text-sm font-bold text-[#1A1A1A] truncate text-right">
+                              <span className="text-xs font-bold text-white font-sports truncate uppercase text-right">
                                 {match.awayTeam}
                               </span>
-                              <TeamLogo teamName={match.awayTeam} className="h-8 w-8 shrink-0" />
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 p-1 shadow-inner">
+                                <TeamLogo teamName={match.awayTeam} className="h-7 w-7 object-contain" />
+                              </div>
                             </div>
                           </div>
 
-                          {/* Scores inputs centered */}
-                          <div className="flex items-center justify-center gap-3">
-                            <div className="flex items-center gap-2 rounded-2xl border border-[#EAE6DF] bg-[#FAF8F5] p-1.5 w-full max-w-[200px] justify-center">
-                              <div className="flex items-center gap-1">
-                                <span className="text-[10px] font-bold text-[#6B6760] uppercase mr-1">EV</span>
+                          {/* Mobile Score Inputs */}
+                          <div className="flex items-center justify-center gap-3 pt-1">
+                            <div className="flex items-center gap-2 rounded-2xl border border-slate-800 bg-slate-950 p-2 justify-center shadow-inner">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase">EV</span>
                                 <input
                                   type="number"
                                   inputMode="numeric"
@@ -556,14 +573,14 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                                   onChange={(event) =>
                                     handleScoreChange(match.id, "home", event.target.value)
                                   }
-                                  className="h-10 w-12 rounded-xl border border-[#EAE6DF] bg-white text-center text-lg font-black text-[#1A1A1A] outline-none transition focus:border-[#D96B43] focus:ring-2 focus:ring-[#D96B43]/20"
+                                  className="h-11 w-12 rounded-xl border border-slate-700 bg-slate-900 text-center font-mono text-xl font-black text-white outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/25 placeholder:text-slate-700"
                                   placeholder="0"
                                 />
                               </div>
 
-                              <span className="text-sm font-bold text-[#6B6760]">:</span>
+                              <span className="text-lg font-black text-slate-600 px-1">:</span>
 
-                              <div className="flex items-center gap-1">
+                              <div className="flex items-center gap-1.5">
                                 <input
                                   type="number"
                                   inputMode="numeric"
@@ -574,29 +591,32 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                                   onChange={(event) =>
                                     handleScoreChange(match.id, "away", event.target.value)
                                   }
-                                  className="h-10 w-12 rounded-xl border border-[#EAE6DF] bg-white text-center text-lg font-black text-[#1A1A1A] outline-none transition focus:border-[#D96B43] focus:ring-2 focus:ring-[#D96B43]/20"
+                                  className="h-11 w-12 rounded-xl border border-slate-700 bg-slate-900 text-center font-mono text-xl font-black text-white outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/25 placeholder:text-slate-700"
                                   placeholder="0"
                                 />
-                                <span className="text-[10px] font-bold text-[#6B6760] uppercase ml-1">DEP</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase">DEP</span>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        {/* Desktop view (3 columns side-by-side) */}
-                        <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-                          <div className="flex min-w-0 items-center justify-end gap-2">
-                            <span className="truncate text-right text-xs font-bold text-[#1A1A1A] sm:text-base">
+                        {/* Desktop View (Versus Card Grid) */}
+                        <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+                          {/* Home Team */}
+                          <div className="flex min-w-0 items-center justify-end gap-3">
+                            <span className="truncate text-right text-sm font-bold text-white font-sports uppercase tracking-wide">
                               {match.homeTeam}
                             </span>
-
-                            <TeamLogo
-                              teamName={match.homeTeam}
-                              className="h-9 w-9 shrink-0 sm:h-11 sm:w-11"
-                            />
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/90 p-1.5 shadow-inner">
+                              <TeamLogo
+                                teamName={match.homeTeam}
+                                className="h-9 w-9 shrink-0 object-contain"
+                              />
+                            </div>
                           </div>
 
-                          <div className="flex items-center gap-1.5 rounded-2xl border border-[#EAE6DF] bg-[#FAF8F5] p-1.5">
+                          {/* Inputs Container */}
+                          <div className="flex items-center gap-2 rounded-2xl border border-slate-800 bg-slate-950 p-2 shadow-inner">
                             <input
                               type="number"
                               inputMode="numeric"
@@ -607,11 +627,11 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               onChange={(event) =>
                                 handleScoreChange(match.id, "home", event.target.value)
                               }
-                              className="h-12 w-12 rounded-xl border border-[#EAE6DF] bg-white text-center text-xl font-black text-[#1A1A1A] outline-none transition focus:border-[#D96B43] focus:ring-2 focus:ring-[#D96B43]/20 sm:h-14 sm:w-14"
+                              className="h-13 w-14 rounded-xl border border-slate-700 bg-slate-900 text-center font-mono text-2xl font-black text-white outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 shadow-inner placeholder:text-slate-700"
                               placeholder="0"
                             />
 
-                            <span className="text-sm font-bold text-[#6B6760]">:</span>
+                            <span className="text-xl font-black text-slate-600 px-0.5">:</span>
 
                             <input
                               type="number"
@@ -623,24 +643,26 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                               onChange={(event) =>
                                 handleScoreChange(match.id, "away", event.target.value)
                               }
-                              className="h-12 w-12 rounded-xl border border-[#EAE6DF] bg-white text-center text-xl font-black text-[#1A1A1A] outline-none transition focus:border-[#D96B43] focus:ring-2 focus:ring-[#D96B43]/20 sm:h-14 sm:w-14"
+                              className="h-13 w-14 rounded-xl border border-slate-700 bg-slate-900 text-center font-mono text-2xl font-black text-white outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 shadow-inner placeholder:text-slate-700"
                               placeholder="0"
                             />
                           </div>
 
-                          <div className="flex min-w-0 items-center gap-2">
-                            <TeamLogo
-                              teamName={match.awayTeam}
-                              className="h-9 w-9 shrink-0 sm:h-11 sm:w-11"
-                            />
-
-                            <span className="truncate text-left text-xs font-bold text-[#1A1A1A] sm:text-base">
+                          {/* Away Team */}
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/90 p-1.5 shadow-inner">
+                              <TeamLogo
+                                teamName={match.awayTeam}
+                                className="h-9 w-9 shrink-0 object-contain"
+                              />
+                            </div>
+                            <span className="truncate text-left text-sm font-bold text-white font-sports uppercase tracking-wide">
                               {match.awayTeam}
                             </span>
                           </div>
                         </div>
 
-                        <div className="mt-3 text-center text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+                        <div className="mt-3 text-center text-[10px] font-semibold text-slate-400">
                           {formatMatchDate(match.matchDate)}
                         </div>
                       </div>
@@ -652,8 +674,9 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
           </AnimatePresence>
         </div>
 
+        {/* Modal Footer Controls */}
         {step === 2 && !isSuccess && (
-          <div className="grid grid-cols-[1fr_2fr] gap-3 border-t border-[#EAE6DF] bg-white p-4">
+          <div className="grid grid-cols-[1fr_2fr] gap-3 border-t border-slate-800 bg-slate-900/80 p-4 sm:p-5 backdrop-blur-md">
             <button
               type="button"
               onClick={() => {
@@ -662,7 +685,7 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
                 setPredictions({});
                 setError(null);
               }}
-              className="btn-secondary justify-center animate-fadeIn"
+              className="flex items-center justify-center gap-2 rounded-2xl border border-slate-700 bg-slate-800/80 px-4 py-3 text-xs font-bold text-slate-200 shadow-sm transition hover:border-slate-600 hover:bg-slate-750 active:scale-[0.98]"
               disabled={isSubmitting}
             >
               <ArrowLeft className="h-4 w-4" />
@@ -673,14 +696,14 @@ const PredictionModal: React.FC<PredictionModalProps> = ({
               type="button"
               onClick={handleSave}
               disabled={isSubmitting || sortedMatches.length === 0}
-              className="btn-primary justify-center text-white"
+              className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-400/40 bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-3 text-xs font-extrabold text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition hover:from-emerald-400 hover:to-teal-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 "Kaydediliyor..."
               ) : (
                 <>
-                  <Save className="h-5 w-5 text-white" />
-                  Kaydet
+                  <Save className="h-4 w-4 stroke-[2.2]" />
+                  Tahminleri Kaydet
                 </>
               )}
             </button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
+import { X, Lock, LogIn, AlertCircle, Loader2, ShieldCheck, KeyRound } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -36,7 +36,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
         code === "auth/invalid-credential" ||
         code === "auth/wrong-password" ||
         code === "auth/user-not-found"
-          ? "Şifre hatalı."
+          ? "Şifre hatalı. Lütfen yetkili şifrenizi kontrol edin."
           : "Giriş şu anda tamamlanamadı. Lütfen tekrar dene."
       );
     } finally {
@@ -47,58 +47,71 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+      {/* Dark Ambient Backdrop */}
       <div
-        className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-md"
+        className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity duration-300"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-[#EAE6DF] bg-white p-7 text-[#1A1A1A] shadow-2xl">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-[#D96B43]/10 blur-3xl" />
+      {/* Cyber / Stadium Dark Glass Modal */}
+      <div className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-slate-700/80 bg-slate-900/95 p-7 text-white shadow-2xl backdrop-blur-2xl ring-1 ring-slate-800">
+        {/* Ambient Top Glow */}
+        <div className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-emerald-500/15 blur-3xl" />
+        <div className="pointer-events-none absolute -left-16 -bottom-20 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl" />
 
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 rounded-full border border-[#EAE6DF] bg-[#FAF8F5] p-2 text-[#6B6760] transition hover:bg-[#EAE6DF] hover:text-[#1A1A1A]"
+          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-slate-950/60 text-slate-400 transition hover:border-slate-700 hover:bg-slate-800 hover:text-white cursor-pointer"
           type="button"
+          aria-label="Kapat"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
 
-        <div className="relative mb-7">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43] shadow-sm">
-            <Lock className="h-7 w-7" />
+        <div className="relative mb-6">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+            <ShieldCheck className="h-7 w-7" />
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">
-            Admin girişi
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/80 bg-slate-800/80 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-slate-300 font-mono mb-2">
+            <KeyRound className="h-3 w-3 text-emerald-400" />
+            Güvenli Yönetim Girişi
+          </div>
+
+          <h2 className="font-sports text-2xl font-bold uppercase tracking-tight text-white">
+            Admin Paneli
           </h2>
 
-          <p className="mt-1 text-sm font-semibold leading-relaxed text-[#6B6760]">
-            Yönetim paneline girmek için admin şifresini yaz.
+          <p className="mt-1 text-xs font-medium leading-relaxed text-slate-400">
+            Haftalık maç ve tahmin yönetimi için yetkili admin şifresini girin.
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-[0.16em] text-[#6B6760]">
-              Şifre
+            <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Yönetici Şifresi
             </label>
 
-            <input
-              type="password"
-              required
-              autoFocus
-              disabled={loading}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full !border-[#EAE6DF] !bg-[#FAF8F5] !text-[#1A1A1A] placeholder:!text-[#6B6760]/60 focus:!border-[#D96B43] disabled:opacity-50"
-              placeholder="Admin şifresi"
-            />
+            <div className="relative">
+              <input
+                type="password"
+                required
+                autoFocus
+                disabled={loading}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 pl-10 text-sm font-semibold text-white placeholder-slate-500 shadow-inner outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-50"
+                placeholder="••••••••••••"
+              />
+              <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            </div>
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div className="flex items-start gap-2.5 rounded-xl border border-rose-500/30 bg-rose-950/40 p-3 text-xs font-semibold text-rose-300">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
               <span>{error}</span>
             </div>
           )}
@@ -106,14 +119,14 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full justify-center text-white disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg shadow-emerald-500/20 transition-all hover:from-emerald-400 hover:to-emerald-500 hover:shadow-emerald-500/30 active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-white" />
+              <Loader2 className="h-4 w-4 animate-spin text-slate-950" />
             ) : (
-              <LogIn className="h-5 w-5 text-white" />
+              <LogIn className="h-4 w-4 text-slate-950" />
             )}
-            {loading ? "Doğrulanıyor..." : "Giriş yap"}
+            {loading ? "Doğrulanıyor..." : "Giriş Yap"}
           </button>
         </form>
       </div>
@@ -122,3 +135,4 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
 };
 
 export default AdminLogin;
+

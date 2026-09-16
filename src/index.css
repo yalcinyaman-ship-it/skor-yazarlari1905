@@ -1,51 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-serif: "Newsreader", Georgia, Cambria, "Times New Roman", serif;
-  --font-display: "Newsreader", "Plus Jakarta Sans", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Chivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sports: "Chivo", "Barlow Condensed", "Plus Jakarta Sans", sans-serif;
+  --font-condensed: "Barlow Condensed", "Chivo", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --color-brand-primary: #1E3A8A;
-  --color-brand-primary-dark: #0F172A;
-  --color-brand-secondary: #059669;
-  --color-brand-accent: #D97706;
-  --color-brand-crimson: #991B1B;
-  --color-brand-background: #F1F4F9;
-  --color-brand-surface: #FFFFFF;
-  --color-brand-surface-raised: #F8FAFC;
-  --color-brand-text: #0F172A;
-  --color-brand-text-muted: #64748B;
-  --color-border-main: #E2E8F0;
+  --color-stadium-bg: #080C14;
+  --color-stadium-surface: #0E1626;
+  --color-stadium-card: rgba(15, 23, 42, 0.75);
+  --color-stadium-card-hover: rgba(30, 41, 59, 0.85);
+  --color-stadium-border: rgba(51, 65, 85, 0.6);
+  --color-stadium-border-light: rgba(148, 163, 184, 0.15);
 
-  --color-gold-500: #D97706;
-  --color-gold-600: #B45309;
+  --color-neon-emerald: #10B981;
+  --color-neon-emerald-glow: rgba(16, 185, 129, 0.3);
+  --color-championship-gold: #F59E0B;
+  --color-championship-gold-glow: rgba(245, 158, 11, 0.3);
 
-  --color-ink: #0F172A;
+  --color-brand-primary: #3B82F6;
+  --color-brand-primary-dark: #1E3A8A;
+  --color-brand-secondary: #10B981;
+  --color-brand-accent: #F59E0B;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #F1F5F9;
+    background-color: #080C14;
+    color-scheme: dark;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: #F1F5F9;
+    background-color: #080C14;
     background-image: 
-      radial-gradient(1200px 500px at 50% -40px, rgba(30, 58, 138, 0.07), transparent 75%),
-      radial-gradient(800px 400px at 85% 15%, rgba(5, 150, 105, 0.03), transparent 70%),
-      radial-gradient(800px 400px at 15% 15%, rgba(217, 119, 6, 0.03), transparent 70%);
-    color: #0F172A;
+      radial-gradient(1000px 600px at 50% -50px, rgba(30, 58, 138, 0.22), transparent 75%),
+      radial-gradient(800px 500px at 85% 15%, rgba(16, 185, 129, 0.09), transparent 70%),
+      radial-gradient(800px 500px at 15% 20%, rgba(245, 158, 11, 0.08), transparent 70%),
+      radial-gradient(1200px 800px at 50% 100%, rgba(15, 23, 42, 0.8), transparent 80%);
+    background-attachment: fixed;
+    color: #F1F5F9;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
   }
 
-  h1, h2, h3, .font-display {
-    font-family: var(--font-display);
-    color: #0F172A;
+  h1, h2, h3, .font-display, .font-sports {
+    font-family: var(--font-sports);
+    letter-spacing: -0.02em;
   }
 
   * {
@@ -53,8 +57,8 @@
   }
 
   ::selection {
-    background: rgba(30, 58, 138, 0.18);
-    color: #0F172A;
+    background: rgba(59, 130, 246, 0.35);
+    color: #FFFFFF;
   }
 
   button,
@@ -81,53 +85,53 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_2px_10px_rgba(15,23,42,0.25)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1E293B] hover:shadow-[0_6px_16px_rgba(15,23,42,0.3)] active:translate-y-0 disabled:translate-y-0 disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] disabled:shadow-none;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(37,99,235,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-blue-600 hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] active:translate-y-0 disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none;
   }
 
   .btn-secondary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#CBD5E1] bg-white px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F172A] shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#94A3B8] hover:bg-[#F8FAFC] active:translate-y-0;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-800/80 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-200 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-500 hover:bg-slate-700/90 hover:text-white active:translate-y-0;
   }
 
   .card {
-    @apply rounded-2xl bg-white border border-[#E2E8F0];
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+    @apply rounded-2xl bg-slate-900/80 border border-slate-800/80 backdrop-blur-md;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   .card-base {
-    @apply rounded-2xl bg-white border border-[#E2E8F0];
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+    @apply rounded-2xl bg-slate-900/80 border border-slate-800/80 backdrop-blur-md;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   .card-hover {
-    @apply transition-all duration-250 hover:-translate-y-0.5 hover:border-[#CBD5E1] hover:shadow-[0_12px_32px_-4px_rgba(15,23,42,0.08)];
+    @apply transition-all duration-250 hover:-translate-y-0.5 hover:border-slate-700/80 hover:bg-slate-900/95 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)];
   }
 
   .section-title {
-    @apply text-[10px] font-bold uppercase tracking-[0.22em] text-[#0F172A];
+    @apply text-[11px] font-bold uppercase tracking-[0.25em] text-blue-400 font-sports;
   }
 
   .input-field {
-    @apply min-h-11 rounded-xl border border-[#CBD5E1] bg-white px-4 py-2.5 text-sm font-semibold text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/15;
+    @apply min-h-11 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25;
   }
 
   .score-input {
-    @apply h-14 w-14 rounded-2xl border border-[#CBD5E1] bg-white text-center text-2xl font-black text-[#0F172A] outline-none transition focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/15;
+    @apply h-14 w-14 rounded-2xl border border-slate-700 bg-slate-900/90 text-center font-mono text-2xl font-bold text-white outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25 tabular-nums;
   }
 
   .prediction-card {
-    @apply rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#CBD5E1] hover:shadow-md;
+    @apply rounded-2xl border border-slate-800/80 bg-slate-900/75 p-5 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)];
   }
 
   .badge-exact {
-    @apply rounded-full bg-[#EFF6FF] border border-[#BFDBFE] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8] shadow-none;
+    @apply rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)];
   }
 
   .badge-result {
-    @apply rounded-full bg-[#ECFDF5] border border-[#A7F3D0] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#047857] shadow-none;
+    @apply rounded-full bg-blue-500/15 border border-blue-500/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-400;
   }
 
   .badge-wrong {
-    @apply rounded-full bg-[#FEF2F2] border border-[#FECACA] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#DC2626];
+    @apply rounded-full bg-rose-500/15 border border-rose-500/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-400;
   }
 }
 
@@ -136,26 +140,39 @@
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
-  .premium-hero {
-    position: relative;
-    isolation: isolate;
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.04);
+  .stadium-glow-emerald {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
   }
 
-  .editorial-rule {
-    height: 1px;
-    background: #E2E8F0;
+  .stadium-glow-gold {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
   }
 
-  @keyframes premium-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(30, 58, 138, 0.28); }
-    50% { box-shadow: 0 0 0 8px rgba(30, 58, 138, 0); }
+  .stadium-glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
   }
 
-  .live-pulse {
-    animation: premium-pulse 2.4s ease-in-out infinite;
+  .glass-panel {
+    background: rgba(14, 22, 38, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-panel-subtle {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  @keyframes matchday-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  }
+
+  .matchday-live-pulse {
+    animation: matchday-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
 
