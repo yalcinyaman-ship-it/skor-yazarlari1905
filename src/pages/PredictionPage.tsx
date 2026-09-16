@@ -136,18 +136,18 @@ const PredictionPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0b1220] px-4 py-8">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#1A1A1A] px-4 py-8">
       {error && (
         <div
-          className="mx-auto mb-6 flex max-w-2xl items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-300 shadow-sm"
+          className="mx-auto mb-6 flex max-w-2xl items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-600 shadow-sm"
           id="prediction-page-db-error"
         >
-          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-400" />
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
           <div>
-            <p className="mb-1 font-black uppercase tracking-wider">
+            <p className="mb-1 font-bold uppercase tracking-wider">
               Veritabanı uyarısı
             </p>
-            <span className="font-semibold opacity-90">{error}</span>
+            <span className="font-medium opacity-90">{error}</span>
           </div>
         </div>
       )}
@@ -162,21 +162,21 @@ const PredictionPage: React.FC = () => {
           seasonId={activeSeason.id}
         />
       ) : (
-        <div className="flex min-h-screen items-center justify-center text-center">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] px-6 py-8 shadow-sm">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06] text-slate-400">
-              <Trophy className="h-6 w-6" />
+        <div className="flex min-h-[80vh] items-center justify-center text-center">
+          <div className="rounded-3xl border border-[#EAE6DF] bg-white px-8 py-10 shadow-sm max-w-md">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FAF8F5] text-[#D96B43] border border-[#EAE6DF]">
+              <Trophy className="h-7 w-7" />
             </div>
-            <h1 className="text-lg font-black tracking-tight text-white">
+            <h1 className="text-xl font-bold tracking-tight text-[#1A1A1A]">
               Aktif tahmin dönemi bulunamadı
             </h1>
-            <p className="mt-2 text-sm font-semibold text-slate-500">
+            <p className="mt-2 text-sm font-medium text-[#6B6760]">
               Admin aktif hafta oluşturduğunda tahmin ekranı açılır.
             </p>
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="btn-primary mt-5 justify-center"
+              className="btn-primary mt-6 justify-center w-full"
             >
               Ana sayfaya dön
             </button>

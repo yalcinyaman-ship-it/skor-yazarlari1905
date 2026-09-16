@@ -135,7 +135,7 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
     <AnimatePresence>
       <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
         <div
-          className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
+          className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
           onClick={onClose}
         />
 
@@ -143,20 +143,20 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
           initial={{ opacity: 0, scale: 0.96, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 18 }}
-          className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl"
+          className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[1.75rem] border border-[#EAE6DF] bg-white shadow-2xl"
         >
-          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-150 bg-slate-50 p-5 sm:p-7">
+          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[#EAE6DF] bg-white p-5 sm:p-7">
             <div className="flex min-w-0 items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-600 text-white">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#D96B43] text-white">
                 <Trophy className="h-6 w-6" />
               </div>
 
               <div className="min-w-0">
-                <h2 className="truncate text-xl font-black tracking-tight text-slate-850 sm:text-2xl">
+                <h2 className="truncate text-xl font-bold tracking-tight text-[#1A1A1A] sm:text-2xl">
                   {season.name} finali
                 </h2>
 
-                <div className="mt-1 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-orange-600">
+                <div className="mt-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#D96B43]">
                   <Calendar className="h-3.5 w-3.5" />
                   <span>
                     Final tarihi: {season.finishedAt?.toDate?.()?.toLocaleDateString("tr-TR") || "Bilinmiyor"}
@@ -168,58 +168,58 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-850"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760] transition hover:bg-[#EAE6DF] hover:text-[#1A1A1A]"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="w-full space-y-8 overflow-y-auto p-5 sm:p-7 bg-white">
+          <div className="w-full space-y-8 overflow-y-auto p-5 sm:p-7 bg-[#FAF8F5]">
             {firstPlace && (
-              <div className="relative overflow-hidden rounded-3xl border border-amber-200 bg-amber-50/20 p-6 text-center shadow-sm">
-                <div className="absolute right-4 top-4 hidden items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 sm:flex">
-                  <Award className="h-3.5 w-3.5 text-amber-500" />
-                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-800">
+              <div className="relative overflow-hidden rounded-3xl border border-[#EAE6DF] bg-white p-6 text-center shadow-sm">
+                <div className="absolute right-4 top-4 hidden items-center gap-1.5 rounded-full border border-[#F3DCD2] bg-[#FDF4F0] px-3 py-1 sm:flex">
+                  <Award className="h-3.5 w-3.5 text-[#D96B43]" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#D96B43]">
                     Şampiyon
                   </span>
                 </div>
 
-                <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-3xl bg-amber-50 ring-1 ring-amber-200">
+                <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-3xl bg-[#FAF8F5] ring-1 ring-[#EAE6DF]">
                   <UserFlag flagEmoji={firstPlace.flagEmoji} className="h-14 w-14 text-6xl" />
                 </div>
 
-                <h3 className="text-2xl font-black tracking-tight text-slate-850">
+                <h3 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">
                   {firstPlace.name}
                 </h3>
 
-                <p className="mt-1 text-[10px] font-black uppercase tracking-[0.22em] text-amber-800">
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#D96B43]">
                   Zirvenin sahibi
                 </p>
 
-                <div className="mx-auto mt-5 grid max-w-md grid-cols-3 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
+                <div className="mx-auto mt-5 grid max-w-md grid-cols-3 overflow-hidden rounded-3xl border border-[#EAE6DF] bg-[#FAF8F5]">
                   <div className="p-4 text-center">
-                    <div className="text-xl font-black text-slate-800">
+                    <div className="text-xl font-bold text-[#1A1A1A]">
                       {firstPlace.pts}
                     </div>
-                    <div className="mt-1 text-[9px] font-black uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
                       Puan
                     </div>
                   </div>
 
-                  <div className="border-x border-slate-200 p-4 text-center">
-                    <div className="text-xl font-black text-slate-800">
+                  <div className="border-x border-[#EAE6DF] p-4 text-center">
+                    <div className="text-xl font-bold text-[#1A1A1A]">
                       {firstPlace.exacts}
                     </div>
-                    <div className="mt-1 text-[9px] font-black uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
                       Tam skor
                     </div>
                   </div>
 
                   <div className="p-4 text-center">
-                    <div className="text-xl font-black text-slate-800">
+                    <div className="text-xl font-bold text-[#1A1A1A]">
                       {firstPlace.results}
                     </div>
-                    <div className="mt-1 text-[9px] font-black uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
                       Sonuç
                     </div>
                   </div>
@@ -228,21 +228,21 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
             )}
 
             <div className="space-y-4">
-              <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-slate-500">
-                <Medal className="h-4 w-4 text-orange-600" />
+              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#6B6760]">
+                <Medal className="h-4 w-4 text-[#D96B43]" />
                 Sezon sonu genel sıralaması
               </h3>
 
-              <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-3xl border border-[#EAE6DF] bg-white shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse text-left">
                     <thead>
-                      <tr className="border-b border-slate-150 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
-                        <th className="px-5 py-4 font-black">Sıra</th>
-                        <th className="px-5 py-4 font-black">Yazar</th>
-                        <th className="px-5 py-4 text-center font-black">Toplam puan</th>
-                        <th className="px-5 py-4 text-center font-black">Tam skor</th>
-                        <th className="px-5 py-4 text-center font-black">Sonuç</th>
+                      <tr className="border-b border-[#EAE6DF] bg-[#FAF8F5] text-[10px] uppercase tracking-wider text-[#6B6760]">
+                        <th className="px-5 py-4 font-bold">Sıra</th>
+                        <th className="px-5 py-4 font-bold">Yazar</th>
+                        <th className="px-5 py-4 text-center font-bold">Toplam puan</th>
+                        <th className="px-5 py-4 text-center font-bold">Tam skor</th>
+                        <th className="px-5 py-4 text-center font-bold">Sonuç</th>
                       </tr>
                     </thead>
 
@@ -255,17 +255,17 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
                         return (
                           <tr
                             key={user.id}
-                            className={`border-b border-slate-100 transition hover:bg-slate-50 ${
-                              isFirst ? "bg-amber-50/50 font-bold" : ""
+                            className={`border-b border-[#EAE6DF] transition hover:bg-[#FAF8F5] ${
+                              isFirst ? "bg-[#FDF4F0]/60 font-semibold" : ""
                             }`}
                           >
-                            <td className="px-5 py-4 text-sm font-black text-slate-850">
+                            <td className="px-5 py-4 text-sm font-bold text-[#1A1A1A]">
                               {isFirst ? (
-                                <Trophy className="h-4 w-4 text-amber-500" />
+                                <Trophy className="h-4 w-4 text-[#D96B43]" />
                               ) : isSecond ? (
-                                <Medal className="h-4 w-4 text-slate-400" />
+                                <Medal className="h-4 w-4 text-[#6B6760]" />
                               ) : isThird ? (
-                                <Medal className="h-4 w-4 text-orange-600" />
+                                <Medal className="h-4 w-4 text-[#D96B43]" />
                               ) : (
                                 `${index + 1}.`
                               )}
@@ -288,23 +288,23 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
                                   )}
                                 </span>
 
-                                <span className="font-black text-slate-800">
+                                <span className="font-bold text-[#1A1A1A]">
                                   {user.name}
                                 </span>
                               </div>
                             </td>
 
                             <td className="px-5 py-4 text-center">
-                              <span className="text-base font-black text-slate-850">
+                              <span className="text-base font-bold text-[#1A1A1A]">
                                 {user.pts}
                               </span>
                             </td>
 
-                            <td className="px-5 py-4 text-center font-black text-orange-600">
+                            <td className="px-5 py-4 text-center font-bold text-[#D96B43]">
                               {user.exacts}
                             </td>
 
-                            <td className="px-5 py-4 text-center font-bold text-slate-500">
+                            <td className="px-5 py-4 text-center font-semibold text-[#6B6760]">
                               {user.results}
                             </td>
                           </tr>
@@ -313,7 +313,7 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
 
                       {rankedUsers.length === 0 && (
                         <tr>
-                          <td colSpan={5} className="px-6 py-10 text-center text-sm font-bold text-slate-500">
+                          <td colSpan={5} className="px-6 py-10 text-center text-sm font-semibold text-[#6B6760]">
                             Bu sezona ait puanlanmış kullanıcı kaydı bulunamadı.
                           </td>
                         </tr>
@@ -324,14 +324,14 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
               </div>
             </div>
 
-            <div className="space-y-5 border-t border-slate-200 pt-6">
+            <div className="space-y-5 border-t border-[#EAE6DF] pt-6">
               <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div>
-                  <h3 className="flex items-center gap-2 text-lg font-black tracking-tight text-slate-800">
-                    <CalendarDays className="h-5 w-5 text-orange-600" />
+                  <h3 className="flex items-center gap-2 text-lg font-bold tracking-tight text-[#1A1A1A]">
+                    <CalendarDays className="h-5 w-5 text-[#D96B43]" />
                     Detaylı hafta sonuçları
                   </h3>
-                  <p className="mt-1 text-sm font-semibold text-slate-500">
+                  <p className="mt-1 text-sm font-semibold text-[#6B6760]">
                     Arşivdeki haftaları seçerek maçları ve tahminleri incele.
                   </p>
                 </div>
@@ -343,7 +343,7 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
                       const found = weeks.find((week) => week.id === e.target.value);
                       if (found) setSelectedWeek(found);
                     }}
-                    className="input-field w-full sm:max-w-xs bg-white text-slate-800 border border-slate-200"
+                    className="input-field w-full sm:max-w-xs bg-white text-[#1A1A1A] border border-[#EAE6DF]"
                   >
                     {weeks.map((week) => (
                       <option key={week.id} value={week.id}>
@@ -355,9 +355,9 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
               </div>
 
               {isLoading ? (
-                <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-slate-200 bg-white p-12 text-center">
-                  <Loader2 className="h-10 w-10 animate-spin text-orange-600" />
-                  <span className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">
+                <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-[#EAE6DF] bg-white p-12 text-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-[#D96B43]" />
+                  <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#6B6760]">
                     Hafta verileri yükleniyor
                   </span>
                 </div>
@@ -366,7 +366,7 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
                   key={selectedWeek.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-3xl border border-slate-200 bg-slate-50/50 p-4 sm:p-5"
+                  className="rounded-3xl border border-[#EAE6DF] bg-white p-4 sm:p-5"
                 >
                   <WeekMatches
                     label={selectedWeek.label}
@@ -378,8 +378,8 @@ const ArchiveSeasonModal: React.FC<ArchiveSeasonModalProps> = ({
                   />
                 </motion.div>
               ) : (
-                <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center">
-                  <span className="text-sm font-bold text-slate-500">
+                <div className="rounded-3xl border border-dashed border-[#EAE6DF] bg-white p-8 text-center">
+                  <span className="text-sm font-bold text-[#6B6760]">
                     Sezona ait haftalık detay bulunamadı.
                   </span>
                 </div>

@@ -6,6 +6,7 @@ export interface User {
   id: string;
   name: string;
   flagEmoji: string;
+  clubLogo?: string;
   colors?: string[];
   createdAt?: FirestoreDate;
   pin?: string;

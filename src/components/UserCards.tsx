@@ -30,11 +30,11 @@ const getRankMeta = (index: number) => {
       icon: <Crown className="h-4 w-4" />,
       medalIcon: <Trophy className="h-16 w-16" />,
       cardClass:
-        "border-orange-400/25 bg-[radial-gradient(circle_at_90%_0%,rgba(240,90,40,0.22),transparent_18rem),linear-gradient(135deg,#131b18,#07100e)] text-white shadow-[0_28px_70px_rgba(8,14,12,0.22)]",
-      badgeClass: "border-orange-300/20 bg-orange-400/10 text-orange-200",
-      numberClass: "bg-orange-500 text-white",
-      glowClass: "bg-orange-400/20",
-      nameClass: "text-white"
+        "border-[#D96B43]/30 bg-gradient-to-br from-[#FFF8F5] via-[#FFF3EE] to-[#FDF0EB] text-[#1A1A1A] shadow-sm",
+      badgeClass: "border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]",
+      numberClass: "bg-[#D96B43] text-white",
+      glowClass: "bg-[#D96B43]/10",
+      nameClass: "text-[#1A1A1A]"
     };
   }
 
@@ -45,11 +45,11 @@ const getRankMeta = (index: number) => {
       icon: <Medal className="h-4 w-4" />,
       medalIcon: <Medal className="h-14 w-14" />,
       cardClass:
-        "border-slate-200 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.03)]",
-      badgeClass: "border-slate-200 bg-slate-100 text-slate-700",
-      numberClass: "bg-slate-400 text-white",
-      glowClass: "bg-slate-100/35",
-      nameClass: "text-slate-800"
+        "border-[#EAE6DF] bg-white shadow-sm",
+      badgeClass: "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]",
+      numberClass: "bg-[#6B6760] text-white",
+      glowClass: "bg-[#FAF8F5]",
+      nameClass: "text-[#1A1A1A]"
     };
   }
 
@@ -60,11 +60,11 @@ const getRankMeta = (index: number) => {
       icon: <Medal className="h-4 w-4" />,
       medalIcon: <Medal className="h-14 w-14" />,
       cardClass:
-        "border-orange-200 bg-white shadow-[0_10px_35px_rgba(234,88,12,0.03)]",
-      badgeClass: "border-orange-200 bg-orange-50 text-orange-800",
-      numberClass: "bg-orange-600 text-white",
-      glowClass: "bg-orange-100/25",
-      nameClass: "text-slate-800"
+        "border-[#EAE6DF] bg-white shadow-sm",
+      badgeClass: "border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]",
+      numberClass: "bg-[#D96B43] text-white",
+      glowClass: "bg-[#FAF8F5]",
+      nameClass: "text-[#1A1A1A]"
     };
   }
 
@@ -74,11 +74,11 @@ const getRankMeta = (index: number) => {
     icon: <UserIcon className="h-4 w-4" />,
     medalIcon: null,
     cardClass:
-      "border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.02)]",
-    badgeClass: "border-slate-100 bg-slate-50 text-slate-500",
-    numberClass: "bg-slate-100 text-slate-600 ring-1 ring-slate-200",
-    glowClass: "bg-orange-50/15",
-    nameClass: "text-slate-800"
+      "border-[#EAE6DF] bg-white shadow-sm",
+    badgeClass: "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]",
+    numberClass: "bg-[#FAF8F5] text-[#6B6760] ring-1 ring-[#EAE6DF]",
+    glowClass: "bg-[#FAF8F5]",
+    nameClass: "text-[#1A1A1A]"
   };
 };
 
@@ -92,15 +92,15 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
   if (!users.length) {
     return (
       <div className="card-base p-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-50 text-slate-400 ring-1 ring-slate-200">
-          <Trophy className="h-7 w-7" />
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-3xl bg-[#FAF8F5] text-[#6B6760] ring-1 ring-[#EAE6DF]">
+          <Trophy className="h-7 w-7 text-[#D96B43]" />
         </div>
 
-        <h3 className="text-lg font-black text-slate-800">
+        <h3 className="text-lg font-bold text-[#1A1A1A]">
           Henüz yazar yok
         </h3>
 
-        <p className="mx-auto mt-2 max-w-sm text-sm font-semibold leading-6 text-slate-500">
+        <p className="mx-auto mt-2 max-w-sm text-sm font-semibold leading-6 text-[#6B6760]">
           Liderlik tablosu için önce yönetim panelinden yazar eklenmeli.
         </p>
       </div>
@@ -123,7 +123,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
             type="button"
             onClick={() => onUserClick?.(user)}
             title={user.name}
-            className={`group relative min-h-[238px] overflow-hidden rounded-[1.5rem] border p-5 text-left transition duration-300 hover:-translate-y-1 hover:border-orange-500/30 hover:shadow-[0_24px_60px_rgba(15,23,42,0.11)] active:translate-y-0 ${rank.cardClass} ${
+            className={`group relative min-h-[238px] overflow-hidden rounded-[1.5rem] border p-5 text-left transition duration-200 hover:-translate-y-0.5 hover:border-[#D96B43]/40 hover:shadow-md active:translate-y-0 ${rank.cardClass} ${
               isLeader ? "sm:col-span-2 xl:col-span-2 xl:row-span-1" : ""
             }`}
           >
@@ -146,7 +146,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
             )}
 
             {rank.medalIcon && (
-              <div className="absolute right-5 top-5 text-amber-500 opacity-[0.15]">
+              <div className="absolute right-5 top-5 text-[#D96B43] opacity-[0.12]">
                 {rank.medalIcon}
               </div>
             )}
@@ -156,7 +156,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                 <div className="flex min-w-0 items-center gap-3">
                   <div
                     className={`relative flex shrink-0 items-center justify-center rounded-[1.15rem] shadow-sm ring-1 ${
-                      isLeader ? "bg-white/[0.08] ring-white/10" : "bg-slate-50 ring-slate-200"
+                      isLeader ? "bg-white ring-[#F3DCD2]" : "bg-[#FAF8F5] ring-[#EAE6DF]"
                     } ${
                       isLeader ? "h-18 w-18" : "h-15 w-15"
                     }`}
@@ -167,7 +167,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                     />
 
                     <div
-                      className={`absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full text-xs font-black shadow-sm ring-4 ${isLeader ? "ring-[#101816]" : "ring-white"} ${rank.numberClass}`}
+                      className={`absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold shadow-sm ring-2 ring-white ${rank.numberClass}`}
                     >
                       {index + 1}
                     </div>
@@ -175,7 +175,7 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
 
                   <div className="min-w-0">
                     <h3
-                      className={`font-display truncate tracking-[-0.01em] font-black ${nameSizeClass(user.name)} ${rank.nameClass} ${
+                      className={`font-display truncate tracking-[-0.01em] font-bold ${nameSizeClass(user.name)} ${rank.nameClass} ${
                         isLeader ? "sm:text-2xl" : ""
                       }`}
                     >
@@ -184,13 +184,13 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
 
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${rank.badgeClass}`}
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${rank.badgeClass}`}
                       >
                         {rank.icon}
                         {rank.title}
                       </span>
 
-                      <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${isLeader ? "border-white/10 bg-white/[0.05] text-white/40" : "border-slate-100 bg-slate-50 text-slate-500"}`}>
+                      <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${isLeader ? "border-[#F3DCD2] bg-white text-[#D96B43]" : "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]"}`}>
                         {rank.note}
                       </span>
                     </div>
@@ -201,12 +201,12 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
               <div>
                 <div className="mb-4 flex items-end justify-between gap-4">
                   <div>
-                    <div className={`text-[10px] font-black uppercase tracking-[0.24em] ${isLeader ? "text-white/35" : "text-slate-500"}`}>
+                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#6B6760]">
                       Toplam Puan
                     </div>
 
                     <div
-                      className={`stat-number mt-1 font-black leading-none ${isLeader ? "text-white" : "text-slate-800"} ${
+                      className={`stat-number mt-1 font-black leading-none ${isLeader ? "text-[#D96B43]" : "text-[#1A1A1A]"} ${
                         isLeader ? "text-6xl" : "text-5xl"
                       }`}
                     >
@@ -215,12 +215,12 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                   </div>
 
                   {weekPoints > 0 ? (
-                    <div className="inline-flex items-center gap-1.5 rounded-2xl border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-black text-orange-700">
+                    <div className="inline-flex items-center gap-1.5 rounded-2xl border border-[#F3DCD2] bg-[#FDF4F0] px-3 py-2 text-xs font-bold text-[#D96B43]">
                       <TrendingUp className="h-4 w-4" />
                       +{weekPoints}
                     </div>
                   ) : (
-                    <div className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-black ${isLeader ? "border-white/10 bg-white/[0.05] text-white/40" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
+                    <div className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold ${isLeader ? "border-[#F3DCD2] bg-white text-[#6B6760]" : "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]"}`}>
                       <Shield className="h-4 w-4" />
                       Stabil
                     </div>
@@ -228,35 +228,35 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                  <div className={`rounded-xl border p-3 ${isLeader ? "border-white/10 bg-white/[0.05]" : "border-slate-100 bg-slate-50/50"}`}>
-                    <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isLeader ? "text-white/35" : "text-slate-500"}`}>
-                      <Target className="h-3.5 w-3.5 text-orange-600" />
+                  <div className={`rounded-xl border p-3 ${isLeader ? "border-[#F3DCD2] bg-white" : "border-[#EAE6DF] bg-[#FAF8F5]"}`}>
+                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
+                      <Target className="h-3.5 w-3.5 text-[#D96B43]" />
                       Tam
                     </div>
 
-                    <div className={`mt-1 text-xl font-black ${isLeader ? "text-white" : "text-slate-800"}`}>
+                    <div className="mt-1 text-xl font-black text-[#1A1A1A]">
                       {exacts}
                     </div>
                   </div>
 
-                  <div className={`rounded-xl border p-3 ${isLeader ? "border-white/10 bg-white/[0.05]" : "border-slate-100 bg-slate-50/50"}`}>
-                    <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isLeader ? "text-white/35" : "text-slate-500"}`}>
-                      <Sparkles className="h-3.5 w-3.5 text-orange-600" />
+                  <div className={`rounded-xl border p-3 ${isLeader ? "border-[#F3DCD2] bg-white" : "border-[#EAE6DF] bg-[#FAF8F5]"}`}>
+                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
+                      <Sparkles className="h-3.5 w-3.5 text-[#D96B43]" />
                       Sonuç
                     </div>
 
-                    <div className={`mt-1 text-xl font-black ${isLeader ? "text-white" : "text-slate-800"}`}>
+                    <div className="mt-1 text-xl font-black text-[#1A1A1A]">
                       {results}
                     </div>
                   </div>
 
-                  <div className={`rounded-xl border p-3 ${isLeader ? "border-white/10 bg-white/[0.05]" : "border-slate-100 bg-slate-50/50"}`}>
-                    <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isLeader ? "text-white/35" : "text-slate-500"}`}>
-                      <Trophy className="h-3.5 w-3.5 text-orange-600" />
+                  <div className={`rounded-xl border p-3 ${isLeader ? "border-[#F3DCD2] bg-white" : "border-[#EAE6DF] bg-[#FAF8F5]"}`}>
+                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
+                      <Trophy className="h-3.5 w-3.5 text-[#D96B43]" />
                       İsabet
                     </div>
 
-                    <div className={`mt-1 text-xl font-black ${isLeader ? "text-white" : "text-slate-800"}`}>
+                    <div className="mt-1 text-xl font-black text-[#1A1A1A]">
                       {totalHits}
                     </div>
                   </div>

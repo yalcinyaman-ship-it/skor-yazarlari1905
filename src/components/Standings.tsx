@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, sanitizeFlagEmoji } from '../types';
+import { User } from '../types';
 import UserFlag from './UserFlag';
 
 interface StandingsProps {
@@ -8,14 +8,14 @@ interface StandingsProps {
 
 const Standings: React.FC<StandingsProps> = ({ users }) => {
   return (
-    <div className="card-base overflow-hidden">
-      <div className="bg-[#006d32]/5 p-4 border-b border-[#e0e3e6]">
-        <h2 className="text-[#006d32] font-black uppercase tracking-widest text-lg font-display">PUAN DURUMU</h2>
+    <div className="card-base overflow-hidden border border-[#EAE6DF]">
+      <div className="bg-[#FAF8F5] p-4 border-b border-[#EAE6DF]">
+        <h2 className="text-[#1A1A1A] font-bold uppercase tracking-wider text-base font-display">Puan Durumu</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="text-gray-500 text-xs uppercase tracking-tighter border-b border-[#e0e3e6]">
+            <tr className="text-[#6B6760] text-xs uppercase tracking-wider border-b border-[#EAE6DF] bg-[#FAF8F5]/50">
               <th className="px-6 py-4 font-bold">#</th>
               <th className="px-6 py-4 font-bold">Kullanıcı</th>
               <th className="px-6 py-4 font-bold text-center">Toplam Puan</th>
@@ -25,14 +25,12 @@ const Standings: React.FC<StandingsProps> = ({ users }) => {
           </thead>
           <tbody>
             {users.map((user, index) => {
-              let rowStyle = "border-b border-gray-100 hover:bg-gray-50 transition-colors";
-              if (index === 0) rowStyle = "bg-[#006d32]/5 border-b border-[#006d32]/25 hover:bg-[#006d32]/10 transition-colors font-bold";
-              else if (index === 1) rowStyle = "bg-[#0058bc]/5 border-b border-[#0058bc]/15 hover:bg-[#0058bc]/10 transition-colors";
-              else if (index === 2) rowStyle = "bg-amber-500/5 border-b border-amber-500/15 hover:bg-amber-500/10 transition-colors";
+              let rowStyle = "border-b border-[#EAE6DF] hover:bg-[#FAF8F5] transition";
+              if (index === 0) rowStyle = "bg-[#FDF4F0]/60 border-b border-[#F3DCD2] hover:bg-[#FDF4F0] transition font-bold";
 
               return (
                 <tr key={user.id} className={rowStyle}>
-                  <td className="px-6 py-4 font-bold text-gray-400">
+                  <td className="px-6 py-4 font-bold text-[#6B6760]">
                     {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
                   </td>
                   <td className="px-6 py-4">
@@ -50,22 +48,22 @@ const Standings: React.FC<StandingsProps> = ({ users }) => {
                           />
                         )}
                       </span>
-                      <span className="font-bold text-[#191c1e] tracking-tight">{user.name}</span>
+                      <span className="font-bold text-[#1A1A1A] tracking-tight">{user.name}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="text-[#0058bc] font-black text-lg">{user.totalPoints}</span>
+                    <span className="text-[#D96B43] font-bold text-lg">{user.totalPoints}</span>
                   </td>
                   <td className="px-6 py-4 text-center">
                     {user.weekPoints !== undefined ? (
-                      <span className="bg-[#006d32]/10 text-[#006d32] px-2.5 py-1 rounded-xl text-xs font-black tracking-wide border border-[#006d32]/15">
+                      <span className="bg-[#EDF7F2] text-[#2D8A66] px-2.5 py-1 rounded-xl text-xs font-bold tracking-wide border border-[#D0EADB]">
                         +{user.weekPoints}
                       </span>
                     ) : (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-[#6B6760]">-</span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-center text-gray-400 text-sm">
+                  <td className="px-6 py-4 text-center text-[#6B6760] text-sm font-medium">
                     {user.avgPoints?.toFixed(2) || "0.00"}
                   </td>
                 </tr>

@@ -60,7 +60,7 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
                 y1={y}
                 x2={width - paddingRight}
                 y2={y}
-                stroke="#e2e8f0"
+                stroke="#EAE6DF"
                 strokeDasharray="4 4"
                 strokeWidth={1}
               />
@@ -69,7 +69,7 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
                 y={y + 4}
                 textAnchor="end"
                 fontSize={9}
-                className="fill-slate-400 font-bold"
+                className="fill-[#6B6760] font-bold"
               >
                 {label}
               </text>
@@ -84,7 +84,7 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
             y={height - 8}
             textAnchor="middle"
             fontSize={9}
-            className="fill-slate-400 font-bold"
+            className="fill-[#6B6760] font-bold"
           >
             {point.name.replace("Hafta ", "H")}
           </text>
@@ -92,8 +92,8 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
 
         <defs>
           <linearGradient id="profileChartGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0a6b3d" stopOpacity="0.16" />
-            <stop offset="100%" stopColor="#0a6b3d" stopOpacity="0" />
+            <stop offset="0%" stopColor="#D96B43" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#D96B43" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -104,7 +104,7 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
               <path
                 d={linePath}
                 fill="none"
-                stroke="#0a6b3d"
+                stroke="#D96B43"
                 strokeWidth={3}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -119,8 +119,8 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
               cx={point.x}
               cy={point.y}
               r={hoveredPoint?.index === index ? 6 : 4}
-              fill={hoveredPoint?.index === index ? "#0a6b3d" : "#ffffff"}
-              stroke="#0a6b3d"
+              fill={hoveredPoint?.index === index ? "#D96B43" : "#ffffff"}
+              stroke="#D96B43"
               strokeWidth={2}
             />
             <circle
@@ -140,17 +140,17 @@ const CustomSVGLineChart: React.FC<{ data: { name: string; Puan: number }[] }> =
 
       {hoveredPoint !== null && (
         <div
-          className="pointer-events-none absolute z-50 flex -translate-x-1/2 flex-col gap-0.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-left text-xs shadow-xl"
+          className="pointer-events-none absolute z-50 flex -translate-x-1/2 flex-col gap-0.5 rounded-xl border border-[#EAE6DF] bg-white px-3 py-2 text-left text-xs shadow-md"
           style={{
             left: `${(hoveredPoint.x / width) * 100}%`,
             top: `${(hoveredPoint.y / height) * 100 - 55}px`
           }}
         >
-          <span className="font-black text-white">
+          <span className="font-bold text-[#1A1A1A]">
             {points[hoveredPoint.index].name}
           </span>
-          <span className="font-bold text-orange-400">
-            Puan: <span className="text-white">{points[hoveredPoint.index].Puan}</span>
+          <span className="font-semibold text-[#D96B43]">
+            Puan: <span className="text-[#1A1A1A]">{points[hoveredPoint.index].Puan}</span>
           </span>
         </div>
       )}
@@ -347,7 +347,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
     <AnimatePresence>
       <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
         <div
-          className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
+          className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
           onClick={onClose}
         />
 
@@ -355,19 +355,19 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
           initial={{ opacity: 0, scale: 0.96, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 18 }}
-          className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.03] shadow-2xl"
+          className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-[1.75rem] border border-[#EAE6DF] bg-white shadow-2xl"
         >
-          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 bg-white/[0.04] p-5 sm:p-7">
+          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[#EAE6DF] bg-white p-5 sm:p-7">
             <div className="flex min-w-0 items-center gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-white/[0.03] ring-1 ring-white/10">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-[#FAF8F5] ring-1 ring-[#EAE6DF]">
                 <UserFlag flagEmoji={user.flagEmoji} className="h-11 w-11 text-5xl" />
               </div>
 
               <div className="min-w-0">
-                <h2 className="font-display truncate text-2xl font-black uppercase tracking-[-0.01em] text-white sm:text-3xl">
+                <h2 className="font-display truncate text-2xl font-bold uppercase tracking-[-0.01em] text-[#1A1A1A] sm:text-3xl">
                   {user.name}
                 </h2>
-                <div className="mt-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-400">
+                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#D96B43]">
                   Sezon profili
                 </div>
               </div>
@@ -376,79 +376,79 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-500 transition hover:bg-white/[0.06] hover:text-white"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760] transition hover:bg-[#EAE6DF] hover:text-[#1A1A1A]"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="w-full overflow-y-auto p-5 sm:p-7">
+          <div className="w-full overflow-y-auto bg-[#FAF8F5] p-5 sm:p-7">
             {loading ? (
-              <div className="flex min-h-[420px] flex-col items-center justify-center gap-4 text-orange-400">
-                <div className="h-12 w-12 animate-spin rounded-full border-4 border-orange-500 border-t-transparent" />
-                <div className="text-xs font-black uppercase tracking-[0.24em]">
+              <div className="flex min-h-[420px] flex-col items-center justify-center gap-4 text-[#D96B43]">
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D96B43] border-t-transparent" />
+                <div className="text-xs font-bold uppercase tracking-[0.24em]">
                   Veriler yükleniyor
                 </div>
               </div>
             ) : (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 text-center shadow-sm">
-                    <Target className="mx-auto mb-2 h-6 w-6 text-white" />
-                    <div className="stat-number text-3xl font-black text-white">
+                  <div className="rounded-3xl border border-[#EAE6DF] bg-white p-4 text-center shadow-sm">
+                    <Target className="mx-auto mb-2 h-6 w-6 text-[#D96B43]" />
+                    <div className="stat-number text-3xl font-black text-[#1A1A1A]">
                       {user.totalPoints || 0}
                     </div>
-                    <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
                       Toplam puan
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 text-center shadow-sm">
-                    <CheckCircle className="mx-auto mb-2 h-6 w-6 text-orange-400" />
-                    <div className="stat-number text-3xl font-black text-orange-400">
+                  <div className="rounded-3xl border border-[#EAE6DF] bg-white p-4 text-center shadow-sm">
+                    <CheckCircle className="mx-auto mb-2 h-6 w-6 text-[#2E7D32]" />
+                    <div className="stat-number text-3xl font-black text-[#2E7D32]">
                       {predictionStats.exact}
                     </div>
-                    <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
                       Tam skor
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 text-center shadow-sm">
-                    <TrendingUp className="mx-auto mb-2 h-6 w-6 text-sky-400" />
-                    <div className="stat-number text-3xl font-black text-white">
+                  <div className="rounded-3xl border border-[#EAE6DF] bg-white p-4 text-center shadow-sm">
+                    <TrendingUp className="mx-auto mb-2 h-6 w-6 text-[#D96B43]" />
+                    <div className="stat-number text-3xl font-black text-[#1A1A1A]">
                       {exactRate}%
                     </div>
-                    <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
                       Tam skor oranı
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 shadow-sm sm:p-6">
+                <div className="rounded-3xl border border-[#EAE6DF] bg-white p-5 shadow-sm sm:p-6">
                   <div className="mb-5">
-                    <h3 className="font-display flex items-center gap-2 text-lg font-black uppercase tracking-[-0.01em] text-white">
-                      <PieChart className="h-5 w-5 text-orange-400" />
+                    <h3 className="font-display flex items-center gap-2 text-lg font-bold uppercase tracking-[-0.01em] text-[#1A1A1A]">
+                      <PieChart className="h-5 w-5 text-[#D96B43]" />
                       Tahmin analizi
                     </h3>
-                    <p className="mt-1 text-sm font-semibold text-slate-500">
+                    <p className="mt-1 text-sm font-semibold text-[#6B6760]">
                       Tam skor, doğru sonuç ve yanlış tahmin dağılımı. Detaylar için aşağıdaki kartlara tıklayabilirsiniz.
                     </p>
                   </div>
 
-                  <div className="flex h-4 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                  <div className="flex h-4 w-full overflow-hidden rounded-full bg-[#EAE6DF]">
                     <div
                       style={{ width: `${exactWidth}%` }}
-                      className="h-full bg-orange-600"
+                      className="h-full bg-[#D96B43]"
                       title="Tam skor"
                     />
                     <div
                       style={{ width: `${resultWidth}%` }}
-                      className="h-full bg-amber-400"
+                      className="h-full bg-[#E89E58]"
                       title="Sonuç"
                     />
                     <div
                       style={{ width: `${wrongWidth}%` }}
-                      className="h-full bg-red-500"
+                      className="h-full bg-[#D65D5D]"
                       title="Yanlış"
                     />
                   </div>
@@ -459,18 +459,18 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                       onClick={() => setSelectedCategory("exact")}
                       className={`group rounded-2xl p-4 text-left transition-all border-2 flex flex-col justify-between ${
                         selectedCategory === "exact"
-                          ? "border-orange-500 bg-orange-500/10 shadow-sm"
-                          : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/10"
+                          ? "border-[#D96B43] bg-[#FDF4F0] shadow-sm"
+                          : "border-[#EAE6DF] bg-[#FAF8F5] hover:bg-[#FDF4F0] hover:border-[#D96B43]/40"
                       }`}
                     >
-                      <div className="text-[10px] font-black uppercase tracking-wider text-orange-400">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#D96B43]">
                         Tam skor
                       </div>
                       <div className="mt-2 flex items-baseline justify-between w-full">
-                        <span className="stat-number text-2xl font-black text-white">
+                        <span className="stat-number text-2xl font-black text-[#1A1A1A]">
                           {predictionStats.exact}
                         </span>
-                        <span className="text-[10px] font-black uppercase text-orange-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[10px] font-bold uppercase text-[#D96B43] opacity-0 group-hover:opacity-100 transition-opacity">
                           GÖSTER
                         </span>
                       </div>
@@ -481,18 +481,18 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                       onClick={() => setSelectedCategory("result")}
                       className={`group rounded-2xl p-4 text-left transition-all border-2 flex flex-col justify-between ${
                         selectedCategory === "result"
-                          ? "border-amber-400 bg-amber-400/10 shadow-sm"
-                          : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/10"
+                          ? "border-[#E89E58] bg-[#FDF8F0] shadow-sm"
+                          : "border-[#EAE6DF] bg-[#FAF8F5] hover:bg-[#FDF8F0] hover:border-[#E89E58]/40"
                       }`}
                     >
-                      <div className="text-[10px] font-black uppercase tracking-wider text-amber-300">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#D97706]">
                         Sonuç
                       </div>
                       <div className="mt-2 flex items-baseline justify-between w-full">
-                        <span className="stat-number text-2xl font-black text-white">
+                        <span className="stat-number text-2xl font-black text-[#1A1A1A]">
                           {predictionStats.result}
                         </span>
-                        <span className="text-[10px] font-black uppercase text-amber-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[10px] font-bold uppercase text-[#D97706] opacity-0 group-hover:opacity-100 transition-opacity">
                           GÖSTER
                         </span>
                       </div>
@@ -503,34 +503,34 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                       onClick={() => setSelectedCategory("wrong")}
                       className={`group rounded-2xl p-4 text-left transition-all border-2 flex flex-col justify-between ${
                         selectedCategory === "wrong"
-                          ? "border-red-400 bg-red-400/10 shadow-sm"
-                          : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/10"
+                          ? "border-[#D65D5D] bg-red-50/70 shadow-sm"
+                          : "border-[#EAE6DF] bg-[#FAF8F5] hover:bg-red-50/50 hover:border-red-300"
                       }`}
                     >
-                      <div className="text-[10px] font-black uppercase tracking-wider text-red-300">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#D65D5D]">
                         Yanlış
                       </div>
                       <div className="mt-2 flex items-baseline justify-between w-full">
-                        <span className="stat-number text-2xl font-black text-white">
+                        <span className="stat-number text-2xl font-black text-[#1A1A1A]">
                           {predictionStats.wrong}
                         </span>
-                        <span className="text-[10px] font-black uppercase text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[10px] font-bold uppercase text-[#D65D5D] opacity-0 group-hover:opacity-100 transition-opacity">
                           GÖSTER
                         </span>
                       </div>
                     </button>
                   </div>
 
-                  <div className="mt-6 border-t border-white/[0.06] pt-6">
+                  <div className="mt-6 border-t border-[#EAE6DF] pt-6">
                     <div className="mb-4 flex items-center justify-between">
-                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                      <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#6B6760]">
                         {selectedCategory === "exact"
                           ? "Tam Skor Bildiği Maçlar"
                           : selectedCategory === "result"
                           ? "Sadece Sonucunu Bildiği Maçlar"
                           : "Yanlış Tahmin Ettiği Maçlar"}
                       </h4>
-                      <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-[10px] font-black text-slate-500">
+                      <span className="rounded-full bg-[#FAF8F5] px-2.5 py-0.5 text-[10px] font-bold text-[#6B6760] border border-[#EAE6DF]">
                         {getActiveList().length} Maç
                       </span>
                     </div>
@@ -540,25 +540,25 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                         {getActiveList().map(({ match, prediction, weekNumber }) => (
                           <div
                             key={match.id}
-                            className={`rounded-2xl border p-4 bg-white/[0.03] flex flex-col justify-between transition hover:bg-white/[0.04] hover:shadow-sm ${
+                            className={`rounded-2xl border p-4 bg-[#FAF8F5] flex flex-col justify-between transition hover:bg-white hover:shadow-sm ${
                               selectedCategory === "exact"
-                                ? "border-orange-500/20"
+                                ? "border-[#F3DCD2]"
                                 : selectedCategory === "result"
-                                ? "border-amber-400/20"
-                                : "border-red-400/20"
+                                ? "border-amber-200"
+                                : "border-red-200"
                             }`}
                           >
-                            <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 mb-3">
-                              <span className="text-[10px] font-black text-slate-500">
+                            <div className="flex items-center justify-between border-b border-[#EAE6DF] pb-2 mb-3">
+                              <span className="text-[10px] font-bold text-[#6B6760]">
                                 Hafta {weekNumber}
                               </span>
                               <span
-                                className={`rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${
+                                className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
                                   selectedCategory === "exact"
-                                    ? "bg-orange-500/15 text-orange-300"
+                                    ? "bg-[#FDF4F0] text-[#D96B43] border border-[#F3DCD2]"
                                     : selectedCategory === "result"
-                                    ? "bg-amber-400/15 text-amber-300"
-                                    : "bg-red-400/15 text-red-300"
+                                    ? "bg-amber-50 text-amber-800 border border-amber-200"
+                                    : "bg-red-50 text-red-700 border border-red-200"
                                 }`}
                               >
                                 {selectedCategory === "exact"
@@ -572,28 +572,28 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex min-w-0 flex-1 items-center gap-2">
                                 <TeamLogo teamName={match.homeTeam} size="sm" className="h-8 w-8 shrink-0" />
-                                <span className="truncate text-sm font-black text-white">
+                                <span className="truncate text-sm font-bold text-[#1A1A1A]">
                                   {match.homeTeam}
                                 </span>
                               </div>
 
-                              <div className="shrink-0 text-center px-2 py-1 bg-white/[0.04] border border-white/10 rounded-xl min-w-[56px] font-mono text-xs font-black text-white">
+                              <div className="shrink-0 text-center px-2 py-1 bg-white border border-[#EAE6DF] rounded-xl min-w-[56px] font-mono text-xs font-black text-[#1A1A1A]">
                                 {match.actualHome} - {match.actualAway}
                               </div>
 
                               <div className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
-                                <span className="truncate text-sm font-black text-white">
+                                <span className="truncate text-sm font-bold text-[#1A1A1A]">
                                   {match.awayTeam}
                                 </span>
                                 <TeamLogo teamName={match.awayTeam} size="sm" className="h-8 w-8 shrink-0" />
                               </div>
                             </div>
 
-                            <div className="mt-3 flex items-center justify-between rounded-xl bg-white/[0.04] px-3 py-1.5 border border-white/[0.06] text-xs">
-                              <span className="font-bold text-slate-500">
+                            <div className="mt-3 flex items-center justify-between rounded-xl bg-white px-3 py-1.5 border border-[#EAE6DF] text-xs">
+                              <span className="font-semibold text-[#6B6760]">
                                 Yazar Tahmini
                               </span>
-                              <span className="font-mono font-black text-slate-500">
+                              <span className="font-mono font-black text-[#1A1A1A]">
                                 {prediction.predictedHome} - {prediction.predictedAway}
                               </span>
                             </div>
@@ -601,8 +601,8 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                         ))}
                       </div>
                     ) : (
-                      <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.03] p-8 text-center">
-                        <p className="text-sm font-bold text-slate-500">
+                      <div className="rounded-2xl border border-dashed border-[#EAE6DF] bg-[#FAF8F5] p-8 text-center">
+                        <p className="text-sm font-bold text-[#6B6760]">
                           Bu kategoride henüz maç bulunamadı.
                         </p>
                       </div>

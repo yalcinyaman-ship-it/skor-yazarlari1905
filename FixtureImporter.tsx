@@ -217,18 +217,18 @@ const FixtureImporter: React.FC<{
   };
 
   return (
-    <section className="card-base mb-6 overflow-hidden border-orange-200">
-      <div className="border-b border-slate-200 bg-slate-950 p-5 text-white">
+    <section className="card-base mb-6 overflow-hidden border-[#EAE6DF]">
+      <div className="border-b border-[#EAE6DF] bg-[#FAF8F6] p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-orange-300">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#D96B43]">
               <CloudDownload className="h-4 w-4" /> API-Football Maç Havuzu
             </div>
-            <p className="mt-2 text-sm font-semibold text-slate-300">
+            <p className="mt-1 text-sm font-semibold text-[#6E6B65]">
               Süper Lig fikstürünü getir, maçları seç ve haftaya ekle.
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-emerald-300">
+          <div className="flex items-center gap-2 rounded-full border border-[#D0EADB] bg-[#EDF7F2] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#2D8A66]">
             <ShieldCheck className="h-4 w-4" /> Admin özel
           </div>
         </div>
@@ -238,7 +238,7 @@ const FixtureImporter: React.FC<{
         {!savedKey && (
           <div className="grid gap-3 md:grid-cols-[1fr_auto]">
             <div className="relative">
-              <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6B65]" />
               <input
                 type="password"
                 value={apiKey}
@@ -285,16 +285,16 @@ const FixtureImporter: React.FC<{
                     onClick={() => setSelectedIds((current) =>
                       selected ? current.filter((id) => id !== item.fixture.id) : [...current, item.fixture.id]
                     )}
-                    className={`rounded-2xl border p-4 text-left transition ${selected ? "border-orange-500 bg-orange-50 ring-2 ring-orange-500/15" : "border-slate-200 bg-white hover:border-orange-300"}`}
+                    className={`rounded-2xl border p-4 text-left transition ${selected ? "border-[#D96B43] bg-[#FDF4F0] ring-2 ring-[#D96B43]/15" : "border-[#EAE6DF] bg-white hover:border-[#D96B43]/40"}`}
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <div className="min-w-0 font-black text-slate-900">
+                      <div className="min-w-0 font-bold text-[#1F2024]">
                         <div className="truncate">{item.teams.home.name}</div>
                         <div className="truncate">{item.teams.away.name}</div>
                       </div>
-                      <CheckCircle2 className={`h-5 w-5 shrink-0 ${selected ? "text-orange-600" : "text-slate-300"}`} />
+                      <CheckCircle2 className={`h-5 w-5 shrink-0 ${selected ? "text-[#D96B43]" : "text-[#EAE6DF]"}`} />
                     </div>
-                    <div className="mt-3 text-xs font-bold text-slate-500">{formatFixtureDate(item.fixture.date)}</div>
+                    <div className="mt-3 text-xs font-semibold text-[#6E6B65]">{formatFixtureDate(item.fixture.date)}</div>
                   </button>
                 );
               })}
@@ -310,7 +310,7 @@ const FixtureImporter: React.FC<{
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Eklenen Maçların Saatlerini Yenile
         </button>
 
-        {message && <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm font-bold text-slate-700">{message}</div>}
+        {message && <div className="rounded-2xl border border-[#EAE6DF] bg-[#FAF8F6] p-3 text-sm font-semibold text-[#1F2024]">{message}</div>}
       </div>
     </section>
   );

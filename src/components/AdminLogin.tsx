@@ -49,38 +49,38 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-[#07100e]/82 backdrop-blur-md"
+        className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-md"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#101816] p-7 text-white shadow-[0_32px_100px_rgba(0,0,0,0.55)]">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-orange-500/20 blur-3xl" />
+      <div className="relative w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-[#EAE6DF] bg-white p-7 text-[#1A1A1A] shadow-2xl">
+        <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-[#D96B43]/10 blur-3xl" />
 
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 rounded-full border border-white/10 bg-white/[0.06] p-2 text-white/45 transition hover:bg-white/10 hover:text-white"
+          className="absolute right-4 top-4 z-10 rounded-full border border-[#EAE6DF] bg-[#FAF8F5] p-2 text-[#6B6760] transition hover:bg-[#EAE6DF] hover:text-[#1A1A1A]"
           type="button"
         >
           <X className="h-5 w-5" />
         </button>
 
         <div className="relative mb-7">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-orange-400/25 bg-orange-500/15 text-orange-400 shadow-[0_12px_32px_rgba(249,115,22,0.12)]">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43] shadow-sm">
             <Lock className="h-7 w-7" />
           </div>
 
-          <h2 className="text-2xl font-black tracking-tight text-white">
+          <h2 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">
             Admin girişi
           </h2>
 
-          <p className="mt-1 text-sm font-semibold leading-relaxed text-white/45">
+          <p className="mt-1 text-sm font-semibold leading-relaxed text-[#6B6760]">
             Yönetim paneline girmek için admin şifresini yaz.
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs font-black uppercase tracking-[0.16em] text-white/40">
+            <label className="mb-1.5 block text-xs font-bold uppercase tracking-[0.16em] text-[#6B6760]">
               Şifre
             </label>
 
@@ -91,13 +91,13 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isVisible, onClose, onSuccess }
               disabled={loading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full !border-white/10 !bg-white/[0.06] !text-white placeholder:!text-white/25 focus:!border-orange-400 disabled:opacity-50"
+              className="input-field w-full !border-[#EAE6DF] !bg-[#FAF8F5] !text-[#1A1A1A] placeholder:!text-[#6B6760]/60 focus:!border-[#D96B43] disabled:opacity-50"
               placeholder="Admin şifresi"
             />
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 rounded-2xl border border-red-400/20 bg-red-500/10 p-3 text-sm font-bold text-red-300">
+            <div className="flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
