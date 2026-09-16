@@ -1,36 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Newsreader", Georgia, Cambria, "Times New Roman", serif;
+  --font-display: "Newsreader", "Plus Jakarta Sans", Georgia, serif;
 
-  --color-brand-primary: #D9532F;
-  --color-brand-primary-dark: #C24522;
-  --color-brand-secondary: #2E7D32;
-  --color-brand-background: #F4F1EA;
+  --color-brand-primary: #1E3A8A;
+  --color-brand-primary-dark: #0F172A;
+  --color-brand-secondary: #059669;
+  --color-brand-accent: #D97706;
+  --color-brand-crimson: #991B1B;
+  --color-brand-background: #F1F4F9;
   --color-brand-surface: #FFFFFF;
-  --color-brand-surface-raised: #FAF8F5;
-  --color-brand-text: #1A1A1E;
-  --color-brand-text-muted: #6B6760;
-  --color-border-main: #EAE6DF;
+  --color-brand-surface-raised: #F8FAFC;
+  --color-brand-text: #0F172A;
+  --color-brand-text-muted: #64748B;
+  --color-border-main: #E2E8F0;
 
-  --color-gold-500: #D9532F;
-  --color-gold-600: #C24522;
+  --color-gold-500: #D97706;
+  --color-gold-600: #B45309;
 
-  --color-ink: #1A1A1E;
+  --color-ink: #0F172A;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #F4F1EA;
+    background-color: #F1F4F9;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: #F4F1EA;
-    color: #1A1A1E;
+    background-color: #F1F4F9;
+    color: #0F172A;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
@@ -38,7 +41,7 @@
 
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    color: #1A1A1E;
+    color: #0F172A;
   }
 
   * {
@@ -46,8 +49,8 @@
   }
 
   ::selection {
-    background: rgba(217, 83, 47, 0.2);
-    color: #1A1A1E;
+    background: rgba(30, 58, 138, 0.18);
+    color: #0F172A;
   }
 
   button,
@@ -74,55 +77,53 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#D9532F] px-6 py-2.5 text-sm font-bold tracking-[0.03em] text-white shadow-[0_2px_8px_rgba(217,83,47,0.25)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#C24522] hover:shadow-[0_4px_12px_rgba(217,83,47,0.35)] active:translate-y-0 disabled:translate-y-0 disabled:bg-[#EAE6DF] disabled:text-[#6B6760] disabled:shadow-none;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_2px_10px_rgba(15,23,42,0.25)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1E293B] hover:shadow-[0_6px_16px_rgba(15,23,42,0.3)] active:translate-y-0 disabled:translate-y-0 disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] disabled:shadow-none;
   }
 
   .btn-secondary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-[#DCD7CE] bg-white px-6 py-2.5 text-sm font-bold tracking-[0.02em] text-[#1A1A1E] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#C8C2B7] hover:bg-[#FAF8F5] active:translate-y-0;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#CBD5E1] bg-white px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F172A] shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#94A3B8] hover:bg-[#F8FAFC] active:translate-y-0;
   }
 
   .card {
-    @apply rounded-2xl bg-white;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    @apply rounded-2xl bg-white border border-[#E2E8F0];
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
   }
 
   .card-base {
-    @apply rounded-2xl bg-white;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    @apply rounded-2xl bg-white border border-[#E2E8F0];
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)];
+    @apply transition-all duration-250 hover:-translate-y-0.5 hover:border-[#CBD5E1] hover:shadow-[0_12px_32px_-4px_rgba(15,23,42,0.08)];
   }
 
   .section-title {
-    @apply text-xs font-bold uppercase tracking-[0.2em] text-[#D9532F];
+    @apply text-[10px] font-bold uppercase tracking-[0.22em] text-[#0F172A];
   }
 
   .input-field {
-    @apply min-h-11 rounded-xl border border-[#EAE6DF] bg-white px-4 py-2.5 text-sm font-semibold text-[#1A1A1E] outline-none transition placeholder:text-[#6B6760]/60 focus:border-[#D9532F] focus:ring-2 focus:ring-[#D9532F]/15;
+    @apply min-h-11 rounded-xl border border-[#CBD5E1] bg-white px-4 py-2.5 text-sm font-semibold text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/15;
   }
 
   .score-input {
-    @apply h-14 w-14 rounded-2xl border border-[#EAE6DF] bg-white text-center text-2xl font-black text-[#1A1A1E] outline-none transition focus:border-[#D9532F] focus:ring-2 focus:ring-[#D9532F]/15;
+    @apply h-14 w-14 rounded-2xl border border-[#CBD5E1] bg-white text-center text-2xl font-black text-[#0F172A] outline-none transition focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/15;
   }
 
   .prediction-card {
-    @apply rounded-2xl border border-[#EAE6DF] bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#D96B43]/40 hover:shadow-md;
+    @apply rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#CBD5E1] hover:shadow-md;
   }
 
   .badge-exact {
-    @apply rounded-full bg-[#FDF4F0] border border-[#F3DCD2] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D96B43] shadow-none;
+    @apply rounded-full bg-[#EFF6FF] border border-[#BFDBFE] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8] shadow-none;
   }
 
   .badge-result {
-    @apply rounded-full bg-[#EDF7F2] border border-[#C8E6C9] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#2E7D32] shadow-none;
+    @apply rounded-full bg-[#ECFDF5] border border-[#A7F3D0] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#047857] shadow-none;
   }
 
   .badge-wrong {
-    @apply rounded-full bg-[#FDF2F2] border border-[#F9D6D6] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#C84A4A];
+    @apply rounded-full bg-[#FEF2F2] border border-[#FECACA] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#DC2626];
   }
 }
 
@@ -135,49 +136,18 @@
     position: relative;
     isolation: isolate;
     background: #FFFFFF;
-    border: 1px solid #EAE6DF;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
-  }
-
-  .premium-nav {
-    background: #FFFFFF;
-    border: 1px solid #EAE6DF;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-  }
-
-  .premium-nav-button {
-    color: #6B6760;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .premium-nav-button:hover {
-    color: #1A1A1A;
-    background: #FAF8F5;
-    transform: translateY(-1px);
-  }
-
-  .match-sheet {
-    background: #FFFFFF;
-    border: 1px solid #EAE6DF;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-    color: #1A1A1A;
-  }
-
-  .score-display {
-    background: #FAF8F5;
-    color: #1A1A1A;
-    border: 1px solid #EAE6DF;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.04);
   }
 
   .editorial-rule {
     height: 1px;
-    background: #EAE6DF;
+    background: #E2E8F0;
   }
 
   @keyframes premium-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(217, 107, 67, 0.3); }
-    50% { box-shadow: 0 0 0 8px rgba(217, 107, 67, 0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(30, 58, 138, 0.28); }
+    50% { box-shadow: 0 0 0 8px rgba(30, 58, 138, 0); }
   }
 
   .live-pulse {

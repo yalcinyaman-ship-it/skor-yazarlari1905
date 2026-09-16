@@ -26,15 +26,15 @@ const getRankMeta = (index: number) => {
   if (index === 0) {
     return {
       title: "Lider",
-      note: "Taht onda",
-      icon: <Crown className="h-4 w-4" />,
+      note: "Zirvede",
+      icon: <Crown className="h-3.5 w-3.5" />,
       medalIcon: <Trophy className="h-16 w-16" />,
       cardClass:
-        "border-[#D96B43]/30 bg-gradient-to-br from-[#FFF8F5] via-[#FFF3EE] to-[#FDF0EB] text-[#1A1A1A] shadow-sm",
-      badgeClass: "border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]",
-      numberClass: "bg-[#D96B43] text-white",
-      glowClass: "bg-[#D96B43]/10",
-      nameClass: "text-[#1A1A1A]"
+        "border-amber-200/80 bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 text-[#0F172A] shadow-[0_4px_20px_rgba(217,119,6,0.06)] ring-1 ring-amber-400/30",
+      badgeClass: "border-amber-300 bg-amber-100/90 text-amber-900",
+      numberClass: "bg-amber-500 text-white ring-2 ring-white shadow-xs",
+      glowClass: "bg-amber-100/30",
+      nameClass: "text-[#0F172A]"
     };
   }
 
@@ -42,14 +42,14 @@ const getRankMeta = (index: number) => {
     return {
       title: "Takipçi",
       note: "Nefesi ensede",
-      icon: <Medal className="h-4 w-4" />,
+      icon: <Medal className="h-3.5 w-3.5" />,
       medalIcon: <Medal className="h-14 w-14" />,
       cardClass:
-        "border-[#EAE6DF] bg-white shadow-sm",
-      badgeClass: "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]",
-      numberClass: "bg-[#6B6760] text-white",
-      glowClass: "bg-[#FAF8F5]",
-      nameClass: "text-[#1A1A1A]"
+        "border-[#E2E8F0] bg-white shadow-xs hover:border-slate-300",
+      badgeClass: "border-[#E2E8F0] bg-[#F8FAFC] text-[#475569]",
+      numberClass: "bg-slate-600 text-white ring-2 ring-white shadow-xs",
+      glowClass: "bg-[#F8FAFC]",
+      nameClass: "text-[#0F172A]"
     };
   }
 
@@ -57,28 +57,28 @@ const getRankMeta = (index: number) => {
     return {
       title: "Podyum",
       note: "Oyunun içinde",
-      icon: <Medal className="h-4 w-4" />,
+      icon: <Medal className="h-3.5 w-3.5" />,
       medalIcon: <Medal className="h-14 w-14" />,
       cardClass:
-        "border-[#EAE6DF] bg-white shadow-sm",
-      badgeClass: "border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]",
-      numberClass: "bg-[#D96B43] text-white",
-      glowClass: "bg-[#FAF8F5]",
-      nameClass: "text-[#1A1A1A]"
+        "border-[#E2E8F0] bg-white shadow-xs hover:border-amber-300",
+      badgeClass: "border-amber-200 bg-amber-50 text-amber-800",
+      numberClass: "bg-amber-700 text-white ring-2 ring-white shadow-xs",
+      glowClass: "bg-[#F8FAFC]",
+      nameClass: "text-[#0F172A]"
     };
   }
 
   return {
     title: `${index + 1}. Sıra`,
     note: "Yarışta",
-    icon: <UserIcon className="h-4 w-4" />,
+    icon: <UserIcon className="h-3.5 w-3.5" />,
     medalIcon: null,
     cardClass:
-      "border-[#EAE6DF] bg-white shadow-sm",
-    badgeClass: "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]",
-    numberClass: "bg-[#FAF8F5] text-[#6B6760] ring-1 ring-[#EAE6DF]",
-    glowClass: "bg-[#FAF8F5]",
-    nameClass: "text-[#1A1A1A]"
+      "border-[#E2E8F0] bg-white shadow-xs hover:border-slate-300",
+    badgeClass: "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]",
+    numberClass: "bg-[#F8FAFC] text-[#475569] ring-1 ring-[#E2E8F0]",
+    glowClass: "bg-[#F8FAFC]",
+    nameClass: "text-[#0F172A]"
   };
 };
 
@@ -151,23 +151,23 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
               </div>
             )}
 
-            <div className="relative flex h-full flex-col justify-between gap-6">
+            <div className="relative flex h-full flex-col justify-between gap-5">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3.5">
                   <div
-                    className={`relative flex shrink-0 items-center justify-center rounded-[1.15rem] shadow-sm ring-1 ${
-                      isLeader ? "bg-white ring-[#F3DCD2]" : "bg-[#FAF8F5] ring-[#EAE6DF]"
+                    className={`relative flex shrink-0 items-center justify-center rounded-2xl shadow-xs ring-1 ${
+                      isLeader ? "bg-white ring-amber-200" : "bg-[#F8FAFC] ring-[#E2E8F0]"
                     } ${
-                      isLeader ? "h-18 w-18" : "h-15 w-15"
+                      isLeader ? "h-16 w-16" : "h-14 w-14"
                     }`}
                   >
                     <UserFlag
                       flagEmoji={user.flagEmoji}
-                      className={isLeader ? "h-12 w-12 text-4xl" : "h-10 w-10 text-3xl"}
+                      className={isLeader ? "h-10 w-10 text-3xl" : "h-8 w-8 text-2xl"}
                     />
 
                     <div
-                      className={`absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold shadow-sm ring-2 ring-white ${rank.numberClass}`}
+                      className={`absolute -bottom-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold ${rank.numberClass}`}
                     >
                       {index + 1}
                     </div>
@@ -175,22 +175,22 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
 
                   <div className="min-w-0">
                     <h3
-                      className={`font-display truncate tracking-[-0.01em] font-bold ${nameSizeClass(user.name)} ${rank.nameClass} ${
-                        isLeader ? "sm:text-2xl" : ""
+                      className={`truncate tracking-tight font-bold ${nameSizeClass(user.name)} ${rank.nameClass} ${
+                        isLeader ? "sm:text-2xl font-serif" : ""
                       }`}
                     >
                       {user.name}
                     </h3>
 
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                       <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${rank.badgeClass}`}
+                        className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${rank.badgeClass}`}
                       >
                         {rank.icon}
                         {rank.title}
                       </span>
 
-                      <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${isLeader ? "border-[#F3DCD2] bg-white text-[#D96B43]" : "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]"}`}>
+                      <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide ${isLeader ? "border-amber-200 bg-white text-amber-900" : "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]"}`}>
                         {rank.note}
                       </span>
                     </div>
@@ -199,15 +199,15 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
               </div>
 
               <div>
-                <div className="mb-4 flex items-end justify-between gap-4">
+                <div className="mb-3.5 flex items-end justify-between gap-4">
                   <div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#6B6760]">
+                    <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#64748B]">
                       Toplam Puan
                     </div>
 
                     <div
-                      className={`stat-number mt-1 font-black leading-none ${isLeader ? "text-[#D96B43]" : "text-[#1A1A1A]"} ${
-                        isLeader ? "text-6xl" : "text-5xl"
+                      className={`stat-number font-mono mt-0.5 font-black leading-none ${isLeader ? "text-[#1E3A8A]" : "text-[#0F172A]"} ${
+                        isLeader ? "text-5xl" : "text-4xl"
                       }`}
                     >
                       {user.totalPoints}
@@ -215,48 +215,48 @@ const UserCards: React.FC<UserCardsProps> = ({ users, onUserClick }) => {
                   </div>
 
                   {weekPoints > 0 ? (
-                    <div className="inline-flex items-center gap-1.5 rounded-2xl border border-[#F3DCD2] bg-[#FDF4F0] px-3 py-2 text-xs font-bold text-[#D96B43]">
-                      <TrendingUp className="h-4 w-4" />
+                    <div className="inline-flex items-center gap-1 rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] px-2.5 py-1.5 text-xs font-bold text-[#047857]">
+                      <TrendingUp className="h-3.5 w-3.5" />
                       +{weekPoints}
                     </div>
                   ) : (
-                    <div className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold ${isLeader ? "border-[#F3DCD2] bg-white text-[#6B6760]" : "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]"}`}>
-                      <Shield className="h-4 w-4" />
+                    <div className={`inline-flex items-center gap-1 rounded-xl border px-2.5 py-1.5 text-xs font-medium ${isLeader ? "border-amber-200 bg-white text-[#64748B]" : "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]"}`}>
+                      <Shield className="h-3.5 w-3.5" />
                       Stabil
                     </div>
                   )}
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <div className={`rounded-xl border p-3 ${isLeader ? "border-[#F3DCD2] bg-white" : "border-[#EAE6DF] bg-[#FAF8F5]"}`}>
-                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
-                      <Target className="h-3.5 w-3.5 text-[#D96B43]" />
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className={`rounded-xl border p-2.5 ${isLeader ? "border-amber-200/90 bg-white/80" : "border-[#E2E8F0] bg-[#F8FAFC]"}`}>
+                    <div className="flex items-center justify-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#64748B]">
+                      <Target className="h-3 w-3 text-[#1E3A8A]" />
                       Tam
                     </div>
 
-                    <div className="mt-1 text-xl font-black text-[#1A1A1A]">
+                    <div className="mt-0.5 font-mono text-lg font-black text-[#0F172A]">
                       {exacts}
                     </div>
                   </div>
 
-                  <div className={`rounded-xl border p-3 ${isLeader ? "border-[#F3DCD2] bg-white" : "border-[#EAE6DF] bg-[#FAF8F5]"}`}>
-                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
-                      <Sparkles className="h-3.5 w-3.5 text-[#D96B43]" />
+                  <div className={`rounded-xl border p-2.5 ${isLeader ? "border-amber-200/90 bg-white/80" : "border-[#E2E8F0] bg-[#F8FAFC]"}`}>
+                    <div className="flex items-center justify-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#64748B]">
+                      <Sparkles className="h-3 w-3 text-[#059669]" />
                       Sonuç
                     </div>
 
-                    <div className="mt-1 text-xl font-black text-[#1A1A1A]">
+                    <div className="mt-0.5 font-mono text-lg font-black text-[#0F172A]">
                       {results}
                     </div>
                   </div>
 
-                  <div className={`rounded-xl border p-3 ${isLeader ? "border-[#F3DCD2] bg-white" : "border-[#EAE6DF] bg-[#FAF8F5]"}`}>
-                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#6B6760]">
-                      <Trophy className="h-3.5 w-3.5 text-[#D96B43]" />
+                  <div className={`rounded-xl border p-2.5 ${isLeader ? "border-amber-200/90 bg-white/80" : "border-[#E2E8F0] bg-[#F8FAFC]"}`}>
+                    <div className="flex items-center justify-center gap-1 text-[9px] font-bold uppercase tracking-wider text-[#64748B]">
+                      <Trophy className="h-3 w-3 text-[#D97706]" />
                       İsabet
                     </div>
 
-                    <div className="mt-1 text-xl font-black text-[#1A1A1A]">
+                    <div className="mt-0.5 font-mono text-lg font-black text-[#0F172A]">
                       {totalHits}
                     </div>
                   </div>
