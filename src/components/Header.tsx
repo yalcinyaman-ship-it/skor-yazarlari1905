@@ -106,17 +106,6 @@ const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {onAdminClick && (
-            <button
-              type="button"
-              onClick={onAdminClick}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/[0.08] text-slate-300 shadow-xs backdrop-blur-xs transition-all duration-150 hover:bg-white/20 hover:text-white hover:border-white/30 active:scale-[0.98]"
-              title="Yönetim ve Ayarlar"
-            >
-              <Settings className="h-3.5 w-3.5 stroke-[1.5]" />
-            </button>
-          )}
-
           <button
             type="button"
             onClick={() => window.location.reload()}
@@ -129,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({
 
           <div
             className="hidden h-8 w-8 items-center justify-center rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-400 shadow-xs backdrop-blur-xs lg:flex"
-            title="VIP Skor Ligi Masası"
+            title="Süper Lig Skor Yazarları"
           >
             <ShieldCheck className="h-3.5 w-3.5 stroke-[1.75]" />
           </div>

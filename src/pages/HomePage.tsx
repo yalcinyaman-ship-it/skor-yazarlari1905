@@ -730,25 +730,20 @@ const HomePage: React.FC = () => {
         {activeSeason && (
           <div className="flex w-full items-center justify-center">
             <div
-              style={{
-                backgroundColor: "#ECE8E1",
-                padding: "4px",
-                borderRadius: "9999px",
-              }}
-              className="inline-flex flex-wrap items-center justify-center gap-1 border border-[#DFDAD1] shadow-[0_2px_8px_rgba(0,0,0,0.03)]"
+              className="inline-flex flex-wrap items-center justify-center gap-1 rounded-full border border-[#CBD5E1]/80 bg-white/95 p-1 shadow-[0_4px_20px_rgba(15,23,42,0.06)] backdrop-blur-md"
             >
               {/* GENEL ÖZET */}
               <button
                 onClick={() => setActiveTab("ozet")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs transition-all duration-150 ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
                   activeTab === "ozet"
-                    ? "bg-[#FFFFFF] text-[#111827] font-semibold shadow-sm"
-                    : "bg-transparent text-[#5A5751] font-medium hover:text-[#111827] hover:bg-black/[0.03]"
+                    ? "bg-[#0F172A] text-white shadow-xs"
+                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
                 }`}
               >
                 <LayoutGrid
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "ozet" ? "text-[#111827]" : "text-[#5A5751]"}`}
-                  strokeWidth={1.5}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "ozet" ? "text-amber-400" : "text-[#64748B]"}`}
+                  strokeWidth={1.75}
                 />
                 <span>Genel Özet</span>
               </button>
@@ -762,28 +757,28 @@ const HomePage: React.FC = () => {
                 }}
                 disabled={predictionLocked}
                 title={predictionLocked ? "Tüm tahminler girildi veya kilitlendi." : "Haftalık tahminleri girmek için tıklayın."}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-150 ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-all duration-150 ${
                   predictionLocked
-                    ? "cursor-not-allowed text-[#5A5751] opacity-65"
-                    : "bg-transparent text-[#111827] hover:text-[#111827] hover:bg-black/[0.03] active:scale-[0.98]"
+                    ? "cursor-not-allowed text-[#94A3B8] opacity-65"
+                    : "bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 text-[#1E3A8A] hover:border-blue-300 hover:bg-blue-100/70 active:scale-[0.98]"
                 }`}
               >
-                <Crosshair className="h-3.5 w-3.5 shrink-0 stroke-[1.5] text-[#D9532F]" />
+                <Crosshair className="h-3.5 w-3.5 shrink-0 stroke-[2] text-[#1E3A8A]" />
                 <span>Maç Tahmini Yap</span>
               </button>
 
               {/* TAHMİNLER */}
               <button
                 onClick={() => setActiveTab("tahminler")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs transition-all duration-150 ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
                   activeTab === "tahminler"
-                    ? "bg-[#FFFFFF] text-[#111827] font-semibold shadow-sm"
-                    : "bg-transparent text-[#5A5751] font-medium hover:text-[#111827] hover:bg-black/[0.03]"
+                    ? "bg-[#0F172A] text-white shadow-xs"
+                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
                 }`}
               >
                 <Calendar
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "tahminler" ? "text-[#111827]" : "text-[#5A5751]"}`}
-                  strokeWidth={1.5}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "tahminler" ? "text-amber-400" : "text-[#64748B]"}`}
+                  strokeWidth={1.75}
                 />
                 <span>Tahminler</span>
               </button>
@@ -791,15 +786,15 @@ const HomePage: React.FC = () => {
               {/* PUAN DURUMU */}
               <button
                 onClick={() => setActiveTab("puan-durumu")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs transition-all duration-150 ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
                   activeTab === "puan-durumu"
-                    ? "bg-[#FFFFFF] text-[#111827] font-semibold shadow-sm"
-                    : "bg-transparent text-[#5A5751] font-medium hover:text-[#111827] hover:bg-black/[0.03]"
+                    ? "bg-[#0F172A] text-white shadow-xs"
+                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
                 }`}
               >
                 <Trophy
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "puan-durumu" ? "text-[#111827]" : "text-[#5A5751]"}`}
-                  strokeWidth={1.5}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "puan-durumu" ? "text-amber-400" : "text-[#64748B]"}`}
+                  strokeWidth={1.75}
                 />
                 <span>Puan Durumu</span>
               </button>
@@ -807,15 +802,15 @@ const HomePage: React.FC = () => {
               {/* İSTATİSTİKLER */}
               <button
                 onClick={() => setActiveTab("istatistikler")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs transition-all duration-150 ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
                   activeTab === "istatistikler"
-                    ? "bg-[#FFFFFF] text-[#111827] font-semibold shadow-sm"
-                    : "bg-transparent text-[#5A5751] font-medium hover:text-[#111827] hover:bg-black/[0.03]"
+                    ? "bg-[#0F172A] text-white shadow-xs"
+                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
                 }`}
               >
                 <TrendingUp
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "istatistikler" ? "text-[#111827]" : "text-[#5A5751]"}`}
-                  strokeWidth={1.5}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "istatistikler" ? "text-amber-400" : "text-[#64748B]"}`}
+                  strokeWidth={1.75}
                 />
                 <span>İstatistikler</span>
               </button>
@@ -823,15 +818,15 @@ const HomePage: React.FC = () => {
               {/* LİG HAFIZASI */}
               <button
                 onClick={() => setActiveTab("hafiza")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs transition-all duration-150 ${
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-150 ${
                   activeTab === "hafiza"
-                    ? "bg-[#FFFFFF] text-[#111827] font-semibold shadow-sm"
-                    : "bg-transparent text-[#5A5751] font-medium hover:text-[#111827] hover:bg-black/[0.03]"
+                    ? "bg-[#0F172A] text-white shadow-xs"
+                    : "bg-transparent text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100"
                 }`}
               >
                 <Archive
-                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "hafiza" ? "text-[#111827]" : "text-[#5A5751]"}`}
-                  strokeWidth={1.5}
+                  className={`h-3.5 w-3.5 shrink-0 ${activeTab === "hafiza" ? "text-amber-400" : "text-[#64748B]"}`}
+                  strokeWidth={1.75}
                 />
                 <span>Lig Hafızası</span>
               </button>
@@ -850,35 +845,35 @@ const HomePage: React.FC = () => {
               >
                 <div className="grid gap-6 lg:grid-cols-[1.18fr_0.82fr] items-stretch">
                   {/* SOL KART: Hero ve 4 Metrik (Haftanın Ana Etkinlik Vitrini) */}
-                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white p-6 sm:p-8 text-[#0F172A] shadow-sm transition-all duration-200 hover:border-slate-300">
+                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#CBD5E1]/90 bg-gradient-to-b from-white via-white to-[#F8FAFC] p-6 sm:p-8 lg:p-9 text-[#0F172A] shadow-[0_4px_24px_rgba(15,23,42,0.05)] transition-all duration-200 hover:border-slate-400">
                     {/* Üst Maç Haftası & Rekabet Vurgusu Çizgisi */}
                     <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-[#1E3A8A] via-[#D97706] to-[#059669]" />
 
                     <div>
                       {/* Üst Bilgi Satırı - Editoryal Maç Haftası Etiketi */}
-                      <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2.5">
-                        <div className="flex items-center gap-2 text-xs text-[#64748B]">
-                          <span className="inline-flex items-center gap-1 rounded-md border border-[#BFDBFE] bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8]">
+                      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#BFDBFE] bg-[#EFF6FF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1D4ED8]">
                             <Sparkles className="h-3 w-3 text-[#1D4ED8]" />
                             Maç Haftası
                           </span>
-                          <span className="font-semibold text-[#0F172A]">{activeSeason.name}</span>
+                          <span className="font-bold text-[#0F172A]">{activeSeason.name}</span>
                           <span className="text-slate-300">•</span>
-                          <span className="font-medium text-[#64748B]">{formatWeekLabel(activeWeek?.label) || "Aktif Hafta Yok"}</span>
+                          <span className="font-semibold text-[#475569]">{formatWeekLabel(activeWeek?.label) || "Aktif Hafta Yok"}</span>
                         </div>
 
                         {activeWeek && (
                           <span
-                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-[11px] font-semibold border ${
+                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold tracking-wide border shadow-2xs ${
                               activeWeek.isPublished
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                ? "bg-blue-50 text-blue-800 border-blue-200"
                                 : allUsersHavePredicted
                                   ? "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]"
                                   : "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]"
                             }`}
                           >
                             <span className={`h-1.5 w-1.5 rounded-full ${
-                              activeWeek.isPublished ? "bg-blue-500" : allUsersHavePredicted ? "bg-[#047857]" : "bg-[#D97706] animate-pulse"
+                              activeWeek.isPublished ? "bg-blue-600" : allUsersHavePredicted ? "bg-[#047857]" : "bg-[#D97706] animate-pulse"
                             }`} />
                             {activeWeek.isPublished
                               ? "Tahminler yayında"
@@ -890,42 +885,42 @@ const HomePage: React.FC = () => {
                       </div>
 
                       {/* Başlık ve Editoryal Hikâye */}
-                      <div>
-                        <h1 className="font-serif text-[26px] sm:text-[32px] font-bold leading-tight tracking-tight text-[#0F172A]">
+                      <div className="space-y-3">
+                        <h1 className="font-serif text-[28px] sm:text-[34px] lg:text-[38px] font-bold leading-[1.15] tracking-tight text-[#0F172A]">
                           {activeWeek ? `${formatWeekLabel(activeWeek.label)} Tahminleri & Maç Dengesi` : "5. Hafta Tahminleri & Maç Dengesi"}
                         </h1>
 
-                        <p className="font-serif mt-2.5 max-w-xl text-sm sm:text-[15px] italic leading-relaxed text-[#475569]">
+                        <p className="font-serif max-w-xl text-sm sm:text-base italic leading-relaxed text-[#475569]">
                           On yazar. Bir sezon. Her hafta yeniden kurulan bir futbol hikâyesi.
                           Skoru yaz, riskini al, masanın zirvesine adını bırak.
                         </p>
                       </div>
 
                       {/* 4 Ayrı, Bağımsız Mini Kart */}
-                      <div className="mt-6 grid grid-cols-2 gap-2.5 xl:grid-cols-4">
+                      <div className="mt-7 grid grid-cols-2 gap-3 xl:grid-cols-4">
                         <StatTile
-                          icon={<Calendar className="h-3.5 w-3.5 text-[#1E3A8A]" />}
+                          icon={<Calendar className="h-4 w-4 text-[#1E3A8A]" />}
                           label="Aktif Hafta"
                           value={formatWeekLabel(activeWeek?.label) || "Yok"}
                           helper={activeSeason?.name || "Sezon bekleniyor"}
                         />
 
                         <StatTile
-                          icon={<Users className="h-3.5 w-3.5 text-[#2563EB]" />}
+                          icon={<Users className="h-4 w-4 text-[#2563EB]" />}
                           label="Katılım"
                           value={`${existingPredictors.length}/${users.length}`}
                           helper={`%${participationPercent} tamamlandı`}
                         />
 
                         <StatTile
-                          icon={<Clock className="h-3.5 w-3.5 text-[#D97706]" />}
+                          icon={<Clock className="h-4 w-4 text-[#D97706]" />}
                           label="Bekleyen Maç"
                           value={pendingMatchesCount}
                           helper={`${playedMatchesCount} maç sonuçlandı`}
                         />
 
                         <StatTile
-                          icon={<Trophy className="h-3.5 w-3.5 text-[#059669]" />}
+                          icon={<Trophy className="h-4 w-4 text-[#059669]" />}
                           label="Lider"
                           value={leader?.name || "Yok"}
                           helper={leader ? `${leader.totalPoints || 0} puan` : "Puan bekleniyor"}
@@ -934,40 +929,31 @@ const HomePage: React.FC = () => {
                     </div>
 
                     {/* Aksiyon Butonları */}
-                    <div className="mt-7 flex flex-wrap items-center gap-2.5 border-t border-[#E2E8F0] pt-5">
+                    <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-[#E2E8F0] pt-6">
                       <button
                         type="button"
                         onClick={() => setActiveTab("tahminler")}
-                        className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-5 py-2.5 text-xs font-semibold tracking-wide text-white shadow-[0_2px_8px_rgba(15,23,42,0.3)] transition-all duration-150 hover:bg-[#1E293B] active:scale-[0.99]"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_4px_14px_rgba(15,23,42,0.3)] transition-all duration-150 hover:bg-[#1E293B] active:scale-[0.99]"
                       >
-                        <ArrowRight className="h-4 w-4 stroke-[2]" />
+                        <ArrowRight className="h-4 w-4 stroke-[2.5]" />
                         <span>Haftayı Gör</span>
                       </button>
 
                       <button
                         onClick={() => setIsPredictionModalOpen(true)}
                         disabled={predictionLocked}
-                        className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#CBD5E1] bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0F172A] shadow-2xs transition-all duration-150 hover:border-slate-400 hover:bg-[#F8FAFC] active:scale-[0.99] ${
+                        className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#CBD5E1] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F172A] shadow-2xs transition-all duration-150 hover:border-slate-400 hover:bg-[#F8FAFC] active:scale-[0.99] ${
                           predictionLocked ? "cursor-not-allowed opacity-75" : ""
                         }`}
                       >
-                        <CheckCircle2 className="h-4 w-4 text-[#059669] stroke-[1.75]" />
+                        <CheckCircle2 className="h-4 w-4 text-[#059669] stroke-[2]" />
                         <span>{allUsersHavePredicted ? "Tahminler Tamamlandı" : "Tahmin Yap"}</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={openAdmin}
-                        className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#CBD5E1] bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0F172A] shadow-2xs transition-all duration-150 hover:border-slate-400 hover:bg-[#F8FAFC] active:scale-[0.99]"
-                      >
-                        <Settings className="h-4 w-4 text-[#0F172A] stroke-[1.75]" />
-                        <span>Yönetim</span>
                       </button>
                     </div>
                   </div>
 
                   {/* SAĞ KART: Haftanın Nabzı */}
-                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white p-6 sm:p-8 text-[#0F172A] shadow-sm transition-all duration-200 hover:border-slate-300">
+                  <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#CBD5E1]/90 bg-gradient-to-b from-white via-white to-[#F8FAFC] p-6 sm:p-8 lg:p-9 text-[#0F172A] shadow-[0_4px_24px_rgba(15,23,42,0.05)] transition-all duration-200 hover:border-slate-400">
                     {/* Üst Rekabet & Prestij Vurgusu */}
                     <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-[#1E3A8A] via-[#D97706] to-[#059669]" />
 
@@ -980,15 +966,15 @@ const HomePage: React.FC = () => {
                             <span>Haftanın Nabzı</span>
                           </div>
 
-                          <div className="font-serif mt-1 text-2xl font-bold tracking-tight text-[#0F172A]">
+                          <div className="font-serif mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
                             {formatWeekLabel(activeWeek?.label) || "Beklemede"}
                           </div>
                         </div>
 
                         <div
-                          className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border shadow-2xs ${
+                          className={`rounded-full px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider border shadow-2xs ${
                             activeWeek?.isPublished
-                              ? "bg-blue-50 text-blue-700 border-blue-200"
+                              ? "bg-blue-50 text-blue-800 border-blue-200"
                               : allUsersHavePredicted
                                 ? "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]"
                                 : "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]"
@@ -1003,7 +989,7 @@ const HomePage: React.FC = () => {
                       </div>
 
                       {/* Haftalık Editoryal Maç Özeti & Katılım Barı */}
-                      <div className="mt-4 rounded-xl border border-[#E2E8F0] bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9] p-4 shadow-2xs">
+                      <div className="mt-5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4.5 shadow-2xs">
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Katılım:</span>
@@ -1026,7 +1012,7 @@ const HomePage: React.FC = () => {
                         </div>
 
                         {/* İnce zarif ilerleme çubuğu */}
-                        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[#E2E8F0]">
+                        <div className="mt-3.5 h-2.5 w-full overflow-hidden rounded-full bg-[#E2E8F0]">
                           <div
                             className="h-full rounded-full transition-all duration-500"
                             style={{
@@ -1041,35 +1027,35 @@ const HomePage: React.FC = () => {
                         <div className="mt-3.5 grid grid-cols-3 gap-2 border-t border-[#E2E8F0] pt-3 text-center">
                           <div>
                             <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Maç</div>
-                            <div className="font-mono mt-0.5 text-xs sm:text-sm font-bold text-[#0F172A]">{activeWeekMatches.length}</div>
+                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-[#0F172A]">{activeWeekMatches.length}</div>
                           </div>
                           <div className="border-x border-[#E2E8F0]">
                             <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Sonuç</div>
-                            <div className="font-mono mt-0.5 text-xs sm:text-sm font-bold text-[#0F172A]">{playedMatchesCount}</div>
+                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-[#0F172A]">{playedMatchesCount}</div>
                           </div>
                           <div>
                             <div className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Bekleyen</div>
-                            <div className="font-mono mt-0.5 text-xs sm:text-sm font-bold text-[#0F172A]">{pendingMatchesCount}</div>
+                            <div className="font-mono mt-0.5 text-sm sm:text-base font-bold text-[#0F172A]">{pendingMatchesCount}</div>
                           </div>
                         </div>
                       </div>
 
                       {/* Liderlik Durumu: Altın / Zirve Rozetiyle Vurgulanan Editoryal Kart */}
                       {leader && (
-                        <div className="mt-3.5 relative overflow-hidden rounded-xl border border-amber-200/80 bg-gradient-to-r from-amber-50/70 via-white to-amber-50/40 p-3.5 shadow-2xs">
+                        <div className="mt-4 relative overflow-hidden rounded-xl border border-amber-200/90 bg-gradient-to-r from-amber-50/80 via-white to-amber-50/50 p-4 shadow-2xs">
                           <div className="flex items-center justify-between gap-3">
-                            <div className="flex min-w-0 items-center gap-2.5">
-                              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white text-xs font-bold text-[#0F172A] shadow-xs">
+                            <div className="flex min-w-0 items-center gap-3">
+                              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white text-xs font-bold text-[#0F172A] shadow-xs">
                                 {leader.clubLogo || flagUrlForEmoji(leader.flagEmoji, 80) ? (
                                   <img
                                     src={leader.clubLogo || flagUrlForEmoji(leader.flagEmoji, 80)!}
                                     alt={leader.name}
                                     referrerPolicy="no-referrer"
-                                    className="h-6 w-6 object-contain drop-shadow-2xs"
+                                    className="h-7 w-7 object-contain drop-shadow-2xs"
                                     loading="lazy"
                                   />
                                 ) : (
-                                  <UserFlag flagEmoji={leader.flagEmoji} className="h-6 w-6 text-base" />
+                                  <UserFlag flagEmoji={leader.flagEmoji} className="h-7 w-7 text-lg" />
                                 )}
                                 <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[9px] font-black text-white ring-2 ring-white">
                                   ★
@@ -1077,21 +1063,21 @@ const HomePage: React.FC = () => {
                               </div>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <span className="truncate text-xs font-bold text-[#0F172A]">
+                                  <span className="truncate text-sm font-bold text-[#0F172A]">
                                     {leader.name}
                                   </span>
-                                  <span className="inline-flex items-center rounded-md border border-amber-300 bg-amber-100/80 px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider text-amber-800">
+                                  <span className="inline-flex items-center rounded-md border border-amber-300 bg-amber-100/90 px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider text-amber-900">
                                     Lider
                                   </span>
                                 </div>
-                                <div className="text-[11px] font-medium text-[#64748B]">
+                                <div className="text-xs font-medium text-[#64748B]">
                                   {leader.totalPoints || 0} puan ile zirvede
                                 </div>
                               </div>
                             </div>
 
                             <div className="text-right">
-                              <div className="font-mono text-sm font-bold text-[#0F172A]">
+                              <div className="font-mono text-base font-bold text-[#0F172A]">
                                 +{leaderGap}
                               </div>
                               <div className="text-[9px] font-bold uppercase tracking-wider text-[#64748B]">
@@ -1145,7 +1131,7 @@ const HomePage: React.FC = () => {
 
                     {/* Bekleyenler: Dikkat Çeken Editoryal Bilgi Şeridi */}
                     {!allUsersHavePredicted && activeWeek && (
-                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/80 p-3.5 text-xs leading-relaxed shadow-2xs">
+                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/90 p-3.5 text-xs leading-relaxed shadow-2xs">
                         <div className="flex items-center gap-1.5 mb-1 font-bold text-amber-900">
                           <Clock3 className="h-3.5 w-3.5 text-amber-700 shrink-0" />
                           <span>Tahmini Beklenen Yazarlar:</span>
@@ -1264,16 +1250,16 @@ const HomePage: React.FC = () => {
                 <section className="space-y-4">
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
-                      <div className="section-title">Canlı Sıralama</div>
-                      <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-slate-850 sm:text-3xl">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A8A]">Canlı Sıralama</div>
+                      <h2 className="font-serif mt-1 text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
                         Sezon Puan Durumu
                       </h2>
-                      <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-500">
+                      <p className="mt-1 max-w-2xl text-xs sm:text-sm text-[#64748B]">
                         Liderlik, tam isabet ve doğru sonuç performansı tek bakışta.
                       </p>
                     </div>
 
-                    <div className="rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-xs font-black uppercase tracking-wider text-slate-500">
+                    <div className="rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#64748B]">
                       {weeks.length} Hafta · {users.length} Yazar
                     </div>
                   </div>
@@ -1294,11 +1280,11 @@ const HomePage: React.FC = () => {
               >
                 <section className="space-y-4">
                   <div>
-                    <div className="section-title">Performans Analizi</div>
-                    <h2 className="mt-2 text-2xl font-black tracking-[-0.045em] text-slate-850 sm:text-3xl">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A8A]">Performans Analizi</div>
+                    <h2 className="font-serif mt-1 text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
                       İstatistik Merkezi
                     </h2>
-                    <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-500">
+                    <p className="mt-1 max-w-2xl text-xs sm:text-sm text-[#64748B]">
                       Tahmin kalitesi, isabet dengesi ve oyuncu performansı burada okunur.
                     </p>
                   </div>
@@ -1600,31 +1586,34 @@ const HomePage: React.FC = () => {
         )}
       </main>
 
-      <footer className="mx-auto mt-16 flex max-w-7xl flex-col items-center justify-center gap-4 border-t border-[#EAE6DF] pb-12 pt-8">
-        <p className="text-xs text-[#6B6760]">
-          &copy; {new Date().getFullYear()} Skor Yazarları. Özel tahmin ligi merkezi.
+      <footer className="mx-auto mt-16 flex max-w-7xl flex-col items-center justify-center gap-3 border-t border-[#E2E8F0] pb-12 pt-8">
+        <p className="text-xs font-medium text-[#64748B]">
+          &copy; {new Date().getFullYear()} Skor Yazarları. Süper Lig Özel Tahmin Ligi.
         </p>
 
         <div className="flex items-center gap-2">
           <button
             onClick={openAdmin}
-            className="rounded-full p-2 text-[#6B6760] transition duration-200 hover:bg-[#FAF8F5] hover:text-[#1A1A1A]"
-            title={isAdmin ? "Yönetici Panelini Aç" : "Yönetici Girişi (Şifre İster)"}
+            className="rounded-full p-2 text-slate-400 opacity-60 transition duration-200 hover:opacity-100 hover:bg-[#F8FAFC] hover:text-[#0F172A]"
+            title={isAdmin ? "Yönetici Panelini Aç" : "Yönetici Girişi"}
             id="admin-footer-btn-login"
           >
-            {isAdmin ? <Unlock className="h-4 w-4 text-[#2D8A66]" /> : <Lock className="h-4 w-4" />}
+            {isAdmin ? <Unlock className="h-3.5 w-3.5 text-[#059669]" /> : <Lock className="h-3.5 w-3.5" />}
           </button>
 
-          <button
-            onClick={async () => {
-              await signOut(auth);
-            }}
-            className="rounded-full p-2 text-[#6B6760] transition duration-200 hover:bg-[#FAF8F5] hover:text-rose-500"
-            title="Yönetici Çıkışı"
-            id="admin-footer-btn-logout"
-          >
-            <Lock className="h-4 w-4 text-[#6B6760] hover:text-rose-500" />
-          </button>
+          {isAdmin && (
+            <button
+              onClick={async () => {
+                await signOut(auth);
+                setIsAdmin(false);
+              }}
+              className="rounded-full p-2 text-slate-400 opacity-60 transition duration-200 hover:opacity-100 hover:bg-[#F8FAFC] hover:text-rose-600"
+              title="Yönetici Çıkışı"
+              id="admin-footer-btn-logout"
+            >
+              <Lock className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
       </footer>
 
