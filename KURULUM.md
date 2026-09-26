@@ -1,20 +1,38 @@
-# Skor Yazarları — alev teması (tam paket)
+# Skor Yazarları — güvenlik + skor botu + geri sayım + JPEG
 
-Klasör yapısı repodakiyle aynı. Hepsini GitHub'da üzerine yaz:
+## 1) Dosyaları GitHub'a yükle (hepsinin üzerine yaz)
+index.html · package.json · vercel.json · firestore.rules · FixtureImporter.tsx
+api/ klasörü (fikstur.js, skor-guncelle.js, guvenlik-temizlik.js, _firebase.js)
+src/index.css · src/App.tsx · src/UserProfileModal.tsx
+src/pages/HomePage.tsx · src/pages/PredictionPage.tsx
+src/components/FlameHome.tsx · src/components/AdminPanel.tsx
 
-| Dosya | Durum |
-|---|---|
-| index.html | değişti (yeni fontlar) |
-| src/index.css | değişti (tema renkleri — TÜM eski ekranları otomatik boyar) |
-| src/App.tsx | değişti (arka plan rengi) |
-| src/pages/HomePage.tsx | değişti (yeni ana sayfa) |
-| src/components/FlameHome.tsx | YENİ |
-| src/components/AdminPanel.tsx | değişti (açık krem tema → koyu alev tema) |
-| FixtureImporter.tsx | değişti (API maç havuzu, koyu tema) |
-| src/UserProfileModal.tsx | değişti (yazar profili, koyu tema) |
-| src/pages/PredictionPage.tsx | değişti (koyu tema) |
+## 2) Sunucu anahtarı (bir kez, 3 dakika)
+Skor botunun veritabanına yazabilmesi için:
+1. Firebase Console → ⚙️ Proje ayarları → **Hizmet hesapları** → **Yeni özel anahtar oluştur** → bir .json dosyası iner.
+2. Vercel → projen → Settings → **Environment Variables**
+   - Ad: `FIREBASE_SERVICE_ACCOUNT`
+   - Değer: indirdiğin .json dosyasının TÜM içeriği (kopyala-yapıştır)
+3. Vercel → Deployments → son deploy → **Redeploy**.
+Bu anahtarı kimseyle paylaşma, GitHub'a koyma.
 
-## Önemli
-- Bu dosyalarda SADECE renk/font sınıfları değişti. Firebase okuma/yazma kodu, puan hesabı, API-Football kodu harfi harfine aynı.
-- Tahmin penceresi, İstatistikler, Arşiv, Yönetici girişi gibi dokunulmayan dosyalar src/index.css'teki yeni tema sayesinde otomatik olarak alev renklerine geçer.
-- Geri almak için GitHub'da bir önceki commit'e dönmen yeterli.
+## 3) Güvenlik temizliği (bir kez)
+Tarayıcıda aç: `https://skor-yazarlari1905-19a6.vercel.app/api/guvenlik-temizlik?onay=evet`
+→ "tamam: true" görmelisin. Açık PIN'ler ve eski API anahtarı silinir. Puan/tahmin etkilenmez.
+
+## 4) Firebase kuralları
+Firebase Console → Firestore → (ai-studio-… veritabanı) → **Kurallar** sekmesi.
+ÖNCE mevcut metni bir yere kopyala (geri dönmek istersen). Sonra `firestore.rules` içeriğini yapıştır → **Yayınla**.
+Sonuç: herkes okur; sadece yönetici yazar; yazarlar tahmini yalnızca maç başlamadan girebilir.
+
+## 5) Skor botunu test et
+`https://skor-yazarlari1905-19a6.vercel.app/api/skor-guncelle?zorla=evet`
+→ "eslesen", "saat", "skor" sayıları görünür. "eslesmeyen" listesinde maç varsa takım adını bana yaz, eşleştirmeyi eklerim.
+Bot, site her açıldığında (en fazla 8 dakikada bir) kendiliğinden çalışır.
+İstersen cron-job.org'a ücretsiz üye olup bu adresi 15 dakikada bir çağırt — kimse siteyi açmasa da skorlar gelir.
+
+## Neler oldu
+- Maçları ELLE girmeye devam et. Bot takım adlarından ESPN'deki maçı bulup tarih/saat, logo ve biten maç skorunu doldurur. Elle girdiğin skora dokunmaz.
+- Geri sayım: Özet'te "İlk düdüğe" sayacı. İlk maç başlayınca tahminler kendiliğinden kapanır (hem ekranda hem veritabanı kuralında).
+- Yönetici girişi yapınca: Maçlar sekmesinde "Tahminleri JPEG indir", Puan Durumu'nda "Puan durumunu JPEG indir".
+- Sefer için gömülü otomatik tahmin kodu silindi.

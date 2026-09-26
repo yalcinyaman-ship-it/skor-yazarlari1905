@@ -516,59 +516,18 @@ const HomePage: React.FC = () => {
     };
   }, [activeSeason, activeWeek]);
 
-  // Sefer Koçan - Erzurumspor vs Galatasaray (1-2) tahmini otomatik senkronizasyonu
+  // Skor botu: sayfa her açıldığında sunucudan maç saatlerini ve biten maç skorlarını tazeler (10 dk'da bir çalışır).
   useEffect(() => {
-    if (!activeSeason || !activeWeek || !users.length || !matches.length) return;
+    fetch("/api/skor-guncelle").catch(() => {});
+    const t = setInterval(() => fetch("/api/skor-guncelle").catch(() => {}), 10 * 60 * 1000);
+    return () => clearInterval(t);
+  }, []);
 
-    const seferUser = users.find((u) => u.name && u.name.toLowerCase().includes("sefer"));
-    if (!seferUser) return;
-
-    const erzGalaMatch = matches.find((m) => {
-      const home = (m.homeTeam || "").toLowerCase();
-      const away = (m.awayTeam || "").toLowerCase();
-      return (
-        (home.includes("erzurum") && away.includes("galatasaray")) ||
-        (home.includes("galatasaray") && away.includes("erzurum"))
-      );
-    });
-
-    if (!erzGalaMatch) return;
-
-    const targetId = `${seferUser.id}_${erzGalaMatch.id}`;
-    const existingPred = predictions.find((p) => p.userId === seferUser.id && p.matchId === erzGalaMatch.id);
-
-    if (!existingPred) {
-      const isHomeErzurum = (erzGalaMatch.homeTeam || "").toLowerCase().includes("erzurum");
-      const predictedHome = isHomeErzurum ? 1 : 2;
-      const predictedAway = isHomeErzurum ? 2 : 1;
-
-      const syncSeferPrediction = async () => {
-        try {
-          await setDoc(doc(db, "seasons", activeSeason.id, "predictions", targetId), {
-            userId: seferUser.id,
-            weekId: activeWeek.id,
-            matchId: erzGalaMatch.id,
-            predictedHome,
-            predictedAway,
-            createdAt: serverTimestamp()
-          });
-
-          await setDoc(
-            doc(db, "seasons", activeSeason.id, "weeks", activeWeek.id, "submissions", seferUser.id),
-            {
-              userId: seferUser.id,
-              createdAt: serverTimestamp()
-            }
-          );
-          console.log("Sefer Koçan tahmini eklendi (Erzurumspor 1 - 2 Galatasaray).");
-        } catch (err) {
-          console.error("Sefer Koçan tahmini eklenirken hata:", err);
-        }
-      };
-
-      syncSeferPrediction();
-    }
-  }, [activeSeason, activeWeek, users, matches, predictions]);
+  const [nowMs, setNowMs] = useState(Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   const activeWeekPredictions = useMemo(() => {
     if (!activeWeek) return [];
@@ -698,8 +657,15 @@ const HomePage: React.FC = () => {
   const participationPercent =
     users.length > 0 ? Math.round((existingPredictors.length / users.length) * 100) : 0;
 
+  // İlk maçın başlama saati: tahminler bu anda kendiliğinden kapanır.
+  const firstKickoffMs = (() => {
+    const times = activeWeekMatches.map((m) => getDateMs(m.matchDate)).filter((t) => t > 0);
+    return times.length ? Math.min(...times) : 0;
+  })();
+  const kickoffPassed = firstKickoffMs > 0 && nowMs >= firstKickoffMs;
+
   const predictionLocked =
-    !activeSeason || !activeWeek || activeWeek.isPublished || allUsersHavePredicted;
+    !activeSeason || !activeWeek || activeWeek.isPublished || allUsersHavePredicted || kickoffPassed;
 
   const openAdmin = () => {
     if (isAdmin) {
@@ -729,6 +695,8 @@ const HomePage: React.FC = () => {
         participationPercent={participationPercent}
         leaderGap={leaderGap}
         predictionLocked={predictionLocked}
+        firstKickoffMs={firstKickoffMs}
+        nowMs={nowMs}
         finishedSeasons={finishedSeasons}
         isAdmin={isAdmin}
         error={error}

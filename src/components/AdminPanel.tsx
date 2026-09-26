@@ -47,7 +47,7 @@ import FixtureImporter from "../../FixtureImporter";
 
 const FLAG_OPTIONS = ["⚽", "🏆", "GS", "FB", "BJK", "TS", "BŞK", "ADS", "GÖZ", "KSK", "ESES", "BURSA", "SAMSUN", "🇹🇷"];
 
-const API_FOOTBALL_BASE = "https://v3.football.api-sports.io";
+const API_FOOTBALL_BASE = "/api/fikstur"; // ESPN üzerinden ücretsiz, anahtarsız
 const FINISHED_API_STATUSES = new Set(["FT", "AET", "PEN"]);
 
 type ApiFixtureResult = {
@@ -1879,7 +1879,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
 
     const importedMatches = matches.filter((match) => match.externalFixtureId);
     if (importedMatches.length === 0) {
-      setSyncMessage("Bu haftada API-Football’dan eklenmiş maç yok.");
+      setSyncMessage("Bu haftada otomatik maç havuzundan eklenmiş maç yok.");
       return;
     }
 
@@ -1887,21 +1887,12 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
     setSyncMessage("");
 
     try {
-      const integrationDoc = await getDoc(doc(db, "integrations", "apiFootball"));
-      const apiKey = integrationDoc.data()?.apiKey as string | undefined;
-
-      if (!apiKey) {
-        throw new Error("API-Football anahtarı bulunamadı. Önce Maçlar bölümünden kaydet.");
-      }
-
       const batch = writeBatch(db);
       const syncedScores = new Map<string, { home: number; away: number; status: string }>();
       let waitingCount = 0;
 
       for (const match of importedMatches) {
-        const response = await fetch(`${API_FOOTBALL_BASE}/fixtures?id=${match.externalFixtureId}`, {
-          headers: { "x-apisports-key": apiKey }
-        });
+        const response = await fetch(`${API_FOOTBALL_BASE}?id=${match.externalFixtureId}`);
 
         if (!response.ok) {
           throw new Error(`API yanıtı: ${response.status}`);

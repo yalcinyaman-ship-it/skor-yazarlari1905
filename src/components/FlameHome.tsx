@@ -48,6 +48,35 @@ const TeamImg: React.FC<{ name: string; logo?: string }> = ({ name, logo }) => {
   return <img src={src} alt="" referrerPolicy="no-referrer" onError={() => setErr(true)} style={{ width: 34, height: 34, objectFit: "contain", flexShrink: 0 }} />;
 };
 
+const pad2 = (n: number) => String(n).padStart(2, "0");
+const abbr = (t: string) => (t || "").replace(/^(İstanbul|Istanbul)\s+/i, "").trim().slice(0, 3).toLocaleUpperCase("tr-TR");
+
+async function saveJpeg(canvas: HTMLCanvasElement, name: string) {
+  const url = canvas.toDataURL("image/jpeg", 0.92);
+  const a = document.createElement("a");
+  a.href = url; a.download = name + ".jpg"; a.click();
+}
+
+function baseCanvas(w: number, h: number, title: string, sub: string) {
+  const c = document.createElement("canvas");
+  c.width = w * 2; c.height = h * 2;
+  const x = c.getContext("2d")!;
+  x.scale(2, 2);
+  x.fillStyle = C.bg; x.fillRect(0, 0, w, h);
+  const g = x.createRadialGradient(w / 2, -80, 10, w / 2, -80, 520);
+  g.addColorStop(0, "rgba(255,90,20,.28)"); g.addColorStop(1, "rgba(255,90,20,0)");
+  x.fillStyle = g; x.fillRect(0, 0, w, 420);
+  const bar = x.createLinearGradient(0, 0, w, 0);
+  bar.addColorStop(0, "#E23B1B"); bar.addColorStop(0.45, C.fire); bar.addColorStop(1, C.gold);
+  x.fillStyle = bar; x.fillRect(0, 0, w, 6);
+  x.fillStyle = C.gold; x.font = "700 18px 'Barlow Condensed'"; x.fillText(sub.toLocaleUpperCase("tr-TR"), 48, 62);
+  x.fillStyle = C.ink; x.font = "64px Anton"; x.fillText("SKOR ", 48, 130);
+  const sw = x.measureText("SKOR ").width;
+  x.fillStyle = C.fire; x.fillText("YAZARLARI", 48 + sw, 130);
+  x.fillStyle = C.soft; x.font = "700 26px 'Barlow Condensed'"; x.fillText(title.toLocaleUpperCase("tr-TR"), 48, 172);
+  return { c, x };
+}
+
 type Tab = "ozet" | "mac" | "puan" | "istatistik" | "hafiza";
 
 export interface FlameHomeProps {
@@ -63,6 +92,8 @@ export interface FlameHomeProps {
   participationPercent: number;
   leaderGap: number;
   predictionLocked: boolean;
+  firstKickoffMs: number;
+  nowMs: number;
   finishedSeasons: Season[];
   isAdmin: boolean;
   error: string | null;
@@ -92,8 +123,9 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
   const awPlayed = awMatches.filter(played).length;
   const predSet = new Set(existingPredictors);
 
-  const weekStatus = !activeWeek ? "Beklemede" : activeWeek.isPublished ? "Yayında" : allUsersHavePredicted ? "Kilitlendi" : "Tahmin açık";
-  const weekStatusColor = !activeWeek ? C.dim : activeWeek.isPublished ? C.green : allUsersHavePredicted ? C.gold : C.fire2;
+  const kickoffGone = p.firstKickoffMs > 0 && p.nowMs >= p.firstKickoffMs;
+  const weekStatus = !activeWeek ? "Beklemede" : activeWeek.isPublished ? "Yayında" : (allUsersHavePredicted || kickoffGone) ? "Kilitlendi" : "Tahmin açık";
+  const weekStatusColor = !activeWeek ? C.dim : activeWeek.isPublished ? C.green : (allUsersHavePredicted || kickoffGone) ? C.gold : C.fire2;
 
   const tabs: [Tab, string][] = [["ozet", "Genel Özet"], ["mac", "Maçlar & Tahminler"], ["puan", "Puan Durumu"], ["istatistik", "İstatistikler"], ["hafiza", "Lig Hafızası"]];
 
@@ -114,6 +146,85 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
   const swCalc = sw ? calc[sw.id] || {} : {};
   const byUser: Record<string, User> = {}; users.forEach((u) => (byUser[u.id] = u));
   const formWeeks = weeks.filter((w) => predictions.some((x) => x.weekId === w.id) && (allMatches[w.id] || []).some(played)).slice(-6);
+
+  const exportStandings = async () => {
+    await (document as any).fonts?.ready;
+    const rows = sortedUserStats;
+    const W = 1080, top = 220, rh = 64, H = top + 50 + rows.length * rh + 70;
+    const { c, x } = baseCanvas(W, H, "Puan durumu", `${activeSeason?.name || ""} · ${weekLabel(activeWeek?.label)}`);
+    x.font = "700 16px 'Barlow Condensed'"; x.fillStyle = C.dim;
+    [["#", 48], ["YAZAR", 110], ["TAM", 700], ["SONUÇ", 800], ["PUAN", 960]].forEach(([t, px]) => x.fillText(t as string, px as number, top + 20));
+    rows.forEach((u, i) => {
+      const y = top + 50 + i * rh;
+      if (i < 3) { x.fillStyle = "rgba(255,106,31,.07)"; x.fillRect(32, y - 4, W - 64, rh - 8); }
+      x.fillStyle = "rgba(255,190,140,.10)"; x.fillRect(48, y + rh - 8, W - 96, 1);
+      x.fillStyle = rankColor(i); x.font = "34px Anton"; x.fillText(String(i + 1), 48, y + 40);
+      x.fillStyle = C.ink; x.font = "700 28px Barlow"; x.fillText(u.name || "", 110, y + 38);
+      x.font = "800 30px 'Barlow Condensed'"; x.fillStyle = C.green; x.fillText(String(u.exacts || 0), 710, y + 38);
+      x.fillStyle = C.fire2; x.fillText(String(u.results || 0), 820, y + 38);
+      x.fillStyle = i === 0 ? C.fire : C.ink; x.font = "42px Anton"; x.textAlign = "right"; x.fillText(String(u.totalPoints || 0), W - 48, y + 42); x.textAlign = "left";
+    });
+    x.fillStyle = C.dim; x.font = "500 16px Barlow"; x.fillText("Tam skor +2 · Doğru sonuç +1 · Tek bilen +1", 48, H - 30);
+    saveJpeg(c, `puan-durumu-${weekLabel(activeWeek?.label) || "sezon"}`.replace(/\s+/g, "-"));
+  };
+
+  const exportWeek = async () => {
+    if (!sw) return;
+    await (document as any).fonts?.ready;
+    const ms_ = swMatches;
+    const nameW = 230, ptsW = 90, W = Math.max(1080, 48 * 2 + nameW + ptsW + ms_.length * 78);
+    const colW = (W - 96 - nameW - ptsW) / Math.max(ms_.length, 1);
+    const top = 220, headH = 86, rh = 54;
+    const ordered = users.map((u) => ({ u, d: swCalc[u.id] || {} })).sort((a, b) => (b.d.totalWeekPoints || 0) - (a.d.totalWeekPoints || 0));
+    const H = top + headH + ordered.length * rh + 80;
+    const { c, x } = baseCanvas(W, H, `${weekLabel(sw.label)} tahminleri`, activeSeason?.name || "");
+    x.textAlign = "center";
+    ms_.forEach((m, j) => {
+      const cx = 48 + nameW + colW * j + colW / 2;
+      x.fillStyle = C.soft; x.font = "700 17px 'Barlow Condensed'";
+      x.fillText(abbr(m.homeTeam), cx, top + 18); x.fillText(abbr(m.awayTeam), cx, top + 38);
+      const pl = played(m);
+      x.fillStyle = pl ? C.fire : "rgba(255,255,255,.06)";
+      x.fillRect(cx - colW / 2 + 6, top + 48, colW - 12, 30);
+      x.fillStyle = pl ? "#140A04" : C.dim; x.font = "22px Anton";
+      x.fillText(pl ? `${m.actualHome}-${m.actualAway}` : "–", cx, top + 71);
+    });
+    x.fillStyle = C.dim; x.font = "700 16px 'Barlow Condensed'"; x.fillText("PUAN", W - 48 - ptsW / 2, top + 71);
+    ordered.forEach(({ u, d }, i) => {
+      const y = top + headH + i * rh;
+      x.fillStyle = "rgba(255,190,140,.10)"; x.fillRect(48, y + rh - 2, W - 96, 1);
+      x.textAlign = "left"; x.fillStyle = rankColor(i); x.font = "24px Anton"; x.fillText(String(i + 1), 48, y + 36);
+      x.fillStyle = C.ink; x.font = "700 21px Barlow"; x.fillText(shortName(u.name), 84, y + 35);
+      x.textAlign = "center";
+      ms_.forEach((m, j) => {
+        const cx = 48 + nameW + colW * j + colW / 2;
+        const pr = swPreds.find((q) => q.userId === u.id && q.matchId === m.id);
+        if (!pr) { x.fillStyle = C.dim; x.font = "20px Anton"; x.fillText("·", cx, y + 35); return; }
+        const bd = (d.breakdown || []).find((b: any) => b.matchId === m.id);
+        let bg = "rgba(255,255,255,.04)", col = C.ink;
+        if (played(m)) {
+          if (bd?.isExact) { bg = "rgba(63,212,131,.18)"; col = C.green; }
+          else if (bd?.isResult) { bg = "rgba(255,138,61,.16)"; col = C.fire2; }
+          else col = C.dim;
+        }
+        x.fillStyle = bg; x.fillRect(cx - colW / 2 + 6, y + 8, colW - 12, rh - 16);
+        if (bd?.bonus) { x.strokeStyle = C.gold; x.lineWidth = 2; x.strokeRect(cx - colW / 2 + 6, y + 8, colW - 12, rh - 16); }
+        x.fillStyle = col; x.font = "22px Anton"; x.fillText(`${pr.predictedHome}-${pr.predictedAway}`, cx, y + 35);
+      });
+      x.fillStyle = i === 0 ? C.fire : C.ink; x.font = "30px Anton"; x.fillText(String(d.totalWeekPoints || 0), W - 48 - ptsW / 2, y + 37);
+    });
+    x.textAlign = "left"; x.fillStyle = C.dim; x.font = "500 16px Barlow";
+    x.fillText("Yeşil: tam skor (+2) · Turuncu: doğru sonuç (+1) · Altın çerçeve: tek bilen (+1)", 48, H - 30);
+    saveJpeg(c, `${weekLabel(sw.label)}-tahminler`.replace(/\s+/g, "-"));
+  };
+
+  const exportBtn = (text: string, onClick: () => void) => (
+    <button onClick={onClick} style={{ height: 40, padding: "0 16px", borderRadius: 999, cursor: "pointer", background: "transparent", border: `1px solid ${C.gold}`, color: C.gold, ...label({ fontSize: 13, letterSpacing: ".14em" }), whiteSpace: "nowrap" }}>{text}</button>
+  );
+
+  const left = Math.max(0, p.firstKickoffMs - p.nowMs);
+  const cd = { d: Math.floor(left / 86400000), h: Math.floor(left / 3600000) % 24, m: Math.floor(left / 60000) % 60, s: Math.floor(left / 1000) % 60 };
+  const kickoffPassed = p.firstKickoffMs > 0 && left === 0;
 
   const pill = (text: string, color: string) => (
     <span style={{ ...label({ fontSize: 13, letterSpacing: ".16em" }), whiteSpace: "nowrap", padding: "6px 12px", borderRadius: 999, color, border: `1px solid ${color}` }}>{text}</span>
@@ -205,6 +316,26 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
                   </div>
                   {pill(weekStatus, weekStatusColor)}
                 </div>
+                {activeWeek && p.firstKickoffMs > 0 && !kickoffPassed && (
+                  <div style={{ borderRadius: 16, border: "1px solid rgba(255,106,31,.35)", background: "rgba(255,106,31,.06)", padding: "14px 16px" }}>
+                    <div style={label({ fontSize: 12, letterSpacing: ".24em", color: C.fire2 })}>İlk düdüğe</div>
+                    <div style={{ display: "flex", gap: 14, alignItems: "baseline", marginTop: 6, flexWrap: "wrap" }}>
+                      {[[cd.d, "gün"], [cd.h, "saat"], [cd.m, "dk"], [cd.s, "sn"]].map(([v, t]) => (
+                        <span key={t as string} style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                          <span style={{ fontFamily: DISPLAY, fontSize: 44, lineHeight: 1, color: C.ink, fontVariantNumeric: "tabular-nums" }}>{t === "gün" ? v : pad2(v as number)}</span>
+                          <span style={label({ fontWeight: 700, fontSize: 13, letterSpacing: ".16em", color: C.mute })}>{t}</span>
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 6, fontSize: 13, color: C.mute }}>Tahminler {new Date(p.firstKickoffMs).toLocaleString("tr-TR", { weekday: "long", hour: "2-digit", minute: "2-digit" })} itibarıyla kendiliğinden kapanır.</div>
+                  </div>
+                )}
+                {activeWeek && kickoffPassed && !activeWeek.isPublished && (
+                  <div style={{ borderRadius: 16, border: `1px solid ${C.gold}`, padding: "12px 16px", color: C.gold, ...label({ fontSize: 14, letterSpacing: ".16em" }) }}>İlk maç başladı · tahminler kapandı</div>
+                )}
+                {activeWeek && !p.firstKickoffMs && (
+                  <div style={{ borderRadius: 16, border: "1px dashed rgba(255,190,140,.2)", padding: "12px 16px", fontSize: 13, color: C.mute }}>Maç saatleri gelince geri sayım başlar.</div>
+                )}
                 <div>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
@@ -297,6 +428,7 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
                 <div style={label({ color: C.fire2, letterSpacing: ".28em" })}>Maç takvimi</div>
                 <h2 style={{ margin: "4px 0 0", fontFamily: DISPLAY, fontWeight: 400, fontSize: 44, lineHeight: 1, textTransform: "uppercase" }}>{sw ? weekLabel(sw.label) : "Hafta yok"}</h2>
               </div>
+              {p.isAdmin && swPreds.length > 0 && exportBtn("Tahminleri JPEG indir", exportWeek)}
               <div style={{ display: "flex", gap: 14, flexWrap: "wrap", ...label({ fontWeight: 700, letterSpacing: ".14em", color: C.mute }) }}>
                 {[[C.green, "Tam skor +2"], [C.fire2, "Sonuç +1"], [C.gold, "Tek bilen +1"]].map(([c, t]) => (
                   <span key={t} style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: c }} />{t}</span>
@@ -448,7 +580,10 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
                 ))}
               </div>
             </div>
-            <div style={{ fontSize: 13, color: C.dim }}>Sıralama: puan → tam skor → doğru sonuç → isim. Satıra tıkla, yazarın profilini aç.</div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ fontSize: 13, color: C.dim }}>Sıralama: puan → tam skor → doğru sonuç → isim. Satıra tıkla, yazarın profilini aç.</div>
+              {p.isAdmin && exportBtn("Puan durumunu JPEG indir", exportStandings)}
+            </div>
           </section>
         )}
 

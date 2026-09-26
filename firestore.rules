@@ -1,100 +1,55 @@
 rules_version = '2';
-
+// Skor Yazarları — güvenli kurallar
+// Herkes okur. Sadece yönetici yazar. Yazarlar yalnızca kendi tahminlerini,
+// hafta yayınlanmadıysa ve maç başlamadıysa girebilir.
 service cloud.firestore {
   match /databases/{database}/documents {
-
     function isAdmin() {
-      return request.auth != null &&
-        request.auth.token.email == 'admin@skoryazarlari.app';
+      return request.auth != null && request.auth.token.email == 'admin@skoryazarlari.app';
+    }
+    function weekDoc(s, w) {
+      return get(/databases/$(database)/documents/seasons/$(s)/weeks/$(w)).data;
+    }
+    function weekOpen(s, w) {
+      return weekDoc(s, w).get('isPublished', false) != true;
+    }
+    function notStarted(s, w, m) {
+      let md = get(/databases/$(database)/documents/seasons/$(s)/weeks/$(w)/matches/$(m)).data.get('matchDate', null);
+      return !(md is timestamp) || request.time < md;
     }
 
-    function incoming() {
-      return request.resource.data;
-    }
+    match /users/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /settings/{id} { allow read, write: if isAdmin(); }
+    match /integrations/{id} { allow read, write: if isAdmin(); }
 
-    function isSafeScore(score) {
-      return score is number && score >= 0 && score <= 30;
-    }
-
-    function isValidPrediction(data) {
-      return data.keys().hasAll([
-        'userId',
-        'weekId',
-        'matchId',
-        'predictedHome',
-        'predictedAway',
-        'createdAt'
-      ]) &&
-      data.keys().size() == 6 &&
-      data.userId is string &&
-      data.weekId is string &&
-      data.matchId is string &&
-      data.createdAt is timestamp &&
-      isSafeScore(data.predictedHome) &&
-      isSafeScore(data.predictedAway);
-    }
-
-    function weekExists(seasonId, weekId) {
-      return exists(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId));
-    }
-
-    function weekIsOpen(seasonId, weekId) {
-      return weekExists(seasonId, weekId) &&
-        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.isActive == true &&
-        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.get('isPublished', false) != true &&
-        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.get('pointsPublished', false) != true;
-    }
-
-    function weekIsPublished(seasonId, weekId) {
-      return weekExists(seasonId, weekId) &&
-        get(/databases/$(database)/documents/seasons/$(seasonId)/weeks/$(weekId)).data.get('isPublished', false) == true;
-    }
-
-    match /users/{userId} {
+    match /seasons/{s} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
+      allow write: if isAdmin();
 
-    match /settings/{settingsId} {
-      allow read, write: if false;
-    }
-
-    match /integrations/{integrationId} {
-      allow read, write: if isAdmin();
-    }
-
-    match /seasons/{seasonId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-
-      match /weeks/{weekId} {
+      match /weeks/{w} {
         allow read: if true;
-        allow create, update, delete: if isAdmin();
+        allow write: if isAdmin();
 
-        match /matches/{matchId} {
-          allow read: if true;
-          allow create, update, delete: if isAdmin();
-        }
+        match /matches/{m} { allow read: if true; allow write: if isAdmin(); }
 
-        match /submissions/{userId} {
+        match /submissions/{u} {
           allow read: if true;
-          allow create, update, delete: if true;
+          allow create, update: if isAdmin() || weekOpen(s, w);
+          allow delete: if isAdmin();
         }
       }
 
-      match /predictions/{predictionId} {
-        allow read: if true;
-        allow create, update, delete: if true;
-      }
+      match /weekPoints/{w}/{rest=**} { allow read: if true; allow write: if isAdmin(); }
+      match /weekPoints/{w} { allow read: if true; allow write: if isAdmin(); }
 
-      match /weekPoints/{weekId}/userPoints/{userId} {
+      match /predictions/{p} {
         allow read: if true;
-        allow create, update, delete: if isAdmin();
+        allow delete: if isAdmin();
+        allow create, update: if isAdmin() || (
+          weekOpen(s, request.resource.data.weekId) &&
+          notStarted(s, request.resource.data.weekId, request.resource.data.matchId)
+        );
       }
-    }
-
-    match /{document=**} {
-      allow read, write: if false;
     }
   }
 }

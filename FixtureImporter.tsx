@@ -34,7 +34,7 @@ type ApiFixture = {
   };
 };
 
-const API_BASE = "https://v3.football.api-sports.io";
+const API_BASE = "/api/fikstur"; // ESPN üzerinden ücretsiz, anahtarsız
 const SUPER_LIG_ID = 203;
 
 const defaultSeason = () => {
@@ -71,7 +71,7 @@ const FixtureImporter: React.FC<{
       setApiKey(key);
     };
 
-    loadKey().catch(() => setMessage("API anahtarı henüz kaydedilmemiş."));
+    loadKey().catch(() => {});
   }, []);
 
   const rounds = useMemo(
@@ -100,18 +100,11 @@ const FixtureImporter: React.FC<{
   };
 
   const fetchFixtures = async () => {
-    const key = savedKey || apiKey.trim();
-    if (!key) {
-      setMessage("Önce API anahtarını kaydet.");
-      return;
-    }
-
     setLoading(true);
     setMessage("");
     try {
       const response = await fetch(
-        `${API_BASE}/fixtures?league=${SUPER_LIG_ID}&season=${season}&timezone=Europe%2FIstanbul`,
-        { headers: { "x-apisports-key": key } }
+        `${API_BASE}?season=${season}`
       );
       if (!response.ok) throw new Error(`API yanıtı: ${response.status}`);
       const data = await response.json();
@@ -182,8 +175,6 @@ const FixtureImporter: React.FC<{
   };
 
   const refreshImportedTimes = async () => {
-    const key = savedKey || apiKey.trim();
-    if (!key) return;
     setLoading(true);
     try {
       const matchSnapshot = await getDocs(
@@ -195,9 +186,7 @@ const FixtureImporter: React.FC<{
 
       const batch = writeBatch(db);
       for (const item of imported as any[]) {
-        const response = await fetch(`${API_BASE}/fixtures?id=${item.externalFixtureId}`, {
-          headers: { "x-apisports-key": key }
-        });
+        const response = await fetch(`${API_BASE}?id=${item.externalFixtureId}`);
         const data = await response.json();
         const current = data.response?.[0] as ApiFixture | undefined;
         if (!current) continue;
@@ -222,7 +211,7 @@ const FixtureImporter: React.FC<{
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#FF6A1F]">
-              <CloudDownload className="h-4 w-4" /> API-Football Maç Havuzu
+              <CloudDownload className="h-4 w-4" /> Otomatik Maç Havuzu
             </div>
             <p className="mt-1 text-sm font-semibold text-[#A89A8C]">
               Süper Lig fikstürünü getir, maçları seç ve haftaya ekle.
@@ -235,7 +224,7 @@ const FixtureImporter: React.FC<{
       </div>
 
       <div className="space-y-5 p-5">
-        {!savedKey && (
+        {false && (
           <div className="grid gap-3 md:grid-cols-[1fr_auto]">
             <div className="relative">
               <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A89A8C]" />
