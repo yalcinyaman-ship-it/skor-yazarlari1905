@@ -195,14 +195,14 @@ const StatusPill: React.FC<{
 }> = ({ children, tone = "slate" }) => {
   const className =
     tone === "green"
-      ? "border-[#D0EADB] bg-[#EDF7F2] text-[#2D8A66]"
+      ? "border-[#1F4A33] bg-[#0F2A1C] text-[#3FD483]"
       : tone === "amber"
-        ? "border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]"
+        ? "border-[#5A2A10] bg-[#2A1508] text-[#FF6A1F]"
         : tone === "blue"
-          ? "border-[#D5E2EE] bg-[#EEF4F9] text-[#366899]"
+          ? "border-[#5A2A10] bg-[#2A1508] text-[#FF8A3D]"
           : tone === "dark"
-            ? "border-[#EAE6DF] bg-[#FAF8F5] text-[#1A1A1A]"
-            : "border-[#EAE6DF] bg-[#FAF8F5] text-[#6B6760]";
+            ? "border-[#2E241C] bg-[#0F0B08] text-[#F6EFE7]"
+            : "border-[#2E241C] bg-[#0F0B08] text-[#A89A8C]";
 
   return (
     <span
@@ -220,15 +220,15 @@ const EmptyState: React.FC<{
 }> = ({ title, description, action }) => {
   return (
     <section className="card-base p-8 text-center sm:p-12">
-      <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl border border-[#F3DCD2] bg-[#FDF4F0] text-[#D96B43]">
+      <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl border border-[#5A2A10] bg-[#2A1508] text-[#FF6A1F]">
         <Trophy className="h-8 w-8" />
       </div>
 
-      <h2 className="text-3xl font-black tracking-[-0.04em] text-[#1A1A1A]">
+      <h2 className="text-3xl font-black tracking-[-0.04em] text-[#F6EFE7]">
         {title}
       </h2>
 
-      <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-[#6B6760]">
+      <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-[#A89A8C]">
         {description}
       </p>
 
@@ -756,14 +756,14 @@ const HomePage: React.FC = () => {
         {isAdminPanelOpen && (
           <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
             <div
-              className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-md"
+              className="absolute inset-0 bg-black/70 backdrop-blur-md"
               onClick={() => setIsAdminPanelOpen(false)}
             />
 
             <div className="relative max-h-[90vh] w-full max-w-6xl">
               <button
                 onClick={() => setIsAdminPanelOpen(false)}
-                className="absolute -top-10 right-0 flex items-center gap-2 rounded-full border border-[#EAE6DF] bg-white/95 px-3 py-1 text-xs font-bold text-[#1A1A1A] shadow-sm transition hover:bg-white"
+                className="absolute -top-10 right-0 flex items-center gap-2 rounded-full border border-[#2E241C] bg-[#15100C]/95 px-3 py-1 text-xs font-bold text-[#F6EFE7] shadow-sm transition hover:bg-[#15100C]"
                 type="button"
               >
                 Kapat <X className="h-4 w-4" />

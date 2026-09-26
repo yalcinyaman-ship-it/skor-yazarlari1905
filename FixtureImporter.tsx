@@ -217,18 +217,18 @@ const FixtureImporter: React.FC<{
   };
 
   return (
-    <section className="card-base mb-6 overflow-hidden border-[#EAE6DF]">
-      <div className="border-b border-[#EAE6DF] bg-[#FAF8F6] p-5">
+    <section className="card-base mb-6 overflow-hidden border-[#2E241C]">
+      <div className="border-b border-[#2E241C] bg-[#0F0B08] p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#D96B43]">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#FF6A1F]">
               <CloudDownload className="h-4 w-4" /> API-Football Maç Havuzu
             </div>
-            <p className="mt-1 text-sm font-semibold text-[#6E6B65]">
+            <p className="mt-1 text-sm font-semibold text-[#A89A8C]">
               Süper Lig fikstürünü getir, maçları seç ve haftaya ekle.
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-[#D0EADB] bg-[#EDF7F2] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#2D8A66]">
+          <div className="flex items-center gap-2 rounded-full border border-[#1F4A33] bg-[#0F2A1C] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#3FD483]">
             <ShieldCheck className="h-4 w-4" /> Admin özel
           </div>
         </div>
@@ -238,7 +238,7 @@ const FixtureImporter: React.FC<{
         {!savedKey && (
           <div className="grid gap-3 md:grid-cols-[1fr_auto]">
             <div className="relative">
-              <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6B65]" />
+              <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A89A8C]" />
               <input
                 type="password"
                 value={apiKey}
@@ -285,16 +285,16 @@ const FixtureImporter: React.FC<{
                     onClick={() => setSelectedIds((current) =>
                       selected ? current.filter((id) => id !== item.fixture.id) : [...current, item.fixture.id]
                     )}
-                    className={`rounded-2xl border p-4 text-left transition ${selected ? "border-[#D96B43] bg-[#FDF4F0] ring-2 ring-[#D96B43]/15" : "border-[#EAE6DF] bg-white hover:border-[#D96B43]/40"}`}
+                    className={`rounded-2xl border p-4 text-left transition ${selected ? "border-[#FF6A1F] bg-[#2A1508] ring-2 ring-[#FF6A1F]/15" : "border-[#2E241C] bg-[#15100C] hover:border-[#FF6A1F]/40"}`}
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <div className="min-w-0 font-bold text-[#1F2024]">
+                      <div className="min-w-0 font-bold text-[#F6EFE7]">
                         <div className="truncate">{item.teams.home.name}</div>
                         <div className="truncate">{item.teams.away.name}</div>
                       </div>
-                      <CheckCircle2 className={`h-5 w-5 shrink-0 ${selected ? "text-[#D96B43]" : "text-[#EAE6DF]"}`} />
+                      <CheckCircle2 className={`h-5 w-5 shrink-0 ${selected ? "text-[#FF6A1F]" : "text-[#2E241C]"}`} />
                     </div>
-                    <div className="mt-3 text-xs font-semibold text-[#6E6B65]">{formatFixtureDate(item.fixture.date)}</div>
+                    <div className="mt-3 text-xs font-semibold text-[#A89A8C]">{formatFixtureDate(item.fixture.date)}</div>
                   </button>
                 );
               })}
@@ -310,7 +310,7 @@ const FixtureImporter: React.FC<{
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Eklenen Maçların Saatlerini Yenile
         </button>
 
-        {message && <div className="rounded-2xl border border-[#EAE6DF] bg-[#FAF8F6] p-3 text-sm font-semibold text-[#1F2024]">{message}</div>}
+        {message && <div className="rounded-2xl border border-[#2E241C] bg-[#0F0B08] p-3 text-sm font-semibold text-[#F6EFE7]">{message}</div>}
       </div>
     </section>
   );

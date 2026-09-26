@@ -520,18 +520,18 @@ const AdminPanel: React.FC = () => {
   };
 
   return (
-    <div className="flex h-[85vh] max-h-[820px] w-full max-w-6xl overflow-hidden rounded-[1.75rem] border border-[#EAE6DF] bg-white shadow-2xl">
-      <aside className="hidden w-64 shrink-0 border-r border-[#EAE6DF] bg-[#FAF8F5] md:flex md:flex-col">
-        <div className="border-b border-[#EAE6DF] p-6">
+    <div className="flex h-[85vh] max-h-[820px] w-full max-w-6xl overflow-hidden rounded-[1.75rem] border border-[#2E241C] bg-[#15100C] shadow-2xl">
+      <aside className="hidden w-64 shrink-0 border-r border-[#2E241C] bg-[#0F0B08] md:flex md:flex-col">
+        <div className="border-b border-[#2E241C] p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#D96B43] text-white">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FF6A1F] text-[#140A04]">
               <Trophy className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-display text-sm font-bold uppercase tracking-[0.08em] text-[#1A1A1A]">
+              <h3 className="font-display text-sm font-bold uppercase tracking-[0.08em] text-[#F6EFE7]">
                 Admin Panel
               </h3>
-              <p className="text-xs font-semibold text-[#6B6760]">
+              <p className="text-xs font-semibold text-[#A89A8C]">
                 Skor Yazarları
               </p>
             </div>
@@ -550,7 +550,7 @@ const AdminPanel: React.FC = () => {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="border-b border-[#EAE6DF] bg-white p-4 md:hidden">
+        <div className="border-b border-[#2E241C] bg-[#15100C] p-4 md:hidden">
           <select
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value as AdminTab)}
@@ -566,7 +566,7 @@ const AdminPanel: React.FC = () => {
           </select>
         </div>
 
-        <main className="flex-1 overflow-y-auto bg-[#FAF8F5] p-5 sm:p-6">
+        <main className="flex-1 overflow-y-auto bg-[#0F0B08] p-5 sm:p-6">
           {activeTab === "users" && (
             <UsersTab
               users={users}
@@ -656,11 +656,11 @@ const AdminPanel: React.FC = () => {
 const PanelTitle = ({ title, description, icon }: { title: string; description: string; icon: React.ReactNode }) => (
   <div className="mb-6 flex items-start justify-between gap-4">
     <div>
-      <h3 className="font-display flex items-center gap-2 text-xl font-bold uppercase tracking-[-0.01em] text-[#1A1A1A]">
+      <h3 className="font-display flex items-center gap-2 text-xl font-bold uppercase tracking-[-0.01em] text-[#F6EFE7]">
         {icon}
         {title}
       </h3>
-      <p className="mt-1 text-sm font-semibold text-[#6B6760]">
+      <p className="mt-1 text-sm font-semibold text-[#A89A8C]">
         {description}
       </p>
     </div>
@@ -673,8 +673,8 @@ const TabButton = ({ label, active, onClick, icon }: any) => (
     onClick={onClick}
     className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
       active
-        ? "bg-[#D96B43] text-white shadow-sm"
-        : "text-[#6B6760] hover:bg-white hover:text-[#1A1A1A]"
+        ? "bg-[#FF6A1F] text-[#140A04] shadow-sm"
+        : "text-[#A89A8C] hover:bg-[#15100C] hover:text-[#F6EFE7]"
     }`}
   >
     {icon}
@@ -683,13 +683,13 @@ const TabButton = ({ label, active, onClick, icon }: any) => (
 );
 
 const NoActiveSeason = () => (
-  <div className="flex min-h-[360px] flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-[#EAE6DF] bg-white p-10 text-center">
+  <div className="flex min-h-[360px] flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-[#2E241C] bg-[#15100C] p-10 text-center">
     <AlertTriangle className="h-14 w-14 text-amber-500" />
     <div>
-      <h3 className="font-display text-xl font-bold uppercase tracking-[-0.01em] text-[#1A1A1A]">
+      <h3 className="font-display text-xl font-bold uppercase tracking-[-0.01em] text-[#F6EFE7]">
         Aktif sezon yok
       </h3>
-      <p className="mt-1 text-sm font-semibold text-[#6B6760]">
+      <p className="mt-1 text-sm font-semibold text-[#A89A8C]">
         Önce Sezonlar sekmesinden yeni bir sezon başlat.
       </p>
     </div>
@@ -719,13 +719,13 @@ const UsersTab = ({
 }: any) => {
   return (
     <div>
-      <PanelTitle title="Kullanıcılar" description="Yazar ekle, renklerini seç, puanları yönet." icon={<Users className="h-5 w-5 text-[#D96B43]" />} />
+      <PanelTitle title="Kullanıcılar" description="Yazar ekle, renklerini seç, puanları yönet." icon={<Users className="h-5 w-5 text-[#FF6A1F]" />} />
 
-      <form onSubmit={handleAddUser} className={`card-base mb-6 space-y-5 p-5 border transition duration-200 ${editingUserPoints ? "border-[#D96B43] bg-[#FDF4F0]/50 shadow-md" : "border-[#EAE6DF]"}`}>
+      <form onSubmit={handleAddUser} className={`card-base mb-6 space-y-5 p-5 border transition duration-200 ${editingUserPoints ? "border-[#FF6A1F] bg-[#2A1508]/50 shadow-md" : "border-[#2E241C]"}`}>
         {editingUserPoints && (
-          <div className="flex items-center justify-between rounded-xl border border-[#F3DCD2] bg-[#FDF4F0] px-4 py-2.5 text-xs font-bold text-[#D96B43]">
+          <div className="flex items-center justify-between rounded-xl border border-[#5A2A10] bg-[#2A1508] px-4 py-2.5 text-xs font-bold text-[#FF6A1F]">
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#D96B43]"></span>
+              <span className="h-2 w-2 rounded-full bg-[#FF6A1F]"></span>
               YAZARI DÜZENLEME MODU AKTİF (Formdan logo, renk ve adı güncelleyebilirsiniz)
             </span>
             <button
@@ -738,7 +738,7 @@ const UsersTab = ({
                 setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
                 setTempUserPoints(0);
               }}
-              className="text-[#6B6760] hover:text-[#1A1A1A] underline uppercase font-semibold"
+              className="text-[#A89A8C] hover:text-[#F6EFE7] underline uppercase font-semibold"
             >
               İptal Et / Vazgeç
             </button>
@@ -747,7 +747,7 @@ const UsersTab = ({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_auto]">
           <div className="flex-1">
-            <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+            <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
               Ad soyad
             </label>
             <input
@@ -760,7 +760,7 @@ const UsersTab = ({
 
           {editingUserPoints && (
             <div>
-              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
                 Puan
               </label>
               <input
@@ -806,8 +806,8 @@ const UsersTab = ({
         </div>
 
         <div>
-          <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
-            Bayrak / ikon {editingUserPoints && <span className="text-[#D96B43] font-bold">(Düzenleniyor)</span>}
+          <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
+            Bayrak / ikon {editingUserPoints && <span className="text-[#FF6A1F] font-bold">(Düzenleniyor)</span>}
           </label>
           <div className="flex flex-wrap gap-2">
             {FLAG_OPTIONS.map((flag) => (
@@ -817,8 +817,8 @@ const UsersTab = ({
                 onClick={() => setUserFlag(flag)}
                 className={`flex h-10 w-10 items-center justify-center rounded-2xl border text-lg transition ${
                   userFlag === flag
-                    ? "border-[#D96B43] bg-[#FDF4F0] scale-105"
-                    : "border-[#EAE6DF] bg-white hover:bg-[#FAF8F5]"
+                    ? "border-[#FF6A1F] bg-[#2A1508] scale-105"
+                    : "border-[#2E241C] bg-[#15100C] hover:bg-[#0F0B08]"
                 }`}
               >
                 <UserFlag flagEmoji={flag} className="h-6 w-6 text-base" />
@@ -829,15 +829,15 @@ const UsersTab = ({
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
-              Renk sayısı {editingUserPoints && <span className="text-[#D96B43] font-bold">(Düzenleniyor)</span>}
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
+              Renk sayısı {editingUserPoints && <span className="text-[#FF6A1F] font-bold">(Düzenleniyor)</span>}
             </label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setUserColorCount(2)}
                 className={`rounded-2xl border px-4 py-2 text-xs font-bold transition ${
-                  userColorCount === 2 ? "border-[#D96B43] bg-[#D96B43] text-white" : "border-[#EAE6DF] bg-white text-[#6B6760] hover:bg-[#FAF8F5]"
+                  userColorCount === 2 ? "border-[#FF6A1F] bg-[#FF6A1F] text-[#140A04]" : "border-[#2E241C] bg-[#15100C] text-[#A89A8C] hover:bg-[#0F0B08]"
                 }`}
               >
                 2 renk
@@ -846,7 +846,7 @@ const UsersTab = ({
                 type="button"
                 onClick={() => setUserColorCount(3)}
                 className={`rounded-2xl border px-4 py-2 text-xs font-bold transition ${
-                  userColorCount === 3 ? "border-[#D96B43] bg-[#D96B43] text-white" : "border-[#EAE6DF] bg-white text-[#6B6760] hover:bg-[#FAF8F5]"
+                  userColorCount === 3 ? "border-[#FF6A1F] bg-[#FF6A1F] text-[#140A04]" : "border-[#2E241C] bg-[#15100C] text-[#A89A8C] hover:bg-[#0F0B08]"
                 }`}
               >
                 3 renk
@@ -855,7 +855,7 @@ const UsersTab = ({
           </div>
 
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
               Renkler
             </label>
             <div className="flex gap-2">
@@ -869,14 +869,14 @@ const UsersTab = ({
                     next[index] = e.target.value;
                     setUserColors(next);
                   }}
-                  className="h-10 w-12 cursor-pointer rounded-xl border border-[#EAE6DF] bg-white p-1"
+                  className="h-10 w-12 cursor-pointer rounded-xl border border-[#2E241C] bg-[#15100C] p-1"
                 />
               ))}
             </div>
           </div>
 
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
               Hızlı seçim
             </label>
             <div className="flex flex-wrap gap-2">
@@ -894,7 +894,7 @@ const UsersTab = ({
                      setUserColorCount(palette.length as 2 | 3);
                      setUserColors([...palette, "#ffffff"]);
                    }}
-                   className="flex h-10 overflow-hidden rounded-xl border border-[#EAE6DF] transition hover:-translate-y-0.5"
+                   className="flex h-10 overflow-hidden rounded-xl border border-[#2E241C] transition hover:-translate-y-0.5"
                 >
                   {palette.map((color, colorIndex) => (
                     <div key={colorIndex} className="h-full w-6" style={{ backgroundColor: color }} />
@@ -907,12 +907,12 @@ const UsersTab = ({
       </form>
 
       <div className="space-y-3">
-        <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#6B6760]">
+        <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#A89A8C]">
           Sistemdeki kullanıcılar ({users.length})
         </div>
 
         {users.map((user: any) => (
-          <div key={user.id} className={`card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between border transition-all duration-200 ${editingUserPoints === user.id ? "border-[#D96B43] bg-[#FDF4F0]/40 ring-1 ring-[#D96B43]" : "border-[#EAE6DF]"}`}>
+          <div key={user.id} className={`card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between border transition-all duration-200 ${editingUserPoints === user.id ? "border-[#FF6A1F] bg-[#2A1508]/40 ring-1 ring-[#FF6A1F]" : "border-[#2E241C]"}`}>
             <div className="flex min-w-0 items-center gap-3">
               {editingUserPoints === user.id ? (
                 <div className="flex items-center gap-2">
@@ -926,7 +926,7 @@ const UsersTab = ({
                     />
                     <div className="flex gap-1 mt-1">
                       {userColors.slice(0, userColorCount).map((color: string, index: number) => (
-                        <div key={index} className="h-3 w-3 rounded-full border border-[#EAE6DF]" style={{ backgroundColor: color }} />
+                        <div key={index} className="h-3 w-3 rounded-full border border-[#2E241C]" style={{ backgroundColor: color }} />
                       ))}
                     </div>
                   </div>
@@ -935,12 +935,12 @@ const UsersTab = ({
                 <>
                   <UserFlag flagEmoji={user.flagEmoji} className="h-10 w-10 text-3xl" />
                   <div className="min-w-0">
-                    <div className="truncate font-bold text-[#1A1A1A]">{user.name}</div>
+                    <div className="truncate font-bold text-[#F6EFE7]">{user.name}</div>
                     <div className="flex items-center gap-3 mt-1">
                       {user.colors && user.colors.length > 0 && (
                         <div className="flex gap-1">
                           {user.colors.map((color: string, index: number) => (
-                            <div key={index} className="h-3 w-3 rounded-full border border-[#EAE6DF]" style={{ backgroundColor: color }} />
+                            <div key={index} className="h-3 w-3 rounded-full border border-[#2E241C]" style={{ backgroundColor: color }} />
                           ))}
                         </div>
                       )}
@@ -954,7 +954,7 @@ const UsersTab = ({
               {editingUserPoints === user.id ? (
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="flex items-center gap-1">
-                    <span className="text-[10px] font-bold text-[#6B6760]">Puan:</span>
+                    <span className="text-[10px] font-bold text-[#A89A8C]">Puan:</span>
                     <input
                       type="number"
                       value={tempUserPoints}
@@ -962,7 +962,7 @@ const UsersTab = ({
                       className="input-field w-16 text-right font-bold"
                     />
                   </div>
-                  <button onClick={() => handleSaveUserPoints(user.id)} className="rounded-xl bg-[#2D8A66] px-3 py-2 text-xs font-bold text-white hover:bg-[#236c50] transition">
+                  <button onClick={() => handleSaveUserPoints(user.id)} className="rounded-xl bg-[#3FD483] px-3 py-2 text-xs font-bold text-[#0B0907] hover:bg-[#5BE39A] transition">
                     Kaydet
                   </button>
                   <button
@@ -974,7 +974,7 @@ const UsersTab = ({
                       setUserColors(["#0a6b3d", "#0058bc", "#ffffff"]);
                       setTempUserPoints(0);
                     }}
-                    className="rounded-xl bg-white border border-[#EAE6DF] px-3 py-2 text-xs font-bold text-[#6B6760] hover:bg-[#FAF8F5] transition"
+                    className="rounded-xl bg-[#15100C] border border-[#2E241C] px-3 py-2 text-xs font-bold text-[#A89A8C] hover:bg-[#0F0B08] transition"
                   >
                     İptal
                   </button>
@@ -982,10 +982,10 @@ const UsersTab = ({
               ) : (
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
                       Puan
                     </div>
-                    <div className="stat-number text-lg font-bold text-[#1A1A1A]">
+                    <div className="stat-number text-lg font-bold text-[#F6EFE7]">
                       {user.totalPoints || 0}
                     </div>
                   </div>
@@ -998,7 +998,7 @@ const UsersTab = ({
                       setTempUserPoints(user.totalPoints || 0);
                       setEditingUserPoints(user.id);
                     }}
-                    className="rounded-xl border border-[#EAE6DF] bg-white px-3 py-2 text-xs font-bold text-[#6B6760] hover:bg-[#FAF8F5] hover:text-[#1A1A1A] transition"
+                    className="rounded-xl border border-[#2E241C] bg-[#15100C] px-3 py-2 text-xs font-bold text-[#A89A8C] hover:bg-[#0F0B08] hover:text-[#F6EFE7] transition"
                   >
                     Düzenle
                   </button>
@@ -1007,15 +1007,15 @@ const UsersTab = ({
 
               {deletingUserId === user.id ? (
                 <div className="flex gap-2">
-                  <button onClick={() => setDeletingUserId(null)} className="rounded-xl bg-white border border-[#EAE6DF] px-3 py-2 text-xs font-bold text-[#6B6760]">
+                  <button onClick={() => setDeletingUserId(null)} className="rounded-xl bg-[#15100C] border border-[#2E241C] px-3 py-2 text-xs font-bold text-[#A89A8C]">
                     İptal
                   </button>
-                  <button onClick={() => handleDeleteUser(user.id)} className="rounded-xl bg-[#C84A4A] px-3 py-2 text-xs font-bold text-white hover:bg-[#b03e3e]">
+                  <button onClick={() => handleDeleteUser(user.id)} className="rounded-xl bg-[#FF8A8A] px-3 py-2 text-xs font-bold text-white hover:bg-[#b03e3e]">
                     Sil
                   </button>
                 </div>
               ) : (
-                <button onClick={() => setDeletingUserId(user.id)} className="rounded-xl p-2 text-[#6B6760] hover:bg-rose-50 hover:text-[#C84A4A] transition">
+                <button onClick={() => setDeletingUserId(user.id)} className="rounded-xl p-2 text-[#A89A8C] hover:bg-rose-500/10 hover:text-[#FF8A8A] transition">
                   <Trash2 className="h-4 w-4" />
                 </button>
               )}
@@ -1029,23 +1029,23 @@ const UsersTab = ({
 
 const SeasonsTab = ({ seasons, activeSeason, seasonName, setSeasonName, loading, handleStartSeason, handleFinishSeason }: any) => (
   <div>
-    <PanelTitle title="Sezonlar" description="Yeni sezon başlat veya aktif sezonu arşive taşı." icon={<Calendar className="h-5 w-5 text-[#D96B43]" />} />
+    <PanelTitle title="Sezonlar" description="Yeni sezon başlat veya aktif sezonu arşive taşı." icon={<Calendar className="h-5 w-5 text-[#FF6A1F]" />} />
 
     {activeSeason ? (
-      <div className="card-base mb-6 border-l-4 border-[#D96B43] p-6">
+      <div className="card-base mb-6 border-l-4 border-[#FF6A1F] p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h3 className="font-display text-2xl font-bold uppercase tracking-[-0.01em] text-[#1A1A1A]">{activeSeason.name}</h3>
-            <p className="mt-1 text-sm font-semibold text-[#6B6760]">
+            <h3 className="font-display text-2xl font-bold uppercase tracking-[-0.01em] text-[#F6EFE7]">{activeSeason.name}</h3>
+            <p className="mt-1 text-sm font-semibold text-[#A89A8C]">
               {activeSeason.startedAt?.toDate?.()?.toLocaleDateString("tr-TR") || "Tarih bekleniyor"} tarihinde başladı.
             </p>
           </div>
-          <span className="rounded-full border border-[#D0EADB] bg-[#EDF7F2] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#2D8A66]">
+          <span className="rounded-full border border-[#1F4A33] bg-[#0F2A1C] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#3FD483]">
             Aktif
           </span>
         </div>
 
-        <button onClick={handleFinishSeason} disabled={loading} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#C84A4A] px-5 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-[#b03e3e] transition shadow-sm">
+        <button onClick={handleFinishSeason} disabled={loading} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#FF8A8A] px-5 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-[#b03e3e] transition shadow-sm">
           <Power className="h-4 w-4" />
           Sezonu Tamamla
         </button>
@@ -1053,7 +1053,7 @@ const SeasonsTab = ({ seasons, activeSeason, seasonName, setSeasonName, loading,
     ) : (
       <form onSubmit={handleStartSeason} className="card-base mb-6 space-y-4 p-6">
         <div>
-          <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+          <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
             Sezon adı
           </label>
           <input
@@ -1071,20 +1071,20 @@ const SeasonsTab = ({ seasons, activeSeason, seasonName, setSeasonName, loading,
     )}
 
     <div className="space-y-3">
-      <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#6B6760]">
+      <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#A89A8C]">
         Geçmiş sezonlar
       </div>
 
       {seasons.filter((s: Season) => s.status === "finished").map((season: Season) => (
         <div key={season.id} className="card-base flex items-center justify-between p-4">
           <div>
-            <div className="font-bold text-[#1A1A1A]">{season.name}</div>
-            <div className="text-xs font-semibold text-[#6B6760]">
+            <div className="font-bold text-[#F6EFE7]">{season.name}</div>
+            <div className="text-xs font-semibold text-[#A89A8C]">
               {(season.startedAt as any)?.toDate?.()?.getFullYear() || "..."} - {(season.finishedAt as any)?.toDate?.()?.getFullYear() || "..."}
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-[#FAF8F5] px-3 py-1 text-xs font-bold text-[#6B6760] ring-1 ring-[#EAE6DF]">
+            <span className="rounded-full bg-[#0F0B08] px-3 py-1 text-xs font-bold text-[#A89A8C] ring-1 ring-[#2E241C]">
               Arşiv
             </span>
             <button
@@ -1098,7 +1098,7 @@ const SeasonsTab = ({ seasons, activeSeason, seasonName, setSeasonName, loading,
                   alert("Sezon silinirken hata oluştu: " + err);
                 }
               }}
-              className="rounded-xl p-2 text-[#6B6760] transition hover:bg-rose-50 hover:text-[#C84A4A]"
+              className="rounded-xl p-2 text-[#A89A8C] transition hover:bg-rose-500/10 hover:text-[#FF8A8A]"
               title="Sezonu ve bağlantılı verileri sil"
             >
               <Trash2 className="h-4 w-4" />
@@ -1115,11 +1115,11 @@ const WeeksTab = ({ activeSeason, weeks, weekLabel, setWeekLabel, loading, handl
 
   return (
     <div>
-      <PanelTitle title="Haftalar" description="Hafta oluştur, aktif haftayı seç ve yayın durumunu yönet." icon={<List className="h-5 w-5 text-[#D96B43]" />} />
+      <PanelTitle title="Haftalar" description="Hafta oluştur, aktif haftayı seç ve yayın durumunu yönet." icon={<List className="h-5 w-5 text-[#FF6A1F]" />} />
 
       <form onSubmit={handleAddWeek} className="card-base mb-6 flex flex-col gap-3 p-5 sm:flex-row sm:items-end">
         <div className="flex-1">
-          <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+          <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
             Hafta adı
           </label>
           <input
@@ -1138,14 +1138,14 @@ const WeeksTab = ({ activeSeason, weeks, weekLabel, setWeekLabel, loading, handl
         {weeks.map((week: Week) => (
           <div key={week.id} className="card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#FAF8F5] border border-[#EAE6DF] text-xs font-bold text-[#1A1A1A]">
+              <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#0F0B08] border border-[#2E241C] text-xs font-bold text-[#F6EFE7]">
                 {week.weekNumber}
               </span>
               <div>
-                <div className="font-bold text-[#1A1A1A]">{week.label}</div>
+                <div className="font-bold text-[#F6EFE7]">{week.label}</div>
                 <div className="mt-1 flex flex-wrap gap-1.5">
-                  {week.isActive && <span className="rounded-full bg-[#EDF7F2] border border-[#D0EADB] px-2 py-0.5 text-[10px] font-bold text-[#2D8A66]">Aktif</span>}
-                  {week.isPublished && <span className="rounded-full bg-[#FDF4F0] border border-[#F3DCD2] px-2 py-0.5 text-[10px] font-bold text-[#D96B43]">Yayında</span>}
+                  {week.isActive && <span className="rounded-full bg-[#0F2A1C] border border-[#1F4A33] px-2 py-0.5 text-[10px] font-bold text-[#3FD483]">Aktif</span>}
+                  {week.isPublished && <span className="rounded-full bg-[#2A1508] border border-[#5A2A10] px-2 py-0.5 text-[10px] font-bold text-[#FF6A1F]">Yayında</span>}
                   {week.pointsPublished && <span className="rounded-full bg-[#FFF9E6] border border-[#FCE9B3] px-2 py-0.5 text-[10px] font-bold text-[#B27B00]">Puanlandı</span>}
                 </div>
               </div>
@@ -1161,8 +1161,8 @@ const WeeksTab = ({ activeSeason, weeks, weekLabel, setWeekLabel, loading, handl
                 onClick={() => toggleWeekStatus(week.id, "isPublished", !week.isPublished)}
                 className={`rounded-xl border px-3 py-2 text-xs font-bold transition ${
                   week.isPublished
-                    ? "border-[#D96B43] bg-[#D96B43] text-white"
-                    : "border-[#EAE6DF] bg-white text-[#6B6760] hover:bg-[#FAF8F5]"
+                    ? "border-[#FF6A1F] bg-[#FF6A1F] text-[#140A04]"
+                    : "border-[#2E241C] bg-[#15100C] text-[#A89A8C] hover:bg-[#0F0B08]"
                 }`}
               >
                 {week.isPublished ? "Yayından Kaldır" : "Yayınla"}
@@ -1177,7 +1177,7 @@ const WeeksTab = ({ activeSeason, weeks, weekLabel, setWeekLabel, loading, handl
                     alert("Hafta silinirken hata oluştu: " + err);
                   }
                 }}
-                className="rounded-xl p-2 text-[#6B6760] hover:bg-rose-50 hover:text-[#C84A4A] transition"
+                className="rounded-xl p-2 text-[#A89A8C] hover:bg-rose-500/10 hover:text-[#FF8A8A] transition"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -1206,10 +1206,10 @@ const MatchesTab = ({
 
   return (
     <div>
-      <PanelTitle title="Maçlar" description="Seçili haftaya maç ekle veya maçları sil." icon={<CheckSquare className="h-5 w-5 text-[#D96B43]" />} />
+      <PanelTitle title="Maçlar" description="Seçili haftaya maç ekle veya maçları sil." icon={<CheckSquare className="h-5 w-5 text-[#FF6A1F]" />} />
 
       <div className="card-base mb-6 p-5">
-        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
           Hafta seç
         </label>
         <select
@@ -1230,15 +1230,15 @@ const MatchesTab = ({
 
           <form onSubmit={handleAddMatch} className="card-base mb-6 grid grid-cols-1 gap-4 p-5 lg:grid-cols-4">
             <div>
-              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">Ev sahibi</label>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">Ev sahibi</label>
               <input value={homeTeam} onChange={(e) => setHomeTeam(e.target.value)} className="input-field w-full" required />
             </div>
             <div>
-              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">Deplasman</label>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">Deplasman</label>
               <input value={awayTeam} onChange={(e) => setAwayTeam(e.target.value)} className="input-field w-full" required />
             </div>
             <div>
-              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">Tarih</label>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">Tarih</label>
               <input type="date" value={matchDate.split("T")[0]} onChange={(e) => setMatchDate(e.target.value)} className="input-field w-full" required />
             </div>
             <button className="btn-primary self-end justify-center">
@@ -1271,10 +1271,10 @@ const MatchList = ({ seasonId, weekId }: { seasonId: string; weekId: string }) =
       {matches.map((match) => (
         <div key={match.id} className="card-base flex items-center justify-between gap-4 p-4">
           <div className="min-w-0">
-            <div className="truncate text-sm font-bold text-[#1A1A1A]">
-              {match.homeTeam} <span className="text-[#6B6760]/50">vs</span> {match.awayTeam}
+            <div className="truncate text-sm font-bold text-[#F6EFE7]">
+              {match.homeTeam} <span className="text-[#A89A8C]/50">vs</span> {match.awayTeam}
             </div>
-            <div className="mt-1 text-xs font-semibold text-[#6B6760]">
+            <div className="mt-1 text-xs font-semibold text-[#A89A8C]">
               {match.matchDate?.toDate?.()?.toLocaleDateString("tr-TR", { weekday: "short", day: "numeric", month: "long" }) ||
                (match.matchDate ? new Date(getDateMs(match.matchDate)).toLocaleDateString("tr-TR", { weekday: "short", day: "numeric", month: "long" }) : "Tarih yok")}
             </div>
@@ -1295,8 +1295,8 @@ const MatchList = ({ seasonId, weekId }: { seasonId: string; weekId: string }) =
               }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition border ${
                 match.isLocked
-                  ? "bg-[#FDF4F0] text-[#D96B43] border-[#F3DCD2] hover:bg-[#faeae3]"
-                  : "bg-[#EDF7F2] text-[#2D8A66] border-[#D0EADB] hover:bg-[#def0e6]"
+                  ? "bg-[#2A1508] text-[#FF6A1F] border-[#5A2A10] hover:bg-[#2A1508]"
+                  : "bg-[#0F2A1C] text-[#3FD483] border-[#1F4A33] hover:bg-[#def0e6]"
               }`}
               title={match.isLocked ? "Tahmine Açmak İçin Tıklayın" : "Tahmine Kapatmak İçin Tıklayın"}
             >
@@ -1322,7 +1322,7 @@ const MatchList = ({ seasonId, weekId }: { seasonId: string; weekId: string }) =
                   alert("Maç silinirken hata oluştu: " + err);
                 }
               }}
-              className="rounded-xl p-2 text-[#6B6760] hover:bg-rose-50 hover:text-[#C84A4A] transition"
+              className="rounded-xl p-2 text-[#A89A8C] hover:bg-rose-500/10 hover:text-[#FF8A8A] transition"
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -1592,10 +1592,10 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
 
   return (
     <div>
-      <PanelTitle title="Tahminler" description="Tek kişi veya toplu tahmin girişi yap." icon={<Target className="h-5 w-5 text-[#D96B43]" />} />
+      <PanelTitle title="Tahminler" description="Tek kişi veya toplu tahmin girişi yap." icon={<Target className="h-5 w-5 text-[#FF6A1F]" />} />
 
       <div className="card-base mb-6 p-5">
-        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
           Sezon haftası
         </label>
         <select
@@ -1619,12 +1619,12 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
 
       {selectedWeek && (
         <div className="space-y-6">
-          <div className="inline-flex rounded-2xl border border-[#EAE6DF] bg-white p-1">
+          <div className="inline-flex rounded-2xl border border-[#2E241C] bg-[#15100C] p-1">
             <button
               type="button"
               onClick={() => setEntryMode("single")}
               className={`rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${
-                entryMode === "single" ? "bg-[#D96B43] text-white shadow-sm" : "text-[#6B6760] hover:bg-[#FAF8F5]"
+                entryMode === "single" ? "bg-[#FF6A1F] text-[#140A04] shadow-sm" : "text-[#A89A8C] hover:bg-[#0F0B08]"
               }`}
             >
               Tekil giriş
@@ -1633,7 +1633,7 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
               type="button"
               onClick={() => setEntryMode("bulk")}
               className={`rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${
-                entryMode === "bulk" ? "bg-[#D96B43] text-white shadow-sm" : "text-[#6B6760] hover:bg-[#FAF8F5]"
+                entryMode === "bulk" ? "bg-[#FF6A1F] text-[#140A04] shadow-sm" : "text-[#A89A8C] hover:bg-[#0F0B08]"
               }`}
             >
               Toplu giriş
@@ -1643,7 +1643,7 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
           {entryMode === "single" && (
             <div className="space-y-4">
               <div className="card-base p-5">
-                <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+                <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
                   Yazar seç
                 </label>
                 <select
@@ -1664,10 +1664,10 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
               </div>
 
               {matches.length > 0 && selectedUser ? (
-                <div className="card-base overflow-hidden border border-[#EAE6DF]">
+                <div className="card-base overflow-hidden border border-[#2E241C]">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                      <thead className="bg-[#FAF8F5] text-xs font-bold uppercase tracking-wider text-[#6B6760] border-b border-[#EAE6DF]">
+                      <thead className="bg-[#0F0B08] text-xs font-bold uppercase tracking-wider text-[#A89A8C] border-b border-[#2E241C]">
                         <tr>
                           <th className="p-4">Maç</th>
                           <th className="w-48 p-4 text-center">Tahmin</th>
@@ -1675,11 +1675,11 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
                       </thead>
                       <tbody>
                         {matches.map((match) => (
-                          <tr key={match.id} className="border-b border-[#EAE6DF]">
+                          <tr key={match.id} className="border-b border-[#2E241C]">
                             <td className="p-4">
-                              <div className="flex items-center gap-3 font-bold text-[#1A1A1A]">
+                              <div className="flex items-center gap-3 font-bold text-[#F6EFE7]">
                                 <span>{match.homeTeam}</span>
-                                <span className="text-[10px] uppercase text-[#6B6760]/60">vs</span>
+                                <span className="text-[10px] uppercase text-[#A89A8C]/60">vs</span>
                                 <span>{match.awayTeam}</span>
                               </div>
                             </td>
@@ -1702,7 +1702,7 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
                                   }}
                                   className="input-field h-11 w-16 text-center font-bold"
                                 />
-                                <span className="font-bold text-[#6B6760]/40">-</span>
+                                <span className="font-bold text-[#A89A8C]/40">-</span>
                                 <input
                                   type="number"
                                   min="0"
@@ -1728,7 +1728,7 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
                     </table>
                   </div>
 
-                  <div className="border-t border-[#EAE6DF] bg-[#FAF8F5] p-4">
+                  <div className="border-t border-[#2E241C] bg-[#0F0B08] p-4">
                     <button onClick={handleSaveAll} disabled={isSaving} className="btn-primary w-full justify-center">
                       <Save className="h-4 w-4" />
                       {isSaving ? "Kaydediliyor..." : "Tahminleri Kaydet"}
@@ -1736,7 +1736,7 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
                   </div>
                 </div>
               ) : (
-                <div className="rounded-3xl border border-dashed border-[#EAE6DF] bg-white p-8 text-center text-sm font-semibold text-[#6B6760]">
+                <div className="rounded-3xl border border-dashed border-[#2E241C] bg-[#15100C] p-8 text-center text-sm font-semibold text-[#A89A8C]">
                   Tahmin girmek için yazar seç.
                 </div>
               )}
@@ -1745,9 +1745,9 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
 
           {entryMode === "bulk" && (
             <div className="space-y-5">
-              <div className="rounded-3xl border border-[#D0EADB] bg-[#EDF7F2] p-5 text-sm font-semibold leading-6 text-[#2D8A66]">
+              <div className="rounded-3xl border border-[#1F4A33] bg-[#0F2A1C] p-5 text-sm font-semibold leading-6 text-[#3FD483]">
                 <div className="mb-2 font-bold">Toplu tahmin formatı</div>
-                <div className="rounded-2xl bg-white p-3 font-mono text-xs text-[#1A1A1A] ring-1 ring-[#D0EADB]">
+                <div className="rounded-2xl bg-[#15100C] p-3 font-mono text-xs text-[#F6EFE7] ring-1 ring-[#1F4A33]">
                   Ahmet: 2-1 1-0 0-0<br />
                   Mehmet: 1-1 0-2 3-1
                 </div>
@@ -1767,28 +1767,28 @@ const PredictionsTab = ({ activeSeason, weeks, users }: any) => {
               </button>
 
               {bulkPreview.length > 0 && (
-                <div className="space-y-4 border-t border-[#EAE6DF] pt-4">
-                  <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#6B6760]">
+                <div className="space-y-4 border-t border-[#2E241C] pt-4">
+                  <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#A89A8C]">
                     Önizleme
                   </div>
 
                   {bulkPreview.map((userPack, index) => (
-                    <div key={index} className="card-base p-4 border border-[#EAE6DF]">
-                      <div className="mb-3 flex items-center gap-2 border-b border-[#EAE6DF] pb-3">
+                    <div key={index} className="card-base p-4 border border-[#2E241C]">
+                      <div className="mb-3 flex items-center gap-2 border-b border-[#2E241C] pb-3">
                         <span className="text-xl">{userPack.userFlag}</span>
-                        <span className="font-bold text-[#1A1A1A]">{userPack.userName}</span>
-                        <span className="rounded-full border border-[#D0EADB] bg-[#EDF7F2] px-2 py-0.5 text-[10px] font-bold text-[#2D8A66]">
+                        <span className="font-bold text-[#F6EFE7]">{userPack.userName}</span>
+                        <span className="rounded-full border border-[#1F4A33] bg-[#0F2A1C] px-2 py-0.5 text-[10px] font-bold text-[#3FD483]">
                           Eşleşti
                         </span>
                       </div>
 
                       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         {userPack.preds.map((prediction, predictionIndex) => (
-                          <div key={predictionIndex} className="flex items-center justify-between gap-2 rounded-2xl bg-[#FAF8F5] border border-[#EAE6DF] p-3 text-xs">
-                            <span className="truncate font-medium text-[#6B6760]">
+                          <div key={predictionIndex} className="flex items-center justify-between gap-2 rounded-2xl bg-[#0F0B08] border border-[#2E241C] p-3 text-xs">
+                            <span className="truncate font-medium text-[#A89A8C]">
                               {prediction.homeTeam} vs {prediction.awayTeam}
                             </span>
-                            <span className="shrink-0 rounded-xl bg-white px-2 py-1 font-bold text-[#1A1A1A] border border-[#EAE6DF]">
+                            <span className="shrink-0 rounded-xl bg-[#15100C] px-2 py-1 font-bold text-[#F6EFE7] border border-[#2E241C]">
                               {prediction.home} - {prediction.away}
                             </span>
                           </div>
@@ -2124,10 +2124,10 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
 
   return (
     <div>
-      <PanelTitle title="Sonuçlar" description="Maç sonuçlarını gir, haftalık puanları hesapla ve yayınla." icon={<Check className="h-5 w-5 text-[#D96B43]" />} />
+      <PanelTitle title="Sonuçlar" description="Maç sonuçlarını gir, haftalık puanları hesapla ve yayınla." icon={<Check className="h-5 w-5 text-[#FF6A1F]" />} />
 
       <div className="card-base mb-6 p-5">
-        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
           Hafta seç
         </label>
         <select
@@ -2144,16 +2144,16 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
 
       {selectedWeek && (
         <div className="space-y-4">
-          <div className="overflow-hidden rounded-[1.75rem] border border-[#EAE6DF] bg-[#FAF8F5] p-5 shadow-sm">
+          <div className="overflow-hidden rounded-[1.75rem] border border-[#2E241C] bg-[#0F0B08] p-5 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#D96B43]">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#FF6A1F]">
                   <RefreshCw className="h-4 w-4" /> Otomatik sonuç merkezi
                 </div>
-                <p className="mt-2 text-sm font-semibold text-[#1A1A1A]">
+                <p className="mt-2 text-sm font-semibold text-[#F6EFE7]">
                   Biten maçların 90 dakika skorunu getirir ve puan önizlemesini hazırlar.
                 </p>
-                <p className="mt-1 text-[11px] font-medium text-[#6B6760]">
+                <p className="mt-1 text-[11px] font-medium text-[#A89A8C]">
                   Uzatma ve penaltı skorları puanlamaya dahil edilmez.
                 </p>
               </div>
@@ -2162,7 +2162,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                 type="button"
                 onClick={handleSyncApiResults}
                 disabled={isSaving}
-                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#D96B43] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#c25832] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#FF6A1F] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#FF8A3D] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                 {isSaving ? "Skorlar alınıyor..." : "Skorları Getir + Hesapla"}
@@ -2170,15 +2170,15 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
             </div>
 
             {syncMessage && (
-              <div className="mt-4 rounded-2xl border border-[#EAE6DF] bg-white px-4 py-3 text-xs font-semibold text-[#1A1A1A]">
+              <div className="mt-4 rounded-2xl border border-[#2E241C] bg-[#15100C] px-4 py-3 text-xs font-semibold text-[#F6EFE7]">
                 {syncMessage}
               </div>
             )}
           </div>
 
           {matches.map((match) => (
-            <div key={match.id} className="card-base flex flex-col items-center justify-between gap-4 p-4 sm:flex-row border border-[#EAE6DF]">
-              <div className="flex-1 text-right font-bold text-[#1A1A1A]">{match.homeTeam}</div>
+            <div key={match.id} className="card-base flex flex-col items-center justify-between gap-4 p-4 sm:flex-row border border-[#2E241C]">
+              <div className="flex-1 text-right font-bold text-[#F6EFE7]">{match.homeTeam}</div>
 
               <div className="flex items-center gap-2">
                 <input
@@ -2198,7 +2198,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                   }}
                   className="input-field h-11 w-16 text-center font-bold"
                 />
-                <span className="font-bold text-[#6B6760]/40">-</span>
+                <span className="font-bold text-[#A89A8C]/40">-</span>
                 <input
                   type="number"
                   min="0"
@@ -2222,7 +2222,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                 </button>
               </div>
 
-              <div className="flex-1 text-left font-bold text-[#1A1A1A]">{match.awayTeam}</div>
+              <div className="flex-1 text-left font-bold text-[#F6EFE7]">{match.awayTeam}</div>
             </div>
           ))}
 
@@ -2246,7 +2246,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                 isSaving ||
                 matches.some((match) => match.actualHome === null || match.actualAway === null)
               }
-              className="btn-secondary w-full justify-center border-[#EAE6DF] bg-white py-4 text-[#6B6760] hover:bg-[#FAF8F5]"
+              className="btn-secondary w-full justify-center border-[#2E241C] bg-[#15100C] py-4 text-[#A89A8C] hover:bg-[#0F0B08]"
             >
               {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <RefreshCw className="h-5 w-5" />}
               Puanları Yeniden Hesapla
@@ -2254,14 +2254,14 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
           </div>
 
           {previewData && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card-base space-y-4 p-6 border border-[#EAE6DF]">
-              <h4 className="text-center text-sm font-bold uppercase tracking-[0.22em] text-[#1A1A1A]">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card-base space-y-4 p-6 border border-[#2E241C]">
+              <h4 className="text-center text-sm font-bold uppercase tracking-[0.22em] text-[#F6EFE7]">
                 Haftalık puan önizleme
               </h4>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="border-b border-[#EAE6DF] text-[#6B6760] uppercase font-bold">
+                  <thead className="border-b border-[#2E241C] text-[#A89A8C] uppercase font-bold">
                     <tr>
                       <th className="py-2">Kullanıcı</th>
                       <th className="py-2 text-center">Puan</th>
@@ -2275,16 +2275,16 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                       const user = users.find((item: any) => item.id === uid);
 
                       return (
-                        <tr key={uid} className="border-b border-[#EAE6DF]">
+                        <tr key={uid} className="border-b border-[#2E241C]">
                           <td className="py-2">
                             <div className="flex items-center gap-2">
                               <UserFlag flagEmoji={user?.flagEmoji} className="h-5 w-5 text-lg" />
-                              <span className="font-semibold text-[#1A1A1A]">{user?.name}</span>
+                              <span className="font-semibold text-[#F6EFE7]">{user?.name}</span>
                             </div>
                           </td>
-                          <td className="py-2 text-center font-bold text-[#1A1A1A]">{data.points}</td>
-                          <td className="py-2 text-center font-bold text-[#1A1A1A]">{data.bonus}</td>
-                          <td className="py-2 text-center font-bold text-[#2D8A66]">+{data.totalWeekPoints}</td>
+                          <td className="py-2 text-center font-bold text-[#F6EFE7]">{data.points}</td>
+                          <td className="py-2 text-center font-bold text-[#F6EFE7]">{data.bonus}</td>
+                          <td className="py-2 text-center font-bold text-[#3FD483]">+{data.totalWeekPoints}</td>
                           <td className="py-2 text-right">
                             <button
                               onClick={async () => {
@@ -2301,7 +2301,7 @@ const ResultsTab = ({ activeSeason, weeks, users, selectedWeekInitial }: any) =>
                                   alert("Tahminler sıfırlandı.");
                                 }
                               }}
-                              className="text-[10px] font-bold text-[#C84A4A] hover:underline"
+                              className="text-[10px] font-bold text-[#FF8A8A] hover:underline"
                             >
                               Sıfırla
                             </button>
@@ -2379,13 +2379,13 @@ const StandingsTab = ({ seasons, users }: { seasons: Season[]; users: User[] }) 
 
   return (
     <div>
-      <PanelTitle title="Puan Durumu" description="Sezon puanlarını manuel olarak düzenle." icon={<Medal className="h-5 w-5 text-[#D96B43]" />} />
+      <PanelTitle title="Puan Durumu" description="Sezon puanlarını manuel olarak düzenle." icon={<Medal className="h-5 w-5 text-[#FF6A1F]" />} />
 
-      <div className="mb-6 rounded-2xl border border-[#EAE6DF] bg-[#FAF8F5] p-4 text-xs leading-5 text-[#6B6760]">
+      <div className="mb-6 rounded-2xl border border-[#2E241C] bg-[#0F0B08] p-4 text-xs leading-5 text-[#A89A8C]">
         <div className="flex items-start gap-2.5">
-          <AlertTriangle className="h-4.5 w-4.5 shrink-0 text-[#D96B43] mt-0.5" />
+          <AlertTriangle className="h-4.5 w-4.5 shrink-0 text-[#FF6A1F] mt-0.5" />
           <div>
-            <p className="font-bold text-[#1A1A1A] mb-1">💡 Canlı Puan Durumu vs Kayıtlı Puanlar Hakkında</p>
+            <p className="font-bold text-[#F6EFE7] mb-1">💡 Canlı Puan Durumu vs Kayıtlı Puanlar Hakkında</p>
             <p className="opacity-90">
               Bu panel, veritabanına <strong>kesinleşip kaydedilen</strong> statik sezon puanlarını gösterir ve bunları manuel düzeltmenizi sağlar.
             </p>
@@ -2400,7 +2400,7 @@ const StandingsTab = ({ seasons, users }: { seasons: Season[]; users: User[] }) 
       </div>
 
       <div className="card-base mb-6 p-5">
-        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#6B6760]">
+        <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[#A89A8C]">
           Sezon seç
         </label>
         <select
@@ -2423,15 +2423,15 @@ const StandingsTab = ({ seasons, users }: { seasons: Season[]; users: User[] }) 
             const points = (user.seasonPoints && user.seasonPoints[selectedSeasonId]) || 0;
 
             return (
-              <div key={user.id} className="card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between border border-[#EAE6DF]">
+              <div key={user.id} className="card-base flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between border border-[#2E241C]">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FAF8F5] border border-[#EAE6DF] text-xs font-bold text-[#1A1A1A]">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0F0B08] border border-[#2E241C] text-xs font-bold text-[#F6EFE7]">
                     {index + 1}
                   </div>
                   <UserFlag flagEmoji={user.flagEmoji} className="h-7 w-7 text-2xl" />
                   <div>
-                    <div className="font-bold text-[#1A1A1A]">{user.name}</div>
-                    <div className="text-xs font-semibold text-[#6B6760]">Sezon puanı</div>
+                    <div className="font-bold text-[#F6EFE7]">{user.name}</div>
+                    <div className="text-xs font-semibold text-[#A89A8C]">Sezon puanı</div>
                   </div>
                 </div>
 
@@ -2443,24 +2443,24 @@ const StandingsTab = ({ seasons, users }: { seasons: Season[]; users: User[] }) 
                       onChange={(e) => setTempPoints(e.target.value)}
                       className="input-field w-24 text-center font-bold"
                     />
-                    <button onClick={() => handleSavePoints(user.id)} disabled={loading} className="rounded-xl bg-[#2D8A66] px-3 py-2 text-xs font-bold text-white transition hover:bg-[#237053]">
+                    <button onClick={() => handleSavePoints(user.id)} disabled={loading} className="rounded-xl bg-[#3FD483] px-3 py-2 text-xs font-bold text-[#0B0907] transition hover:bg-[#5BE39A]">
                       Kaydet
                     </button>
-                    <button onClick={() => setEditingUserId(null)} disabled={loading} className="rounded-xl bg-[#FAF8F5] border border-[#EAE6DF] px-3 py-2 text-xs font-bold text-[#6B6760] hover:bg-white transition">
+                    <button onClick={() => setEditingUserId(null)} disabled={loading} className="rounded-xl bg-[#0F0B08] border border-[#2E241C] px-3 py-2 text-xs font-bold text-[#A89A8C] hover:bg-[#15100C] transition">
                       İptal
                     </button>
                   </div>
                 ) : (
                   <div className="flex items-center gap-5">
                     <div className="text-right">
-                      <div className="stat-number text-3xl font-bold text-[#1A1A1A]">{points}</div>
+                      <div className="stat-number text-3xl font-bold text-[#F6EFE7]">{points}</div>
                     </div>
                     <button
                       onClick={() => {
                         setTempPoints(points);
                         setEditingUserId(user.id);
                       }}
-                      className="rounded-xl border border-[#EAE6DF] p-3 text-[#6B6760] hover:bg-[#FAF8F5] hover:text-[#D96B43] transition"
+                      className="rounded-xl border border-[#2E241C] p-3 text-[#A89A8C] hover:bg-[#0F0B08] hover:text-[#FF6A1F] transition"
                     >
                       <Trophy className="h-5 w-5" />
                     </button>

@@ -136,10 +136,10 @@ const PredictionPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1A1A1A] px-4 py-8">
+    <div className="min-h-screen bg-[#0F0B08] text-[#F6EFE7] px-4 py-8">
       {error && (
         <div
-          className="mx-auto mb-6 flex max-w-2xl items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-600 shadow-sm"
+          className="mx-auto mb-6 flex max-w-2xl items-start gap-3 rounded-2xl border border-red-400/25 bg-red-400/10 p-4 text-sm text-red-400 shadow-sm"
           id="prediction-page-db-error"
         >
           <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
@@ -163,14 +163,14 @@ const PredictionPage: React.FC = () => {
         />
       ) : (
         <div className="flex min-h-[80vh] items-center justify-center text-center">
-          <div className="rounded-3xl border border-[#EAE6DF] bg-white px-8 py-10 shadow-sm max-w-md">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FAF8F5] text-[#D96B43] border border-[#EAE6DF]">
+          <div className="rounded-3xl border border-[#2E241C] bg-[#15100C] px-8 py-10 shadow-sm max-w-md">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0F0B08] text-[#FF6A1F] border border-[#2E241C]">
               <Trophy className="h-7 w-7" />
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-[#1A1A1A]">
+            <h1 className="text-xl font-bold tracking-tight text-[#F6EFE7]">
               Aktif tahmin dönemi bulunamadı
             </h1>
-            <p className="mt-2 text-sm font-medium text-[#6B6760]">
+            <p className="mt-2 text-sm font-medium text-[#A89A8C]">
               Admin aktif hafta oluşturduğunda tahmin ekranı açılır.
             </p>
             <button
