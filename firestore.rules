@@ -1,7 +1,7 @@
 rules_version = '2';
 // Skor Yazarları — güvenli kurallar
 // Herkes okur. Sadece yönetici yazar. Yazarlar yalnızca kendi tahminlerini,
-// hafta yayınlanmadıysa ve maç başlamadıysa girebilir.
+// hafta yayınlanmadığı sürece girebilir (maç saati tahmini kapatmaz).
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
@@ -12,10 +12,6 @@ service cloud.firestore {
     }
     function weekOpen(s, w) {
       return weekDoc(s, w).get('isPublished', false) != true;
-    }
-    function notStarted(s, w, m) {
-      let md = get(/databases/$(database)/documents/seasons/$(s)/weeks/$(w)/matches/$(m)).data.get('matchDate', null);
-      return !(md is timestamp) || request.time < md;
     }
 
     match /users/{id} { allow read: if true; allow write: if isAdmin(); }
@@ -45,10 +41,7 @@ service cloud.firestore {
       match /predictions/{p} {
         allow read: if true;
         allow delete: if isAdmin();
-        allow create, update: if isAdmin() || (
-          weekOpen(s, request.resource.data.weekId) &&
-          notStarted(s, request.resource.data.weekId, request.resource.data.matchId)
-        );
+        allow create, update: if isAdmin() || weekOpen(s, request.resource.data.weekId);
       }
     }
   }
