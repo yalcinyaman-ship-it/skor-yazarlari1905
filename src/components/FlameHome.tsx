@@ -123,9 +123,8 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
   const awPlayed = awMatches.filter(played).length;
   const predSet = new Set(existingPredictors);
 
-  const kickoffGone = p.firstKickoffMs > 0 && p.nowMs >= p.firstKickoffMs;
-  const weekStatus = !activeWeek ? "Beklemede" : activeWeek.isPublished ? "Yayında" : (allUsersHavePredicted || kickoffGone) ? "Kilitlendi" : "Tahmin açık";
-  const weekStatusColor = !activeWeek ? C.dim : activeWeek.isPublished ? C.green : (allUsersHavePredicted || kickoffGone) ? C.gold : C.fire2;
+  const weekStatus = !activeWeek ? "Beklemede" : activeWeek.isPublished ? "Yayında" : allUsersHavePredicted ? "Kilitlendi" : "Tahmin açık";
+  const weekStatusColor = !activeWeek ? C.dim : activeWeek.isPublished ? C.green : allUsersHavePredicted ? C.gold : C.fire2;
 
   const tabs: [Tab, string][] = [["ozet", "Genel Özet"], ["mac", "Maçlar & Tahminler"], ["puan", "Puan Durumu"], ["istatistik", "İstatistikler"], ["hafiza", "Lig Hafızası"]];
 
@@ -327,11 +326,11 @@ const FlameHome: React.FC<FlameHomeProps> = (p) => {
                         </span>
                       ))}
                     </div>
-                    <div style={{ marginTop: 6, fontSize: 13, color: C.mute }}>Tahminler {new Date(p.firstKickoffMs).toLocaleString("tr-TR", { weekday: "long", hour: "2-digit", minute: "2-digit" })} itibarıyla kendiliğinden kapanır.</div>
+                    <div style={{ marginTop: 6, fontSize: 13, color: C.mute }}>İlk maç {new Date(p.firstKickoffMs).toLocaleString("tr-TR", { weekday: "long", hour: "2-digit", minute: "2-digit" })}.</div>
                   </div>
                 )}
                 {activeWeek && kickoffPassed && !activeWeek.isPublished && (
-                  <div style={{ borderRadius: 16, border: `1px solid ${C.gold}`, padding: "12px 16px", color: C.gold, ...label({ fontSize: 14, letterSpacing: ".16em" }) }}>İlk maç başladı · tahminler kapandı</div>
+                  <div style={{ borderRadius: 16, border: `1px solid ${C.gold}`, padding: "12px 16px", color: C.gold, ...label({ fontSize: 14, letterSpacing: ".16em" }) }}>İlk maç başladı</div>
                 )}
                 {activeWeek && !p.firstKickoffMs && (
                   <div style={{ borderRadius: 16, border: "1px dashed rgba(255,190,140,.2)", padding: "12px 16px", fontSize: 13, color: C.mute }}>Maç saatleri gelince geri sayım başlar.</div>

@@ -23,7 +23,7 @@ Tarayıcıda aç: `https://skor-yazarlari1905-19a6.vercel.app/api/guvenlik-temiz
 ## 4) Firebase kuralları
 Firebase Console → Firestore → (ai-studio-… veritabanı) → **Kurallar** sekmesi.
 ÖNCE mevcut metni bir yere kopyala (geri dönmek istersen). Sonra `firestore.rules` içeriğini yapıştır → **Yayınla**.
-Sonuç: herkes okur; sadece yönetici yazar; yazarlar tahmini yalnızca maç başlamadan girebilir.
+Sonuç: herkes okur; sadece yönetici yazar; yazarlar tahmini hafta yayınlanana kadar girebilir.
 
 ## 5) Skor botunu test et
 `https://skor-yazarlari1905-19a6.vercel.app/api/skor-guncelle?zorla=evet`
@@ -33,6 +33,6 @@ Bot, site her açıldığında (en fazla 8 dakikada bir) kendiliğinden çalış
 
 ## Neler oldu
 - Maçları ELLE girmeye devam et. Bot takım adlarından ESPN'deki maçı bulup tarih/saat, logo ve biten maç skorunu doldurur. Elle girdiğin skora dokunmaz.
-- Geri sayım: Özet'te "İlk düdüğe" sayacı. İlk maç başlayınca tahminler kendiliğinden kapanır (hem ekranda hem veritabanı kuralında).
+- Geri sayım: Özet'te "İlk düdüğe" sayacı. Sayaç yalnızca bilgi amaçlıdır; tahminler maç saatine göre kapanmaz, hafta yayınlanana kadar açık kalır.
 - Yönetici girişi yapınca: Maçlar sekmesinde "Tahminleri JPEG indir", Puan Durumu'nda "Puan durumunu JPEG indir".
 - Sefer için gömülü otomatik tahmin kodu silindi.

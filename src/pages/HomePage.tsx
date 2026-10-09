@@ -657,15 +657,14 @@ const HomePage: React.FC = () => {
   const participationPercent =
     users.length > 0 ? Math.round((existingPredictors.length / users.length) * 100) : 0;
 
-  // İlk maçın başlama saati: tahminler bu anda kendiliğinden kapanır.
+  // İlk maçın başlama saati: yalnızca geri sayım için (tahminleri kapatmaz).
   const firstKickoffMs = (() => {
     const times = activeWeekMatches.map((m) => getDateMs(m.matchDate)).filter((t) => t > 0);
     return times.length ? Math.min(...times) : 0;
   })();
-  const kickoffPassed = firstKickoffMs > 0 && nowMs >= firstKickoffMs;
 
   const predictionLocked =
-    !activeSeason || !activeWeek || activeWeek.isPublished || allUsersHavePredicted || kickoffPassed;
+    !activeSeason || !activeWeek || activeWeek.isPublished || allUsersHavePredicted;
 
   const openAdmin = () => {
     if (isAdmin) {
